@@ -1,0 +1,49 @@
+.nilia-nav{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 60vh;
+}
+
+.nilia-nav-image{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60vh;
+    object-fit: cover;
+}
+
+.nilia-nav-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background:  radial-gradient(circle, transparent, rgba(0, 0, 0, 0.75));
+    z-index: 999;
+}
+
+.nilia-nav-innercontainer{
+    width: 100%;
+    max-width: 1200px;
+    padding-inline: 1rem;
+    
+}
+
+.nilia-badge{
+    background-color: #FFCA00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    width: 135px;
+    margin-bottom: 1rem;
+}

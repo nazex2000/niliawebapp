@@ -1,0 +1,12 @@
+.class-selector {
+    font-family: "Montserrat", sans-serif;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .class-selector.selected {
+    background-color: #ff812e;
+    color: white;
+  }
