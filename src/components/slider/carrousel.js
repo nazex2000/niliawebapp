@@ -43,13 +43,13 @@ const Carousel = ({ data }) => {
                     </div>
                 );
             })}
-            <div className='carousel-buttons'>
+            <div className='carousel-buttons hidden sm:flex'>
                 <MdChevronLeft size={50} className='left-arrow' onClick={prevSlide} />
                 <MdChevronRight size={50} className='right-arrow' onClick={nextSlide} />
             </div>
             <div className='carousel-content'>
                 <div className='carousel-inner'>
-                    <p className='carousel-title mb-4'>Admissões para <span className='font-orange'>2025</span> <br /> Abertas</p>
+                    <p className='carousel-title-s sm:carousel-title mb-4'>Admissões para <span className='font-orange'>2025</span> <br /> Abertas</p>
                     <NiliaButton text='Mais Informações' onClick={() => window.location.href = '/admissoes'} />
                 </div>
 

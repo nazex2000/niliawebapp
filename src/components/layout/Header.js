@@ -1,17 +1,28 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import niliaLogo from "../../assets/logo/nilia.webp";
+import { MdMenu, MdClose, MdFacebook } from "react-icons/md";
+import { FaArrowRight } from "react-icons/fa";
 import "./css/Header.css";
 
 const Header = () => {
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const handleMenu = (path) => {
+        window.location.href = path;
+
+        setMenuOpen(false);
+    }
+
     return (
         <div className="header">
             <div className="header-content">
                 <div className="logo-container">
                     <Image src={niliaLogo} alt="Instituto Nilia" className="logo" onClick={() => window.location.href = "/"} />
                 </div>
-                <nav className="nav-menu">
+                <nav className="nav-menu hidden sm:flex">
                     <ul>
                         <li>
                             <a href="/">Home</a>
@@ -20,7 +31,7 @@ const Header = () => {
                             <a >O Instituto</a>
                             <div className="dropdown-menu">
                                 <a href="/sobre">Sobre</a>
-                                <a href="/sobre/nossa-equipa">Nossa Equipe</a>
+                                <a href="/sobre/nossa-equipa">Nossa Equipa</a>
                             </div>
                         </li>
                         <li className="dropdown">
@@ -38,10 +49,60 @@ const Header = () => {
                             </div>
                         </li>
                         <li>
+                            <a href="/galeria">Galeria</a>
+                        </li>
+                        <li>
                             <a href="/contactos">Contactos</a>
                         </li>
                     </ul>
                 </nav>
+                <div className="menu-icon sm:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+                    {menuOpen ? <MdClose className='cursor-pointer' color="white" size={30} /> : <MdMenu className='cursor-pointer' color="white" size={30} />}
+                </div>
+                {menuOpen &&
+                    <div className='menu-bar-mobile  block sm:hidden'>
+                        <p className='text-menu'>
+                            <FaArrowRight size={17} color='#ff812e' />
+                            <p className="nilia-text-m" onClick={() => handleMenu('/')}>Home</p>
+                        </p>
+                        <p className='text-menu'>
+                            <FaArrowRight size={17} color='#ff812e' />
+                            <p className="nilia-text-m" onClick={() => handleMenu('/sobre')}>O Instituto</p>
+
+                        </p>
+                        <p className='text-menu'>
+                            <FaArrowRight size={17} color='#ff812e' />
+                            <p className="nilia-text-m" onClick={() => handleMenu('/sobre/nossa-equipa')}>Nossa Equipa</p>
+                        </p>
+                        <p className='text-menu'>
+                            <FaArrowRight size={17} color='#ff812e' />
+                            <p className="nilia-text-m" onClick={() => handleMenu('/ensino/primario')}>Ensino Primário</p>
+                        </p>
+                        <p className='text-menu'>
+                            <FaArrowRight size={17} color='#ff812e' />
+                            <p className="nilia-text-m" onClick={() => handleMenu('/ensino/secundario')}>Ensino Secundário</p>
+                        </p>
+                        <p className='text-menu'>
+                            <FaArrowRight size={17} color='#ff812e' />
+                            <p className="nilia-text-m" onClick={() => handleMenu('/admissoes')}>Admissões</p>
+                        </p>
+                        <p className='text-menu'>
+                            <FaArrowRight size={17} color='#ff812e' />
+                            <p className="nilia-text-m" onClick={() => handleMenu('/admissoes#precario')}>Preçario</p>
+                        </p>
+                        <p className='text-menu'>
+                            <FaArrowRight size={17} color='#ff812e' />
+                            <p className="nilia-text-m" onClick={() => handleMenu('/galeria')}>Galeria</p>
+                        </p>
+                        <p className='text-menu'>
+                            <FaArrowRight size={17} color='#ff812e' />
+                            <p className="nilia-text-m" onClick={() => handleMenu('/contactos')}>Contactos</p>
+                        </p>
+                        <div className='flex flex-row gap-2 mt-16'>
+                            <MdFacebook size={30} color='#ff812e' />
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     );

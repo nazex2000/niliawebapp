@@ -30,16 +30,16 @@ export default function FrequentAsks() {
     return (
         <section className='nilia-section bg-nilia-standard'>
             <div className='nilia-container'>
-                <Image src={idea_icon} alt='Perguntas Frequentes' className='ask-icon' />
+                <Image src={idea_icon} alt='Perguntas Frequentes' className='ask-icon hidden sm:flex' />
                 <div className=' w-full flex flex-col gap-8 items-center justify-center ask-container'>
-                    <p className='nilia-title-ls'>Perguntas Frequentes</p>
+                    <p className='nilia-title-ms sm:nilia-title-ls'>Perguntas Frequentes</p>
                     
                     <div className='grid grid-cols-1 gap-4'>
                         {asks.map((ask, index) => (
-                            <div key={index} className='w-full flex flex-col items-center gap-2'>
+                            <div key={index} className='w-full flex flex-col sm:items-center gap-2'>
                                 <div className='flex flex-row justify-start items-center gap-2 cursor-pointer' onClick={() => setSelected(selected === index ? null : index)}>
                                     {selected === index ? <MdExpandLess size={30}/> : <MdExpandMore size={30} />}
-                                    <p className='nilia-text-ms'>{ask.question}</p>
+                                    <p className='nilia-text-s sm:nilia-text-ms'>{ask.question}</p>
                                 </div>
                                 {selected === index && <div className="ask-card"><p className='nilia-text-s'>{ask.answer}</p></div>}
                             </div>

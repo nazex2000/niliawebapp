@@ -12,14 +12,14 @@ const Footer = () => {
                 </div>
                 <div className="footer-card">
                     <p className="nilia-title-xs">Contatos</p>
-                    <p className="nilia-text-xs">Email:  
+                    <p className="nilia-text-xs">Email:
                         <a href="mailto:instituonilia@gmail.com" className="nilia-link">
-                            instituonilia@gmail.com
+                            secretaria@institutonilia.edu.mz
                         </a>
                     </p>
-                    <p className="nilia-text-xs">Telefone:  
+                    <p className="nilia-text-xs">Telefone:
                         <a href="tel:+258 84 123 4567" className="nilia-link">
-                            +258 84 123 4567
+                        +258 86 93 32 344
                         </a>
                     </p>
                 </div>
@@ -34,7 +34,7 @@ const Footer = () => {
                     <p className="nilia-text-xs">Av. F. Orlando Magumbwe, 837 Maputo</p>
                 </div>
             </div>
-            <p className="nilia-text-xs">© 2024 Instituto Nilia. Todos os direitos reservados. Desenvolvido por <a href="https://itcom.co.mz" className="nilia-link">ITCOM</a></p>
+            <p className="nilia-text-xs">© 2024 Instituto Nilia. Todos os direitos reservados. Desenvolvido por <a href="www.itcom.co.mz" className="nilia-link">ITCOM</a></p>
         </div>
     );
 };

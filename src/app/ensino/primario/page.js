@@ -44,8 +44,8 @@ export default function Page() {
             </Head>
             <NiliaNav imageBg={nilio_bg} title={"Ensino"} text={"Primário"} />
             <section className='nilia-section bg-nilia-standard'>
-                <div className='nilia-container'>
-                    <div className=' w-2/3 flex flex-col gap-2'>
+                <div className='nilia-container flex-col sm:flex-row'>
+                    <div className='w-full sm:w-2/3 flex flex-col gap-2'>
                         <h2 className='nilia-title-m'>Ensino Primário</h2>
                         <p className='nilia-text-s'>
                             O Ensino Primário no Instituto Nília segue o currículo do Sistema Nacional de Educação (SNE), mas com importantes complementos que visam enriquecer
@@ -55,7 +55,7 @@ export default function Page() {
                             equilibrado e integral.
                         </p>
                     </div>
-                    <div className=' w-1/3 flex flex-col justify-center items-center'>
+                    <div className='w-full sm:w-1/3 flex flex-col justify-center items-center'>
                         <div className='card-school-info'>
                             <div className='w-full flex flex-row gap-2 items-center'>
                                 <MdTimer className='icon' size={25} color='white' />
@@ -79,7 +79,7 @@ export default function Page() {
             </section>
             <section className='nilia-special-section'>
                 <div className='nilia-container'>
-                    <div className=' w-2/3 flex flex-col gap-2'>
+                    <div className='w-full sm:w-2/3 flex flex-col gap-2'>
                         <h2 className='nilia-title-ms font-orange'>À saída da educação básica, o aluno deverá ser capaz de:</h2>
                         <div className='flex flex-row gap-2 items-start'>
                             <MdDoubleArrow size={20} color='#ffef11' className="min-w-[20px]" />
@@ -116,7 +116,7 @@ export default function Page() {
                             </p>
                         </div>
                     </div>
-                    <div className=' w-1/3 flex flex-col gap-2'>
+                    <div className=' w-1/3 hidden sm:flex flex-col gap-2'>
                         <Image src={nilia_kids_1} alt='Porquê escolher o Instituto Nília?' className='nilia-container-image h-full' />
                     </div>
                 </div>
@@ -163,10 +163,10 @@ export default function Page() {
             </section>
             <section className='nilia-section bg-nilia-marrom'>
                 <div className='nilia-container'>
-                    <div className='w-1/3 flex flex-col justify-center items-center'>
+                    <div className='hidden sm:flex w-1/3 flex flex-col justify-center items-center'>
                         <Image src={oxford} alt='Oxford | Instituto Nília?' className='nilia-container-image' />
                     </div>
-                    <div className='w-2/3 flex flex-col gap-2'>
+                    <div className='w-full sm:w-2/3 flex flex-col gap-2'>
                         <p className='nilia-title-m'>Programa de Inglês Oxford</p>
                         <p className='nilia-text-s'>
                             O Instituto Nília dá uma ênfase especial ao ensino da língua inglesa, integrando-a como parte essencial do currículo desde o Ensino Primário até o Ensino Secundário. A partir de 2024, o

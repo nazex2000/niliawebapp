@@ -110,7 +110,7 @@ export default function SecundaryClasses() {
     ]
 
     return (<>
-        <div className='flex flex-row gap-2 items-start'>
+        <div className='flex flex-row gap-2 grid grid-cols-4 sm:grid-cols-6 items-start'>
             {classes.map((classe, index) => (
                 <div key={index} className={`class-selector ${selectedClass === index ? 'selected' : ''}`} onClick={() => setSelectedClass(index)}>
                     {classe.title}
@@ -118,7 +118,7 @@ export default function SecundaryClasses() {
             ))}
         </div>
         <div className='flex flex-row gap-2 mt-4'>
-            <div className="w-2/3 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8" style={{height: 'fit-content'}}>
+            <div className="w-full sm:w-2/3 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8" style={{height: 'fit-content'}}>
                 {classes[selectedClass].subjects.map((subject, index) => (
                     <div key={index} className='w-full flex flex-row gap-2 items-center'>
                         <MdBook className="min-w-[20px]" size={25} color='#10374F' />
@@ -126,7 +126,7 @@ export default function SecundaryClasses() {
                     </div>
                 ))}
             </div>
-            <div className=' w-1/3 flex flex-col gap-2'>
+            <div className=' hidden sm:flex  w-1/3 flex flex-col gap-2'>
                 <Image src={nilia_kids_1} alt='Porquê escolher o Instituto Nília?' className='nilia-container-image h-full' />
             </div>
         </div>

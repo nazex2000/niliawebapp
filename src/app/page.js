@@ -56,10 +56,10 @@ export default function Home() {
       ]} />
       <section className='nilia-section'>
         <div className='nilia-container'>
-          <div className=' w-1/2 flex flex-col justify-center items-center'>
+          <div className='hidden sm:flex w-1/2 flex flex-col justify-center items-center'>
             <Image src={nilia_kids_1} alt='Porquê escolher o Instituto Nília?' className='nilia-container-image' />
           </div>
-          <div className=' w-1/2 flex flex-col gap-2'>
+          <div className='w-full sm:w-1/2 flex flex-col gap-2'>
             <h2 className='nilia-title-m'>Porquê escolher o Instituto Nília?</h2>
             <p className='nilia-title-xs mt-2'>Descubra porquê mais de 1000 familias confiam em nós</p>
             <p className='nilia-text-s'>
@@ -86,9 +86,9 @@ export default function Home() {
 
           </div>
         </div>
-        <div className='nilia-container mt-16'>
-          <div className=' w-1/2 flex flex-col gap-8'>
-            <p className='nilia-title-l mt-2'>RESULTADOS QUE <br />FALAM POR NÓS</p>
+        <div className='nilia-container mt-16 flex-col sm:flex-row'>
+          <div className='w-full sm:w-1/2 flex flex-col gap-8'>
+            <p className='nilia-title-l mt-2 text-center sm:text-left'>RESULTADOS QUE <br />FALAM POR NÓS</p>
             <div className='w-full grid grid-cols-2 gap-4'>
               <div className='flex flex-col gap-2'>
                 <p className='nilia-title-l'>97%</p>
@@ -100,25 +100,25 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className=' w-1/2 flex flex-col justify-center items-center'>
+          <div className='w-full sm:w-1/2 flex flex-col justify-center items-center'>
             <Image src={nilia_kids_2} alt='Os Resultados falam por nós no instituto nília' className='nilia-container-image' />
           </div>
         </div>
       </section>
       <section className='nilia-section bg-nilia-marrom'>
         <div className='nilia-container'>
-          <div className=' w-1/2 flex flex-col justify-center items-center'>
+          <div className='hidden sm:flex w-1/2 flex flex-col justify-center items-center'>
             <Image src={nilia_kids_3} alt='Porquê escolher o Instituto Nília?' className='nilia-container-image img-decr' />
           </div>
-          <div className=' w-1/2 flex flex-col justify-center items-center gap-4'>
+          <div className='w-full sm:w-1/2 flex flex-col justify-center items-center gap-4'>
             <p className='nilia-title-ls text-center'>Testemunhos da <br />nossa comunidade</p>
             <Testimonials />
           </div>
         </div>
       </section>
       <section className='nilia-section'>
-        <div className='nilia-container'>
-          <div className=' w-2/3 flex flex-col justify-center gap-4'>
+        <div className='nilia-container flex-col sm:flex-row'>
+          <div className='w-full sm:w-2/3 flex flex-col justify-center gap-4'>
             <p className='nilia-title-m'>Onde o Futuro é Construído com Excelência...</p>
             <p className='nilia-text-s'>
               No Instituto Nília, acreditamos que a educação vai além da sala de aula. Aqui, cada aluno é visto como um indivíduo único, com talentos e potencialidades
@@ -134,7 +134,7 @@ export default function Home() {
               <div className='dot-orange'></div>
             </div>
           </div>
-          <div className=' w-1/3 flex flex-col justify-center items-center'>
+          <div className='w-fu;; sm:w-1/3 flex flex-col justify-center items-center'>
             <Image src={prateleira} alt='Onde o Futuro é Construído com Excelência' className='nilia-container-image' />
           </div>
         </div>
@@ -180,7 +180,7 @@ export default function Home() {
         <div className='nilia-container'>
           <div className=' w-full flex flex-col gap-4'>
             <p className='nilia-title-ls'>Oferta formativa</p>
-            <div className='grid grid-cols-3 gap-4'>
+            <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
               <OfferCard title='Ensino Pré-Escolar' bgImg={nilia_kids_5} href='/ensino/pre-escolar' />
               <OfferCard title='Ensino Primário' bgImg={nilia_img_2} href='/ensino/primario' />
               <OfferCard title='Ensino Secundário' bgImg={nilia_kids_4} href='/ensino/secundario' />
@@ -192,10 +192,10 @@ export default function Home() {
       <section className='nilia-section'>
         <div className='nilia-container'>
           <div className='activities-block gap-2'>
-            <Image src={nilia_painting} alt='Atividades extracurriculares no Instituto Nília' className='activities-image' />
+            <Image src={nilia_painting} alt='Atividades extracurriculares no Instituto Nília' className='activities-image hidden sm:flex' />
             <Image src={nilia_book} alt='Atividades extracurriculares' className='activities-icons' />
             <p className='nilia-title-ls font-white'>Atividades de Interesse</p>
-            <p className='nilia-text-s font-white w-1/3'>Descubra as atividades de interesse disponíveis para crianças e jovens no Instituto Nília.</p>
+            <p className='nilia-text-s font-white w-full sm:w-1/3'>Descubra as atividades de interesse disponíveis para crianças e jovens no Instituto Nília.</p>
             <div className='flex flex-row gap-2 items-start'>
               <div className='dot-white'></div>
               <div className='dot-white'></div>

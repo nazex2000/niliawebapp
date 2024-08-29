@@ -47,10 +47,10 @@ export default function Page() {
             <NiliaNav imageBg={nilio_bg} title={"Sobre Nós"} text={"Mais de 25 anos a educar."} />
             <section className='nilia-section'>
                 <div className='nilia-container'>
-                    <div className=' w-1/3 flex flex-col justify-center items-center'>
+                    <div className=' hidden sm:flex w-1/3 flex flex-col justify-center items-center'>
                         <Image src={nilia_place} alt='Porquê escolher o Instituto Nília?' className='nilia-container-image' />
                     </div>
-                    <div className=' w-2/3 flex flex-col gap-2'>
+                    <div className='w-full sm:w-2/3 flex flex-col gap-2'>
                         <h2 className='nilia-title-m'>Educação irreverente, moderna e orientada para o futuro</h2>
                         <p className='nilia-text-s'>
                             O Instituto Nília é uma instituição de ensino privada moçambicana, com raízes que remontam a 1994, quando foi fundada como Instituto Edulândia. Em 1997,
@@ -125,8 +125,8 @@ export default function Page() {
                 </div>
             </section>
             <section className='nilia-section'>
-                <div className='nilia-container'>
-                    <div className=' w-2/3 flex flex-col gap-2'>
+                <div className='nilia-container flex-col sm:flex-row'>
+                    <div className='w-full sm:w-2/3 flex flex-col gap-2'>
                         <h2 className='nilia-title-m'>Mais que uma escola,
                             uma comunidade</h2>
                         <p className='nilia-text-s'>
@@ -141,7 +141,7 @@ export default function Page() {
                             <div className='dot-orange'></div>
                         </div>
                     </div>
-                    <div className=' w-1/3 flex flex-col justify-center items-center'>
+                    <div className='w-full sm:w-1/3 flex flex-col justify-center items-center'>
                         <Image src={nilia_kids_1} alt='Porquê escolher o Instituto Nília?' className='nilia-container-image' />
                     </div>
                 </div>
@@ -177,10 +177,10 @@ export default function Page() {
             <section className='nilia-section'>
                 <div className='nilia-container'>
                     <div className='activities-block gap-2'>
-                        <Image src={nilia_team} alt='Atividades extracurriculares no Instituto Nília' className='activities-image' />
+                        <Image src={nilia_team} alt='Atividades extracurriculares no Instituto Nília' className='activities-image hidden sm:flex' />
                         <Image src={nilia_book} alt='Atividades extracurriculares' className='activities-icons' />
                         <p className='nilia-title-ls font-white'>Conheça a nossa equipa</p>
-                        <p className='nilia-text-s font-white w-1/3'>Somos uma grande equipa de educadores atentos e próximos dos nossos alunos.</p>
+                        <p className='nilia-text-s font-white w-full sm:w-1/3'>Somos uma grande equipa de educadores atentos e próximos dos nossos alunos.</p>
                         <div className='flex flex-row gap-2 items-start'>
                             <div className='dot-white'></div>
                             <div className='dot-white'></div>

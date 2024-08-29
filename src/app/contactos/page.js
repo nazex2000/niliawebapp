@@ -37,8 +37,8 @@ export default function Page() {
             </Head>
             <NiliaNav imageBg={nilia_place} title={"Contactos"} text={"O sucesso do seu filho começa aqui."} />
             <section className="nilia-section bg-nilia-standard">
-                <div className='nilia-container bg-[#10374F]' style={{padding: '0'}} >
-                    <div className='w-1/2 p-8 gap-3 flex flex-col bg-[white]'>
+                <div className='nilia-container flex-col md:flex-row bg-[#10374F]' style={{padding: '0'}} >
+                    <div className='w-full md:w-1/2 p-8 gap-3 flex flex-col bg-[white]'>
                         <p className='nilia-title-m'>Unidade Tivane</p>
                         <p className='nilia-text-s'>Ensino Pré-escolar (5 anos) e Primário1 nível (1-3a Classes) e Sede Administrativa</p>
                         <div className='flex flex-row gap-2 items-center'>
@@ -68,7 +68,7 @@ export default function Page() {
                             <p className='nilia-text-s'>administracao@institutonilia.edu.mz</p>
                         </div>
                     </div>
-                    <div className='w-1/2 p-8 flex flex-col mb-auto' style={{minHeight: '100%'}}>
+                    <div className='w-full md:w-1/2 p-8 flex flex-col mb-auto' style={{minHeight: '100%'}}>
                         <p className='nilia-title-m text-white'>Envie-nos uma mensagem</p>
                         <form className='flex flex-col gap-3 mt-4'>
                             <input type='text' placeholder='Nome' className='nilia-input' />

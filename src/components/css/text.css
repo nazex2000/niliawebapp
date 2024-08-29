@@ -65,6 +65,8 @@
   cursor: pointer;
 }
 
+
+
 .nilia-title-ls {
   font-family: "Poppins", sans-serif;
   font-size: 2rem;
@@ -110,6 +112,8 @@
   text-decoration: none;
 }
 
+
+
 .nilia-link {
   font-family: "Montserrat", sans-serif;
   font-size: 0.76rem;
@@ -124,6 +128,16 @@
 .carousel-title {
   font-family: "Poppins", sans-serif;
   font-size: 4.2rem;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.carousel-title-s {
+  font-family: "Poppins", sans-serif;
+  font-size: 3.5rem;
   color: white;
   text-decoration: none;
   font-weight: 500;
@@ -183,4 +197,9 @@ table td {
   font-family: "Montserrat", sans-serif;
   font-size: 0.9rem;
   color: black;
+}
+
+.line-bottom{
+  border-bottom: 3px solid #FF6600;
+  width: 40%;
 }

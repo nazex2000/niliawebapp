@@ -143,7 +143,7 @@ export default function Page() {
                         </p>
                         <p className='nilia-title-ms'>Preçario 2024-25</p>
                         <p className='nilia-text-s'>
-                            A anuidade pode ser paga na totalidade no início do ano letivo com um desconto de 5% ou dividida em 2 prestações semestrais, 4 prestações trimestrais ou 11 prestações 
+                            A anuidade pode ser paga na totalidade no início do ano letivo com um desconto de 5% ou dividida em 2 prestações semestrais, 4 prestações trimestrais ou 11 prestações
                             mensais. No ato de matrícula, é necessário pagar a Taxa de Inscrição, Seguro de Acidentes Escolares e Taxa de Material Complementar
                         </p>
                         <div className="overflow-x-auto">
@@ -183,7 +183,7 @@ export default function Page() {
                             </table>
                         </div>
                         <p className='nilia-text-s mt-4'>
-                            Para informações complementares clique <a href="/documents/info.pdf" download className="font-orange">aqui</a>.
+                            Para informações complementares clique <a href="/documents/info.pdf" target="_blank" rel="noopener noreferrer" className="font-orange">aqui</a>.
                         </p>
                     </div>
 

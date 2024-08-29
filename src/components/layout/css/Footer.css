@@ -26,3 +26,23 @@
   width: 100%;
   padding-inline: 1rem;
 }
+
+@media screen and (max-width: 768px) {
+  .footer {
+    padding: 2rem 1rem;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    justify-content: left;
+    gap: 1rem;
+  }
+
+  .footer-card{
+    width: 100%;
+  }
+
+  .logo-footer {
+    width: 10vw;
+  }
+}
