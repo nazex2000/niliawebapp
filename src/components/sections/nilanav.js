@@ -9,7 +9,7 @@ export default function NiliaNav({ imageBg, title, text }) {
                     <div className="nilia-badge">
                         {title}
                     </div>
-                    <p className="nilia-title-l title-border font-white">
+                    <p className="nilia-title-ls md:nilia-title-l title-border font-white">
                         {text}
                     </p>
                 </div>

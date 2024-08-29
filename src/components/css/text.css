@@ -43,7 +43,6 @@
 .title-border {
   border-bottom: 3px solid #FF6600;
   width: fit-content;
-  font-size: 2.8rem !important;
 }
 
 .nilia-title-m::after, .title-after {

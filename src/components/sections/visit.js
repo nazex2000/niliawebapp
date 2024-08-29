@@ -10,7 +10,7 @@ export default function VisitNilia (){
                 <div className="nilia-container">
                     <div className="w-full flex flex-col justify-center gap-2">
                         <p className="nilia-title-s">Instituto Nília</p>
-                        <p className="nilia-title-l">
+                        <p className="nilia-title-ls md:nilia-title-l">
                             A <span className="font-orange"> educação</span> é o <br />seu melhor <br /><span className="font-orange">investimento</span>
                         </p>
                         <NiliaButton text='Visite-nos' onClick={() => window.location.href = "/contactos"} />
