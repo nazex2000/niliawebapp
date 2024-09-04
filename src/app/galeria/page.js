@@ -69,7 +69,7 @@ export default function Page() {
                     </div>
                 </div>
             </section>
-            <section className="nilia-section">
+            <section className="nilia-section" style={{paddingTop: 0}}>
                 <div className='nilia-container flex-col md:flex-row'>
                     <div className='w-full md:w-1/2 flex flex-col justify-center items-start'>
                         <p className='nilia-title-l font-orange'>Dia da Água</p>
@@ -93,7 +93,7 @@ export default function Page() {
                     </div>
                 </div>
             </section>
-            <section className="nilia-section">
+            <section className="nilia-section" style={{paddingTop: 0}}>
                 <div className='nilia-container flex-col md:flex-row'>
                     <div className='w-full md:w-1/2 flex flex-col justify-center items-start'>
                         <p className='nilia-title-l font-orange'>Feira Gastronómica</p>
@@ -120,7 +120,7 @@ export default function Page() {
                     </div>
                 </div>
             </section>
-            <section className="nilia-section">
+            <section className="nilia-section" style={{paddingTop: 0}}>
                 <div className='nilia-container flex-col md:flex-row'>
                     <div className='w-full md:w-1/2 flex flex-col justify-center items-start'>
                         <p className='nilia-title-l font-orange'>Ohana</p>

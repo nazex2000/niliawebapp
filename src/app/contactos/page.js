@@ -69,7 +69,7 @@ export default function Page() {
                         </div>
                     </div>
                     <div className='w-full md:w-1/2 p-8 flex flex-col mb-auto' style={{minHeight: '100%'}}>
-                        <p className='nilia-title-m text-white'>Envie-nos uma mensagem</p>
+                        <p className='nilia-title-m font-white'>Envie-nos uma mensagem</p>
                         <form className='flex flex-col gap-3 mt-4'>
                             <input type='text' placeholder='Nome' className='nilia-input' />
                             <input type='email' placeholder='Email' className='nilia-input' />

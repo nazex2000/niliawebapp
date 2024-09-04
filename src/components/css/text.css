@@ -88,12 +88,14 @@
   font-size: 0.9rem;
   color: black;
   text-decoration: none;
+  text-align: justify;
 }
 
 .nilia-text-m {
   font-family: "Montserrat", sans-serif;
   font-size: 1.5rem;
   color: black;
+  text-align: justify;
   text-decoration: none;
 }
 
@@ -102,6 +104,7 @@
   font-size: 1.1rem;
   color: black;
   text-decoration: none;
+  text-align: justify;
 }
 
 .nilia-text-l {
@@ -109,6 +112,7 @@
   font-size: 2rem;
   color: black;
   text-decoration: none;
+  text-align: justify;
 }
 
 

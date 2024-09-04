@@ -4,7 +4,7 @@ import nilia_kids from '../../assets/images/nilia-scroll-3.webp';
 import NiliaButton from "../buttons/button";
 export default function VisitNilia (){
     return (
-        <section className='nilia-section no-pd'>
+        <section className='nilia-section no-pd' style={{height: '50vh'}} id='visit'>
             <Image src={nilia_kids} alt='Visite o Instituto Nília?' className='visit-bg-image' />
             <div className='visit-container'>
                 <div className="nilia-container">

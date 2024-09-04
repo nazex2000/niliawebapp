@@ -22,7 +22,7 @@ const Header = () => {
                 <div className="logo-container">
                     <Image src={niliaLogo} alt="Instituto Nilia" className="logo" onClick={() => window.location.href = "/"} />
                 </div>
-                <nav className="nav-menu hidden sm:flex">
+                <nav className="nav-menu hidden md:flex">
                     <ul>
                         <li>
                             <a href="/">Home</a>
@@ -56,11 +56,11 @@ const Header = () => {
                         </li>
                     </ul>
                 </nav>
-                <div className="menu-icon sm:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+                <div className="menu-icon md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
                     {menuOpen ? <MdClose className='cursor-pointer' color="white" size={30} /> : <MdMenu className='cursor-pointer' color="white" size={30} />}
                 </div>
                 {menuOpen &&
-                    <div className='menu-bar-mobile  block sm:hidden'>
+                    <div className='menu-bar-mobile  block md:hidden'>
                         <p className='text-menu'>
                             <FaArrowRight size={17} color='#ff812e' />
                             <p className="nilia-text-m" onClick={() => handleMenu('/')}>Home</p>

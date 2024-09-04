@@ -165,7 +165,7 @@ export default function Home() {
                 <p className='nilia-text-s'>
                 Localizada na Av. F. Orlando Magumbwe, 837, em Maputo, a Unidade Magumbwé é dedicada ao ensino secundário e ao 2º nível do pré-escolar. O campus é dividido em dois turnos: 
                 manhã e tarde. No turno da manhã, oferecemos ensino para o 2º nível do pré-escolar e 7ª classe do ensino secundário. No turno da tarde, atendemos alunos do ensino secundário, 
-                das 8ª à 12ª classes. O Unidade Magumbwé conta com instalações avançadas, incluindo laboratórios, bibliotecas e espaços dedicados para atividades extracurriculares, promovendo 
+                das 8ª à 12ª classes. A Unidade Magumbwé conta com instalações avançadas, incluindo laboratórios, bibliotecas e espaços dedicados para atividades extracurriculares, promovendo 
                 um ambiente de aprendizado dinâmico e enriquecedor.
                 </p>
               </div>
