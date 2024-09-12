@@ -6,6 +6,7 @@ import nilia_place from '../../assets/images/galeria.jpg';
 import '../../components/css/main.css';
 import '../../components/css/button.css';
 import Image from 'next/image';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 //image folder
 
@@ -19,6 +20,7 @@ export const metadata = {
 export default function Page() {
     return (
         <div>
+            <GoogleAnalytics />
             <Head>
                 <title>Instituto Nilia - Galeria</title>
                 <link rel="icon" href="../favicon.ico" sizes="any" />

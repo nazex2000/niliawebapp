@@ -15,6 +15,7 @@ import oxford from '../../../assets/images/oxford.webp';
 
 import VisitNilia from '@/components/sections/visit';
 import PrimaryClasses from '@/components/sections/primaryClasses';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 export const metadata = {
     title: "Instituto Nilia | Ensino Primário",
@@ -26,6 +27,7 @@ export default function Page() {
 
     return (
         <div>
+            <GoogleAnalytics />
             <Head>
                 <title>Instituto Nilia - Nossa Equipe</title>
                 <link rel="icon" href="../favicon.ico" sizes="any" />

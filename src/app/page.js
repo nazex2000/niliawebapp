@@ -28,10 +28,12 @@ import Testimonials from '@/components/slider/testimonials';
 import OfferCard from '@/components/cards/offerCard';
 import FrequentAsks from '@/components/sections/frequentasks';
 import VisitNilia from '@/components/sections/visit';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 export default function Home() {
   return (
     <>
+      <GoogleAnalytics />
       <Head>
         <title>Instituto Nilia - Preparando Estudantes para o Futuro</title>
         <link rel="icon" href="./favicon.ico" sizes="any" />

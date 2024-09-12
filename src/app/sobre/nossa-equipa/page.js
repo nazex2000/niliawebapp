@@ -13,6 +13,7 @@ import director from '../../../assets/images/director.jpg';
 
 
 import VisitNilia from '@/components/sections/visit';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 export const metadata = {
     title: "Instituto Nilia | Sobre Nós",
@@ -23,6 +24,7 @@ export const metadata = {
 export default function Page() {
     return (
         <div>
+            <GoogleAnalytics />
             <Head>
                 <title>Instituto Nilia - Nossa Equipe</title>
                 <link rel="icon" href="../favicon.ico" sizes="any" />

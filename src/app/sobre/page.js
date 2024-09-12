@@ -18,6 +18,7 @@ import mission_img from '../../assets/icons/target.png';
 import vision_img from '../../assets/icons/binocular.png';
 import values_img from '../../assets/icons/loyalty.png';
 import VisitNilia from '@/components/sections/visit';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 export const metadata = {
     title: "Instituto Nilia | Sobre Nós",
@@ -28,6 +29,7 @@ export const metadata = {
 export default function Page() {
     return (
         <div>
+            <GoogleAnalytics />
             <Head>
                 <title>Instituto Nilia - Sobre</title>
                 <link rel="icon" href="../favicon.ico" sizes="any" />

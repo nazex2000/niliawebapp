@@ -8,6 +8,7 @@ import { MdFacebook, MdLocationPin, MdMail, MdPhone } from 'react-icons/md';
 import '../../components/css/main.css';
 import '../../components/css/button.css';
 import Image from 'next/image';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
 
 export const metadata = {
@@ -19,6 +20,7 @@ export const metadata = {
 export default function Page() {
     return (
         <div>
+            <GoogleAnalytics />
             <Head>
                 <title>Instituto Nilia - Contactos</title>
                 <link rel="icon" href="../favicon.ico" sizes="any" />
