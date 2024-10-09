@@ -18,15 +18,19 @@ const Footer = () => {
                         </a>
                     </p>
                     <p className="nilia-text-xs">Telefone:
-                        <a href="tel:+258 84 123 4567" className="nilia-link">
-                        +258 86 93 32 344
+                        <a href="tel:+258873037946" className="nilia-link">
+                            +258873037946
+                        </a>
+                    </p>
+                    <p className="nilia-text-xs">Telefone:
+                        <a href="tel:+258823037946" className="nilia-link">
+                            +258823037946
                         </a>
                     </p>
                 </div>
                 <div className="footer-card">
                     <p className="nilia-title-xs">Horário de Funcionamento</p>
-                    <p className="nilia-text-xs">Segunda a Sexta: 08:00 - 17:00</p>
-                    <p className="nilia-text-xs">Sábado: 08:00 - 12:00</p>
+                    <p className="nilia-text-xs">Segunda a Sexta: 07:30 - 15:00</p>
                 </div>
                 <div className="footer-card">
                     <p className="nilia-title-xs">Localização</p>
