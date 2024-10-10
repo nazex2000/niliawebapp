@@ -1,3 +1,4 @@
+"use client";
 import niliaLogo from "../../assets/logo/nilia.webp";
 import "./css/Footer.css";
 import "../css/text.css"
@@ -38,7 +39,8 @@ const Footer = () => {
                     <p className="nilia-text-xs">Av. F. Orlando Magumbwe, 837 Maputo</p>
                 </div>
             </div>
-            <p className="nilia-text-xs">© 2024 Instituto Nilia. Todos os direitos reservados. Desenvolvido por <a href="www.itcom.co.mz" className="nilia-link">ITCOM</a></p>
+            <p className="nilia-text-xs">© 2024 Instituto Nilia. Todos os direitos reservados. Desenvolvido por <a onClick={() => window.open("https://itcom.co.mz")} className="nilia-link">ITCOM</a>
+            </p>
         </div>
     );
 };
