@@ -22,7 +22,7 @@ export default function FrequentAsks() {
             answer: <>Os custos associados variam consoante o nível de ensino e o número de disciplinas. Para mais informações, clique <a className="font-orange" href='/admissoes#precario'>aqui</a></>        },
         {
             question: 'Em que línguas é o ensino no Instituto Nília?',
-            answer: 'O ensino no Instituto Nília é ministrado em Português e Inglês. Os alunos têm a possibilidade de frequentar aulas de reforço em outras línguas.'
+            answer: "O ensino no Instituto Nília é ministrado em Português (curriculum do SNE), acrescentamos algumas áreas com o objectivo de alargar o âmbito de aprendizagens. Fazemos um grande investimento em Inglês desde a Pré, tendo em vista capacitar alunos com comunicação bilingue, no final do Ensino Primário. "
         }
     ]);
 

@@ -53,11 +53,11 @@ export default function Page() {
                         <Image src={nilia_place} alt='Porquê escolher o Instituto Nília?' className='nilia-container-image' />
                     </div>
                     <div className='w-full sm:w-2/3 flex flex-col gap-2'>
-                        <h2 className='nilia-title-m'>Educação irreverente, moderna e orientada para o futuro</h2>
+                        <h2 className='nilia-title-m'>Educação inovadora e orientada para o futuro</h2>
                         <p className='nilia-text-s'>
-                            O Instituto Nília é uma instituição de ensino privada moçambicana, com raízes que remontam a 1994, quando foi fundada como Instituto Edulândia. Em 1997,
-                            a escola passou a se chamar Instituto Nília, consolidando sua identidade e missão.
-                            Desde a sua criação, o Instituto Nília se destacou por oferecer uma abordagem pedagógica inovadora, centrada no aluno e em suas necessidades individuais.
+                            O Instituto Nília é uma instituição de ensino privada moçambicana, com raízes que remontam a 1994, quando foi fundada como Instituto Edulândia. Em 1997, a escola passou a chamar-se Instituto Nília,
+                            consolidando sua identidade e missão.
+                            Desde a sua criação, o Instituto Nília destacou-se por oferecer uma abordagem pedagógica inovadora, centrada no aluno e em suas necessidades individuais.
                             A escola busca promover o desenvolvimento integral dos seus estudantes, estimulando a autonomia, a criatividade e o pensamento crítico.
                         </p>
                         <p className='nilia-text-s'>
@@ -94,7 +94,7 @@ export default function Page() {
                         </div>
                         <div className='flex flex-col items-center gap-2'>
                             <p className='nilia-title-l'>97%</p>
-                            <p className='nilia-text-s'>Taxa de entrada no Ensino Superior</p>
+                            <p className='nilia-text-s'>Taxa de sucesso</p>
                         </div>
                     </div>
                 </div>
@@ -106,21 +106,28 @@ export default function Page() {
                             <Image src={mission_img} alt='Missão' width={80} height={80} />
                             <h3 className='nilia-title-s'>Missão</h3>
                             <p className='nilia-text-s text-center'>
-                                Inspirar e capacitar cada aluno a ser um cidadão global, criativo e autônomo, preparado para os desafios do futuro.
+                                Promover uma educação que incentive a diversidade e
+                                estimule o desenvolvimento individual, formando alunos para
+                                que se tornem cidadãos globais, criativos e autónomos,
+                                preparados para enfrentar o futuro com confiança.
                             </p>
                         </div>
                         <div className='flex flex-col gap-2 items-center'>
                             <Image src={vision_img} alt='Visão' width={80} height={80} />
                             <h3 className='nilia-title-s'>Visão</h3>
                             <p className='nilia-text-s text-center'>
-                                Ser referência em educação inovadora, oferecendo um ensino de qualidade que transforma vidas e contribui para o desenvolvimento da sociedade.
+                                Contribuir para o desenvolvimento de alunos autoconfiantes,
+                                criativos e competentes, bem preparados para navegar com
+                                sucesso nas constantes mudanças da vida profissional e social.
                             </p>
                         </div>
                         <div className='flex flex-col gap-2 items-center'>
                             <Image src={values_img} alt='Valores' width={80} height={80} />
                             <h3 className='nilia-title-s'>Valores</h3>
                             <p className='nilia-text-s text-center'>
-                                Compromisso com a excelência, respeito à diversidade, ética e responsabilidade social.
+                                Autoconstrução, Compromisso com a excelência, respeito à
+                                diversidade, aos valores morais e éticos e responsabilidade
+                                social.
                             </p>
                         </div>
                     </div>
@@ -133,8 +140,10 @@ export default function Page() {
                             uma comunidade</h2>
                         <p className='nilia-text-s'>
                             No Instituto Nília, a comunidade escolar é fundamental para o sucesso de cada aluno. Pais, professores e alunos trabalham juntos para
-                            criar um ambiente de aprendizagem colaborativo e enriquecedor. Através de reuniões, eventos e projetos conjuntos, fortalecemos os laços
-                            entre todos os membros da comunidade, promovendo um sentimento de pertencimento e engajamento.
+                            criar um ambiente de aprendizagem colaborativo e enriquecedor. Através de reuniões numa base individualizada, de
+                            organização de eventos e projectos conjuntos, fortalecemos os
+                            laços entre todos os membros da comunidade escolar,
+                            promovendo um sentimento de pertença e engajamento.
                         </p>
                         <p className='nilia-title-xs mt-2'>Mais do que uma escola, o Instituto Nília é um lugar onde sonhos se realizam e futuros são construídos.</p>
                         <div className='flex flex-row gap-2 items-start mt-2'>

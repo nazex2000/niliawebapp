@@ -6,22 +6,22 @@ export default function Testimonials() {
 
     const testimonials = [
         {
-            text: 'O Instituto Nília é uma escola incrível! Meu filho adora as aulas e os professores são muito atenciosos.',
-            author: 'Maria Silva',
+            text: 'Ser aluna do Instituto Nília transformou a minha vida, proporcionando aprendizagens incríveis que impactaram tanto a minha trajetória académica quanto a minha vida profissional.',
+            author: 'Monica Amargar',
+            role: 'Ex-aluna (1999 – 2008)',
         },
         {
-            text: 'Estou muito satisfeito com o progresso do meu filho. O Instituto Nília é uma escola de excelência.',
-            author: 'João Santos',
+            text: 'Falar do Instituto Nilia hoje, é voltar a um passado maravilhoso em que tive uma educação centrada no desenvolvimento da criança, sem distinção de raça, etnia e condição física, o Nilia foi uma segunda casa para mim.',
+            author: 'Vanessa Adamgee',
+            role: 'Ex-aluna (2003 – 2007)',
         },
         {
-            text: 'O Instituto Nília oferece uma educação de qualidade e um ambiente acolhedor. Recomendo!',
-            author: 'Ana Oliveira',
-        },
-        {
-            text: 'Meu filho adora as aulas de matemática! O Instituto Nília é uma escola de excelência.',
-            author: 'Pedro Almeida',
+            text: 'Sou profundamente grato ao Instituto Nília, que foi a base da minha formação académica e do profissional que sou hoje. Sem dúvida, as minhas crianças também irão para o Instituto Nília.',
+            author: 'Renato Dombo',
+            role: 'Ex-aluno (1997 – 2007)',
         },
     ];
+    
 
     // Go to the next slide
     const nextSlide = () => {
@@ -50,9 +50,9 @@ export default function Testimonials() {
                     >
                         {index === current && (
                             <div className="flex flex-col items-center justify-center gap-4">
-                                <p className="nilia-text-s text-italic text-center"> {testimonial.text}</p>
+                                <p className="nilia-text-s text-italic text-center" style={{textAlign:'center'}}> {testimonial.text}</p>
                                 <p className="nilia-title-ms">{testimonial.author}</p>
-                                <p className="nilia-text-s">Encarregada de Educação</p>
+                                <p className="nilia-text-s">{testimonial.role}</p>
                                 <div className="flex flex-row items-center justify-center gap-2">
                                     <div className="dot-orange"></div>
                                     <div className="dot-orange"></div>

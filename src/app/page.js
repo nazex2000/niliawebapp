@@ -29,6 +29,7 @@ import OfferCard from '@/components/cards/offerCard';
 import FrequentAsks from '@/components/sections/frequentasks';
 import VisitNilia from '@/components/sections/visit';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
+import ResultSlider from '@/components/slider/slide-results';
 
 export default function Home() {
   return (
@@ -62,14 +63,18 @@ export default function Home() {
             <Image src={nilia_kids_1} alt='Porquê escolher o Instituto Nília?' className='nilia-container-image' />
           </div>
           <div className='w-full sm:w-1/2 flex flex-col gap-2'>
-            <h2 className='nilia-title-m'>Porquê escolher o Instituto Nília?</h2>
-            <p className='nilia-title-xs mt-2'>Descubra porquê mais de 1000 familias confiam em nós</p>
+            <h2 className='nilia-title-m'>Por que escolher o Instituto Nília?</h2>
+            <p className='nilia-title-xs mt-2'>Descubra por que famílias confiam em nós</p>
             <p className='nilia-text-s'>
               No Instituto Nília, acreditamos que cada aluno é único e possui um potencial infinito. Nossa missão é oferecer uma educação de excelência, que inspire e prepare nossos alunos para os desafios do futuro.
             </p>
             <div className='flex flex-row gap-2 items-start'>
               <MdCheckCircle size={20} color='#48ff00' className="min-w-[20px]" />
-              <p className='nilia-text-s'><span className='font-bold'>Foco no aluno:</span> Nosso ensino é personalizado, estimulando a autonomia e a criatividade de cada aluno.</p>
+              <p className='nilia-text-s'><span className='font-bold'>Foco no aluno:</span> O nosso ensino é individualizado, endereçamos
+                as diferenças especificas dos alunos na turma. Encorajamos o
+                estudante a realizar as actividades por sua própria descoberta,
+                por tentativa, erro e autocorreção, promovendo autonomia e
+                reconhecimento das suas próprias capacidades</p>
             </div>
             <div className='flex flex-row gap-2 items-start'>
               <MdCheckCircle size={20} color='#48ff00' className="min-w-[20px]" />
@@ -81,7 +86,7 @@ export default function Home() {
             </div>
             <div className='flex flex-row gap-2 items-start mb-5'>
               <MdCheckCircle size={20} color='#48ff00' className="min-w-[20px]" />
-              <p className='nilia-text-s'><span className='font-bold'>Excelência:</span> Excelentes resultados em avaliações e participação em projetos transformadores.</p>
+              <p className='nilia-text-s'><span className='font-bold'>Qualidade:</span> Excelentes resultados em avaliações e participação em projectos transformadores.</p>
             </div>
             <NiliaButton text={<a href='/sobre'>Saiba mais</a>} />
 
@@ -94,7 +99,7 @@ export default function Home() {
             <div className='w-full grid grid-cols-2 gap-4'>
               <div className='flex flex-col gap-2'>
                 <p className='nilia-title-l'>97%</p>
-                <p className='nilia-text-s'>Entrada no Ensino Superior</p>
+                <p className='nilia-text-s'>Taxa de Sucesso</p>
               </div>
               <div className='flex flex-col gap-2'>
                 <p className='nilia-title-l'>+25</p>
@@ -103,7 +108,7 @@ export default function Home() {
             </div>
           </div>
           <div className='w-full sm:w-1/2 flex flex-col justify-center items-center'>
-            <Image src={nilia_kids_2} alt='Os Resultados falam por nós no instituto nília' className='nilia-container-image' />
+            <ResultSlider />
           </div>
         </div>
       </section>
@@ -121,13 +126,13 @@ export default function Home() {
       <section className='nilia-section'>
         <div className='nilia-container flex-col sm:flex-row'>
           <div className='w-full sm:w-2/3 flex flex-col justify-center gap-4'>
-            <p className='nilia-title-m'>Onde o Futuro é Construído com Excelência...</p>
+            <p className='nilia-title-m'>Onde o futuro é contruído com dedicação</p>
             <p className='nilia-text-s'>
               No Instituto Nília, acreditamos que a educação vai além da sala de aula. Aqui, cada aluno é visto como um indivíduo único, com talentos e potencialidades
               que precisam ser descobertos e cultivados. Nossa missão é preparar os alunos não apenas para terem sucesso nos exames, mas para se tornarem cidadãos completos,
               prontos para enfrentar os desafios de um mundo em constante mudança.
               <br />
-              Escolher o Instituto Nília é optar por uma educação que forma líderes, inovadores e cidadãos conscientes. Venha nos conhecer e descubra como podemos ajudar a
+              Escolher o Instituto Nília é optar por uma educação que forma líderes, inovadores e cidadãos conscientes. Venha conhecer-nos e descubra como podemos ajudar a
               construir o futuro do seu filho com excelência e dedicação.
             </p>
             <div className='flex flex-row gap-2 items-start'>
@@ -146,33 +151,42 @@ export default function Home() {
             <p className='nilia-text-s'>O Instituto Nília possui dois campus, cada um com uma proposta pedagógica única e adaptada às necessidades dos alunos, oferecendo um ambiente
               educacional de alta qualidade para diferentes níveis de ensino, desde o pré-escolar até o ensino secundário.
             </p>
-            
+
             <div className='flex flex-row gap-2 items-center gap-8'>
               <div className='w-1/3 flex flex-col gap-2'>
-                <Image src={nilia_place} alt='Unidade Tivane' className='nilia-container-image' style={{ maxHeight: '240px' }}/>
+                <Image src={nilia_place} alt='Unidade Tivane' className='nilia-container-image' style={{ maxHeight: '240px' }} />
               </div>
               <div className='w-2/3 flex flex-col gap-2'>
                 <p className='nilia-title-ms'>Unidade Tivane</p>
                 <p className='nilia-text-s'>
-                Situada na Av. Armando Tivane, 1581, em Maputo, a Unidade Tivane é o coração do nosso instituto, onde se concentra o ensino pré-escolar e primário. Este campus oferece 
-                um ambiente acolhedor e estimulante para crianças a partir dos 5 anos. As instalações incluem salas de aula modernas, um playground seguro e áreas verdes que incentivam 
-                a exploração e o aprendizado. A Unidade Tivane também abriga nossa sede administrativa, facilitando a comunicação e o apoio a pais e alunos.
+                  Situada na Av. Armando Tivane, 1581, em Maputo, a Unidade Tivane é o coração
+                  do nosso instituto, onde se concentra o ensino pré-escolar e primário. Este
+                  campus oferece um ambiente acolhedor e estimulante para crianças dos 5 anos
+                  aos 8 anos (Pré à 3ª Classe). As instalações incluem salas de aula modernas, uma
+                  biblioteca apetrechada, um playground seguro e áreas verdes que incentivam a
+                  exploração e o aprendizado. A Unidade Tivane também abriga nossa sede
+                  administrativa.
                 </p>
               </div>
             </div>
             <div className='flex flex-row gap-2 items-center gap-8 mt-4'>
-              
+
               <div className='w-2/3 flex flex-col gap-2'>
                 <p className='nilia-title-ms'>Unidade Magumbwé</p>
                 <p className='nilia-text-s'>
-                Localizada na Av. F. Orlando Magumbwe, 837, em Maputo, a Unidade Magumbwé é dedicada ao ensino secundário e ao 2º nível do pré-escolar. O campus é dividido em dois turnos: 
-                manhã e tarde. No turno da manhã, oferecemos ensino para o 2º nível do pré-escolar e 7ª classe do ensino secundário. No turno da tarde, atendemos alunos do ensino secundário, 
-                das 8ª à 12ª classes. A Unidade Magumbwé conta com instalações avançadas, incluindo laboratórios, bibliotecas e espaços dedicados para atividades extracurriculares, promovendo 
-                um ambiente de aprendizado dinâmico e enriquecedor.
+                  Localizada na Av. F. Orlando Magumbwé, 837, em Maputo, a Unidade Magumbwé
+                  é dedicada ao 2º nível do ensino primário e ao ensino secundário. O campus é
+                  dividido em dois turnos: manhã e tarde. No turno da manhã, oferecemos ensino
+                  para o 2º nível do primário (4ª à 6ª classes) e 7ª e 8ª classes do ensino secundário.
+                  No turno da tarde, atendemos alunos do ensino secundário, das 9ª à 12ª classes.
+                  A Unidade Magumbwé conta com instalações avançadas, incluindo laboratório,
+                  biblioteca, sala de informática e espaços dedicados para atividades
+                  extracurriculares, promovendo um ambiente de aprendizado dinâmico e
+                  enriquecedor.
                 </p>
               </div>
               <div className='w-1/3 flex flex-col gap-2'>
-                <Image src={nilia_place_2} alt='Unidade Tivane' className='nilia-container-image'  />
+                <Image src={nilia_place_2} alt='Unidade Tivane' className='nilia-container-image' />
               </div>
             </div>
           </div>
