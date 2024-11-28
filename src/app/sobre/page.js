@@ -1,5 +1,5 @@
 import NiliaNav from '@/components/sections/nilanav';
-import nilio_bg from '../../assets/images/nilia-kids-6.webp';
+import nilio_bg from '../../assets/images/teachers.JPG';
 import Head from 'next/head';
 import Image from 'next/image';
 import nilia_place from '../../assets/images/nilia-place.png';

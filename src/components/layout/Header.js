@@ -37,16 +37,13 @@ const Header = () => {
                         <li className="dropdown">
                             <a>Ensino</a>
                             <div className="dropdown-menu">
+                                <a href="/ensino/pre-escolar">Pré-Escolar</a>
                                 <a href="/ensino/primario">Primário</a>
                                 <a href="/ensino/secundario">Secundário</a>
                             </div>
                         </li>
                         <li className="dropdown">
-                            <a>Admissões</a>
-                            <div className="dropdown-menu">
-                                <a href="/admissoes">Processo de Inscrição</a>
-                                <a href="/admissoes#precario">Preçario</a>
-                            </div>
+                            <a href="/admissoes">Admissões</a>
                         </li>
                         <li>
                             <a href="/galeria">Galeria</a>

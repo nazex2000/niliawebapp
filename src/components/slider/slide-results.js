@@ -17,7 +17,7 @@ const ResultSlider = () => {
     }, [images.length]);
 
     return (
-        <div style={{  width: '100%', height: '600px' }} className='flex justify-center items-center'>
+        <div style={{  width: '100%', height: '600px' }} className='flex justify-center items-center specialMob'>
             <Image
                 src={images[currentIndex]}
                 alt='Os Resultados falam por nós no instituto nília'

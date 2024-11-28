@@ -29,7 +29,7 @@ export default function Page() {
         <div>
             <GoogleAnalytics />
             <Head>
-                <title>Instituto Nilia - Nossa Equipe</title>
+                <title>Instituto Nilia - Ensino Primário</title>
                 <link rel="icon" href="../favicon.ico" sizes="any" />
                 <meta name="description" content="O Instituto Nilia oferece um ambiente de aprendizagem que promove a autoconfiança, a criatividade e o desenvolvimento pessoal, preparando os alunos para enfrentar os desafios do futuro." />
                 <meta name="keywords" content="educação, aprendizagem, desenvolvimento pessoal, auto-aprendizagem, ensino fundamental, ensino secundário, Moçambique" />
@@ -64,8 +64,10 @@ export default function Page() {
                                 <p className='nilia-title-xs font-white'>Horários</p>
                             </div>
                             <div className='w-full flex flex-col gap-2 pl-8 mt-2'>
-                                <p className='nilia-text-xs font-white'>Horário de Aulas: 07:30 - 13:00</p>
-                                <p className='nilia-text-xs font-white'>Horário de Atendimento: 07:00 - 19:00</p>
+                                <p className='nilia-text-xs font-white'>Pré, 1ª, 2ª e 3ª: 07:30 - 11:45(Segunda a Sexta Feira)
+                                e 13:10 - 16:00 (4 X's por semana)</p>
+                                <p className='nilia-text-xs font-white'>4ª, 5ª e 6ª: 07:30 - 11:45(Segunda a Sexta Feira)
+                                e 13:10 - 16:00 (4 X's por semana)</p>
                             </div>
                             <div className='w-full flex flex-row gap-2 items-center mt-4'>
                                 <MdSchool className='icon' size={25} color='white' />

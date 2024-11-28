@@ -39,7 +39,17 @@ const Carousel = ({ data }) => {
                         className={index === current ? 'slide active' : 'slide'}
                         key={index}
                     >
-                        {index === current && (<Image src={image.image} alt='carousel image' className='image-carousel' />)}
+                        {index === current && (
+                            <Image
+                                src={image.image}
+                                alt='carousel image'
+                                className='image-carousel'
+                                placeholder="blur"
+                                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+                                priority
+                                loading='eager'
+                            />
+                        )}
                     </div>
                 );
             })}

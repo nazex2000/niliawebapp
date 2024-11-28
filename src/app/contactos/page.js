@@ -1,6 +1,6 @@
 import NiliaNav from '@/components/sections/nilanav';
 import Head from 'next/head';
-import nilia_place from '../../assets/images/nilia-place-2.webp';
+import nilia_place from '../../assets/images/cnt.webp';
 import facebook_icon from '../../assets/icons/facebook.png';
 import { MdFacebook, MdLocationPin, MdMail, MdPhone } from 'react-icons/md';
 

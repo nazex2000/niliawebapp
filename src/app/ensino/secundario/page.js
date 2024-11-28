@@ -10,7 +10,7 @@ import '../../../components/css/button.css';
 //Icons import from react-icons
 import { MdArrowBackIos, MdDoubleArrow, MdSchool, MdTimeline, MdTimer } from 'react-icons/md';
 
-import nilia_kids_1 from '../../../assets/images/nilia-kids-2.webp';
+import nilia_kids_1 from '../../../../public/galeria/almoco-12/foto-7.jpg';
 import oxford from '../../../assets/images/oxford.webp';
 
 import VisitNilia from '@/components/sections/visit';
@@ -63,8 +63,8 @@ export default function Page() {
                                 <p className='nilia-title-xs font-white'>Horários</p>
                             </div>
                             <div className='w-full flex flex-col gap-2 pl-8 mt-2'>
-                                <p className='nilia-text-xs font-white'>Horário de Aulas: 12:30 - 17:00</p>
-                                <p className='nilia-text-xs font-white'>Horário de Atendimento: 07:00 - 19:00</p>
+                                <p className='nilia-text-xs font-white'>7º e 8º Classe: 07:30 - 11:45(Segunda a Sexta Feira)</p>
+                                <p className='nilia-text-xs font-white'>9º, 10º, 11ª e 12ª Classe: 12:50 - 17:45(Segunda a Sexta Feira)</p>
                             </div>
                             <div className='w-full flex flex-row gap-2 items-center mt-4'>
                                 <MdSchool className='icon' size={25} color='white' />

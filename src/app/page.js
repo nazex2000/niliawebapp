@@ -4,20 +4,20 @@ import Image from 'next/image';
 import React from 'react';
 
 //Images import
-import nilia_img_1 from '../assets/images/nilia-scroll-1.webp';
-import nilia_img_2 from '../assets/images/nilia-scroll-2.webp';
-import nilia_img_3 from '../assets/images/nilia-scroll-3.webp';
-import nilia_img_4 from '../assets/images/nilia-scroll-4.webp';
+import nilia_img_1 from '../assets/images/carrousel_1.webp';
+import nilia_img_2 from '../assets/images/carrousel_2.webp';
+import nilia_img_3 from '../assets/images/carrousel_3.webp';
+import nilia_img_4 from '../assets/images/carrousel_4.webp';
 import nilia_kids_1 from '../assets/images/nilia-kids-1.webp';
 import nilia_kids_2 from '../assets/images/nilia-kids-2.webp';
 import nilia_kids_3 from '../assets/images/nilia-kids-3.webp';
 import nilia_kids_4 from '../assets/images/nilia-kids-4.webp';
-import nilia_kids_5 from '../assets/images/nilia-kids-5.webp';
+import nilia_kids_5 from '../assets/images/oferta-formativa.webp';
 import nilia_painting from '../assets/images/nilia-painting.png';
 import nilia_book from '../assets/icons/mind.png';
-import prateleira from '../assets/images/prateleira.png';
-import nilia_place from '../assets/images/nilia-place.png';
-import nilia_place_2 from '../assets/images/nilia-place-3.jpg';
+import prateleira from '../assets/images/ondekids.webp';
+import nilia_place from '../assets/images/tiv.webp';
+import nilia_place_2 from '../assets/images/mun.webp';
 //Styles import
 import '../components/css/main.css';
 
@@ -30,6 +30,7 @@ import FrequentAsks from '@/components/sections/frequentasks';
 import VisitNilia from '@/components/sections/visit';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import ResultSlider from '@/components/slider/slide-results';
+import YouTubeComponet from '@/components/cards/youtube';
 
 export default function Home() {
   return (
@@ -113,9 +114,9 @@ export default function Home() {
         </div>
       </section>
       <section className='nilia-section bg-nilia-marrom'>
-        <div className='nilia-container'>
-          <div className='hidden sm:flex w-1/2 flex flex-col justify-center items-center'>
-            <Image src={nilia_kids_3} alt='Porquê escolher o Instituto Nília?' className='nilia-container-image img-decr' />
+        <div className='nilia-container flex-col sm:flex-row'>
+          <div className='w-full sm:flex w-1/2 flex flex-col justify-center items-center rounded-lg' style={{minHeight:'40vh', overflow:'hidden'}}>
+            <YouTubeComponet/>
           </div>
           <div className='w-full sm:w-1/2 flex flex-col justify-center items-center gap-4'>
             <p className='nilia-title-ls text-center'>Testemunhos da <br />nossa comunidade</p>
