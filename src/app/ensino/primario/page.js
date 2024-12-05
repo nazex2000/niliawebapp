@@ -1,5 +1,5 @@
 import NiliaNav from '@/components/sections/nilanav';
-import nilio_bg from '../../../assets/images/nilia-scroll-1.webp';
+import nilio_bg from '../../../assets/images/IMG_5594.webp';
 import Head from 'next/head';
 import Image from 'next/image';
 

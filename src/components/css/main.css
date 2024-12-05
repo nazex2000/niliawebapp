@@ -115,8 +115,8 @@
   border-radius: 0.3rem;
 }
 .nilia-team-image {
-  width: 300px; /* adjust as needed */
-  height: 300px; /* adjust as needed */
+  width: 250px; /* adjust as needed */
+  height: 250px; /* adjust as needed */
   border-radius: 50%;
   object-fit: cover;
 }
@@ -168,6 +168,25 @@
 .galleryimage:hover {
   transform: scale(1.1);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.floating-email {
+  position: fixed;
+  bottom: 7rem; /* Adjust if needed */
+  right: 2rem; /* Adjust position based on WhatsApp button */
+  background-color: #ff812e;
+  color: #333;
+  border-radius: 50%;
+  padding: 15px;
+  font-size: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  z-index: 1000;
+}
+.floating-email:hover {
+  background-color: #ddd;
+  transform: scale(1.1);
 }
 
 @media screen and (max-width: 768px) {

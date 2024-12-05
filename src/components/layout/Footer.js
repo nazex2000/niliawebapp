@@ -6,7 +6,8 @@ import Image from "next/image";
 
 const Footer = () => {
     return (
-        <div className="footer gap-12">
+        <div className="footer gap-4">
+            <p className="nilia-title-s text-underline" style={{textDecoration:'underline'}}>SERVIÇOS ADMINISTRATIVOS/SECRETARIA</p>
             <div className="footer-content">
                 <div className="footer-card">
                     <Image src={niliaLogo} alt="Instituto Nilia" className="logo-footer" />

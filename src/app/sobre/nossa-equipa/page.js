@@ -8,7 +8,10 @@ import '../../../components/css/main.css';
 import '../../../components/css/button.css';
 
 //Images import
-import teachers from '../../../assets/images/teachers.JPG';
+import mari from '../../../assets/docente/Marinela Muemela.webp';
+import nel from '../../../assets/docente/Nélia Macondzo.webp';
+import Ngui from '../../../assets/docente/Nguiloze Aleixa da Conceição.webp';
+import Noel from '../../../assets/docente/Noelma Dias.webp';
 
 import VisitNilia from '@/components/sections/visit';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
@@ -53,13 +56,29 @@ export default function Page() {
                             o conhecimento, mas também a responsabilidade, dedicação e o prazer
                             que têm na sua profissão.
                         </p>
+                        <p className='nilia-title-xs mt-2'>Descubra abaixo a nossa brinhante equipa.</p>
                         <div className='flex flex-row gap-2 items-start mt-2'>
                             <div className='dot-orange'></div>
                             <div className='dot-orange'></div>
                             <div className='dot-orange'></div>
                         </div>
-                        <div className='w-full mt-4'>
-                            <Image src={teachers} alt='Equipa do Instituto Nilia' className='w-full rounded-md' />
+                        <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12'>
+                            <div className='w-full flex flex-col gap-2 items-center'>
+                                <Image src={mari} alt='Marinela Muemela' className='nilia-team-image' />
+                                <p className='nilia-title-s text-center'>Marinela Muemela</p>
+                            </div>
+                            <div className='w-full flex flex-col gap-2 items-center'>
+                                <Image src={nel} alt='Nélia Macondzo' className='nilia-team-image' />
+                                <p className='nilia-title-s text-center'>Nélia Macondzo</p>
+                            </div>
+                            <div className='w-full flex flex-col gap-2 items-center'>
+                                <Image src={Ngui} alt='Nguiloze Aleixa da Conceição' className='nilia-team-image' />
+                                <p className='nilia-title-s text-center'>Nguiloze Aleixa da Conceição</p>
+                            </div>
+                            <div className='w-full flex flex-col gap-2 items-center'>
+                                <Image src={Noel} alt='Noelma Dias' className='nilia-team-image' />
+                                <p className='nilia-title-s text-center'>Noelma Dias</p>
+                            </div>
                         </div>
                     </div>
                 </div>

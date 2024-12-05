@@ -50,34 +50,22 @@ export default function Page() {
                 </div>
                 <div className='nilia-container'>
                     <div className='w-full grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5'>
-                        <img src="/galeria/insittuicao/sala-1.jpg" alt="Instituto Nilia | Salas de Aulas" className='galleryimage' />
-                        <img src="/galeria/insittuicao/sala-2.jpg" alt="Instituto Nilia | Salas de Aulas" className='galleryimage' />
-                        <img src="/galeria/insittuicao/sala-3.jpg" alt="Instituto Nilia | Salas de Aulas" className='galleryimage' />
-                        <img src="/galeria/insittuicao/biblioteca-1.jpg" alt="Instituto Nilia | Biblioteca" className='galleryimage' />
-                        <img src="/galeria/insittuicao/biblioteca-2.jpg" alt="Instituto Nilia | Biblioteca" className='galleryimage' />
                         <img src="/galeria/insittuicao/biblioteca-3.jpg" alt="Instituto Nilia | Biblioteca" className='galleryimage' />
-                        <img src="/galeria/insittuicao/sala-de-informatica-1.jpg" alt="Instituto Nilia | Sala de Informática" className='galleryimage' />
                         <img src="/galeria/insittuicao/sala-de-informatica-2.jpg" alt="Instituto Nilia | Sala de Informática" className='galleryimage' />
-                        <img src="/galeria/insittuicao/sala-de-informatica-3.jpg" alt="Instituto Nilia | Sala de Informática" className='galleryimage' />
                         <img src="/galeria/insittuicao/laboratorio-1.jpg" alt="Instituto Nilia | Laboratório" className='galleryimage' />
                         <img src="/galeria/insittuicao/laboratorio-2.jpg" alt="Instituto Nilia | Laboratório" className='galleryimage' />
-                        <img src="/galeria/insittuicao/laboratorio-3.jpg" alt="Instituto Nilia | Laboratório" className='galleryimage' />
-                        <img src="/galeria/insittuicao/campo-1.jpg" alt="Instituto Nilia | Campo Desportivo" className='galleryimage' />
-                        <img src="/galeria/insittuicao/campo-2.jpg" alt="Instituto Nilia | Campo Desportivo" className='galleryimage' />
                         <img src="/galeria/insittuicao/campo-3.jpg" alt="Instituto Nilia | Campo Desportivo" className='galleryimage' />
-                        <img src="/galeria/insittuicao/patio-1.jpg" alt="Instituto Nilia | Pátio" className='galleryimage' />
                         <img src="/galeria/insittuicao/patio-2.jpg" alt="Instituto Nilia | Pátio" className='galleryimage' />
-                        <img src="/galeria/insittuicao/patio-3.jpg" alt="Instituto Nilia | Pátio" className='galleryimage' />
                     </div>
                 </div>
             </section>
-            <section className="nilia-section" style={{paddingTop: 0}}>
+            <section className="nilia-section" style={{ paddingTop: 0 }}>
                 <div className='nilia-container flex-col md:flex-row'>
                     <div className='w-full md:w-1/2 flex flex-col justify-center items-start'>
                         <p className='nilia-title-l font-orange'>Dia da Água</p>
                     </div>
                     <div className='w-full md:w-1/2 flex flex-col justify-center items-start gap-3'>
-                        <p className='nilia-text-s '>No Instituto Nilia, celebramos o Dia Mundial da Água com atividades educativas e recreativas que promovem a consciencialização sobre a importância da água para a vida no planeta.</p>
+                        <p className='nilia-text-s '>No Instituto Nilia, celebramos o Dia Mundial da Água com atividades educactivas e recreactivas que promovem a consciencialização sobre a importância da água para a vida no planeta.</p>
                         <div className='line-bottom'></div>
                     </div>
                 </div>
@@ -85,17 +73,12 @@ export default function Page() {
                     <div className='w-full grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5'>
                         <img src="/galeria/dia-da-agua/foto-1.jpg" alt="Instituto Nilia | Dia da Água" className='galleryimage' />
                         <img src="/galeria/dia-da-agua/foto-2.jpg" alt="Instituto Nilia | Dia da Água" className='galleryimage' />
-                        <img src="/galeria/dia-da-agua/foto-3.jpg" alt="Instituto Nilia | Dia da Água" className='galleryimage' />
-                        <img src="/galeria/dia-da-agua/foto-4.jpg" alt="Instituto Nilia | Dia da Água" className='galleryimage' />
                         <img src="/galeria/dia-da-agua/foto-5.jpg" alt="Instituto Nilia | Dia da Água" className='galleryimage' />
                         <img src="/galeria/dia-da-agua/foto-6.jpg" alt="Instituto Nilia | Dia da Água" className='galleryimage' />
-                        <img src="/galeria/dia-da-agua/foto-7.jpg" alt="Instituto Nilia | Dia da Água" className='galleryimage' />
-                        <img src="/galeria/dia-da-agua/foto-8.jpg" alt="Instituto Nilia | Dia da Água" className='galleryimage' />
-                        <img src="/galeria/dia-da-agua/foto-9.jpg" alt="Instituto Nilia | Dia da Água" className='galleryimage' />
                     </div>
                 </div>
             </section>
-            <section className="nilia-section" style={{paddingTop: 0}}>
+            <section className="nilia-section" style={{ paddingTop: 0 }}>
                 <div className='nilia-container flex-col md:flex-row'>
                     <div className='w-full md:w-1/2 flex flex-col justify-center items-start'>
                         <p className='nilia-title-l font-orange'>Feira Gastronómica</p>
@@ -107,22 +90,16 @@ export default function Page() {
                 </div>
                 <div className='nilia-container'>
                     <div className='w-full grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5'>
-                        <img src="/galeria/feira-gastronomica/feira-1.jpg" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
-                        <img src="/galeria/feira-gastronomica/feira-2.jpg" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
-                        <img src="/galeria/feira-gastronomica/feira-3.jpg" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
-                        <img src="/galeria/feira-gastronomica/feira-4.jpg" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
-                        <img src="/galeria/feira-gastronomica/feira-5.jpg" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
-                        <img src="/galeria/feira-gastronomica/feira-6.jpg" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
-                        <img src="/galeria/feira-gastronomica/feira-7.jpg" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
-                        <img src="/galeria/feira-gastronomica/feira-8.jpg" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
-                        <img src="/galeria/feira-gastronomica/feira-9.jpg" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
-                        <img src="/galeria/feira-gastronomica/feira-10.jpg" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
-                        <img src="/galeria/feira-gastronomica/feira-11.jpg" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
-                        <img src="/galeria/feira-gastronomica/feira-12.jpg" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
+                        <img src="/galeria/feira-gastronomica/feira1.webp" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
+                        <img src="/galeria/feira-gastronomica/feira2.webp" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
+                        <img src="/galeria/feira-gastronomica/feira3.webp" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
+                        <img src="/galeria/feira-gastronomica/feira4.webp" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
+                        <img src="/galeria/feira-gastronomica/feira5.webp" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
+                        <img src="/galeria/feira-gastronomica/feira6.webp" alt="Instituto Nilia | Feira Gastronómica" className='galleryimage' />
                     </div>
                 </div>
             </section>
-            <section className="nilia-section" style={{paddingTop: 0}}>
+            <section className="nilia-section" style={{ paddingTop: 0 }}>
                 <div className='nilia-container flex-col md:flex-row'>
                     <div className='w-full md:w-1/2 flex flex-col justify-center items-start'>
                         <p className='nilia-title-l font-orange'>Ohana</p>
@@ -134,15 +111,9 @@ export default function Page() {
                 </div>
                 <div className='nilia-container'>
                     <div className='w-full grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5'>
-                        <img src="/galeria/almoco-12/foto-1.jpg" alt="Instituto Nilia | Ohana" className='galleryimage' />
                         <img src="/galeria/almoco-12/foto-2.jpg" alt="Instituto Nilia | Ohana" className='galleryimage' />
-                        <img src="/galeria/almoco-12/foto-3.jpg" alt="Instituto Nilia | Ohana" className='galleryimage' />
                         <img src="/galeria/almoco-12/foto-4.jpg" alt="Instituto Nilia | Ohana" className='galleryimage' />
-                        <img src="/galeria/almoco-12/foto-5.jpg" alt="Instituto Nilia | Ohana" className='galleryimage' />
-                        <img src="/galeria/almoco-12/foto-6.jpg" alt="Instituto Nilia | Ohana" className='galleryimage' />
-                        <img src="/galeria/almoco-12/foto-7.jpg" alt="Instituto Nilia | Ohana" className='galleryimage' />
                         <img src="/galeria/almoco-12/foto-8.jpg" alt="Instituto Nilia | Ohana" className='galleryimage' />
-                        <img src="/galeria/almoco-12/foto-9.jpg" alt="Instituto Nilia | Ohana" className='galleryimage' />
                         <img src="/galeria/almoco-12/foto-10.jpg" alt="Instituto Nilia | Ohana" className='galleryimage' />
                         <img src="/galeria/almoco-12/foto-11.jpg" alt="Instituto Nilia | Ohana" className='galleryimage' />
                         <img src="/galeria/almoco-12/foto-12.jpg" alt="Instituto Nilia | Ohana" className='galleryimage' />

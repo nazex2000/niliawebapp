@@ -3,7 +3,7 @@ import nilio_bg from '../../assets/images/teachers.JPG';
 import Head from 'next/head';
 import Image from 'next/image';
 import nilia_place from '../../assets/images/nilia-place.png';
-import nilia_kids_1 from '../../assets/images/nilia-kids-1.webp';
+import nilia_kids_1 from '../../assets/images/nilia-about.webp';
 import nilia_team from '../../assets/images/nilia-teacher.png';
 import nilia_book from '../../assets/icons/book.png';
 
@@ -62,7 +62,7 @@ export default function Page() {
                         </p>
                         <p className='nilia-text-s'>
                             O Instituto Nília é uma escola que oferece um ambiente de aprendizagem seguro e estimulante, onde os alunos são encorajados a explorar e a construir seu próprio
-                            conhecimento. A instituição utiliza metodologias ativas e recursos tecnológicos para tornar o aprendizado mais eficaz e divertido.
+                            conhecimento. A instituição utiliza metodologias activas e recursos tecnológicos para tornar o aprendizado mais eficaz e divertido.
                         </p>
                         <div className='flex flex-row gap-2 items-start'>
                             <MdTimeline size={20} color='#48ff00' className="min-w-[20px]" />
@@ -175,7 +175,7 @@ export default function Page() {
                             <h2 className='nilia-title-m'>Metodologia Inovadora</h2>
                             <div className='flex flex-row gap-2 items-start'>
                                 <MdRocket size={20} color='#48ff00' className="min-w-[20px]" />
-                                <p className='nilia-text-s'><span className='font-bold'>Metodologias ativas:</span> A utilização de métodos de ensino que colocam o aluno no centro do processo de aprendizagem, estimulando a participação e a colaboração.</p>
+                                <p className='nilia-text-s'><span className='font-bold'>Metodologias activas:</span> A utilização de métodos de ensino que colocam o aluno no centro do processo de aprendizagem, estimulando a participação e a colaboração.</p>
                             </div>
                             <div className='flex flex-row gap-2 items-start'>
                                 <MdRocket size={20} color='#48ff00' className="min-w-[20px]" />

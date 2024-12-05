@@ -79,7 +79,7 @@ export default function Home() {
             </div>
             <div className='flex flex-row gap-2 items-start'>
               <MdCheckCircle size={20} color='#48ff00' className="min-w-[20px]" />
-              <p className='nilia-text-s'><span className='font-bold'>Inovador:</span> Metodologias ativas e tecnologia para um aprendizado mais eficaz.</p>
+              <p className='nilia-text-s'><span className='font-bold'>Inovador:</span> Metodologias activas e tecnologia para um aprendizado mais eficaz.</p>
             </div>
             <div className='flex flex-row gap-2 items-start'>
               <MdCheckCircle size={20} color='#48ff00' className="min-w-[20px]" />
@@ -154,11 +154,12 @@ export default function Home() {
             </p>
 
             <div className='flex flex-row gap-2 items-center gap-8'>
-              <div className='w-1/3 flex flex-col gap-2'>
+              <div className='w-1/3 flex flex-col gap-2 hidden sm:block'>
                 <Image src={nilia_place} alt='Unidade Tivane' className='nilia-container-image' style={{ maxHeight: '240px' }} />
               </div>
-              <div className='w-2/3 flex flex-col gap-2'>
+              <div className='w-full sm:w-2/3 flex flex-col gap-2'>
                 <p className='nilia-title-ms'>Unidade Tivane</p>
+                <Image src={nilia_place} alt='Unidade Tivane' className='nilia-container-image sm:hidden block' style={{ maxHeight: '240px' }} />
                 <p className='nilia-text-s'>
                   Situada na Av. Armando Tivane, 1581, em Maputo, a Unidade Tivane é o coração
                   do nosso instituto, onde se concentra o ensino pré-escolar e primário. Este
@@ -172,8 +173,9 @@ export default function Home() {
             </div>
             <div className='flex flex-row gap-2 items-center gap-8 mt-4'>
 
-              <div className='w-2/3 flex flex-col gap-2'>
+              <div className='w-full sm:w-2/3 flex flex-col gap-2'>
                 <p className='nilia-title-ms'>Unidade Magumbwé</p>
+                <Image src={nilia_place_2} alt='Unidade Tivane' className='nilia-container-image sm:hidden block' />
                 <p className='nilia-text-s'>
                   Localizada na Av. F. Orlando Magumbwé, 837, em Maputo, a Unidade Magumbwé
                   é dedicada ao 2º nível do ensino primário e ao ensino secundário. O campus é
@@ -186,7 +188,7 @@ export default function Home() {
                   enriquecedor.
                 </p>
               </div>
-              <div className='w-1/3 flex flex-col gap-2'>
+              <div className='w-1/3 flex flex-col gap-2 hidden sm:block'>
                 <Image src={nilia_place_2} alt='Unidade Tivane' className='nilia-container-image' />
               </div>
             </div>

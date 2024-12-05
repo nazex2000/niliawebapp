@@ -50,7 +50,7 @@ export default function Testimonials() {
                     >
                         {index === current && (
                             <div className="flex flex-col items-center justify-center gap-4">
-                                <p className="nilia-text-s text-italic text-center" style={{textAlign:'center'}}> {testimonial.text}</p>
+                                <p className="nilia-text-s text-italic text-center flex items-center" style={{textAlign:'center', minHeight:'120px'}}> {testimonial.text}</p>
                                 <p className="nilia-title-ms">{testimonial.author}</p>
                                 <p className="nilia-text-s">{testimonial.role}</p>
                                 <div className="flex flex-row items-center justify-center gap-2">
