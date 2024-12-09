@@ -6,6 +6,7 @@ import '../../../components/css/main.css';
 import '../../../components/css/button.css';
 
 import GoogleAnalytics from '@/components/GoogleAnalytics';
+import FormularioInscricao from '@/components/formulario/inscricao';
 
 export const metadata = {
     title: "Instituto Nilia | Inscrições",
@@ -37,6 +38,7 @@ export default function Page() {
                 <div className='nilia-container'>
                     <div className=' w-full flex flex-col gap-4'>
                         <p className='nilia-title-m'>Submissão de Candidatura</p>
+                        <FormularioInscricao />
                     </div>
                 </div>
             </section>
