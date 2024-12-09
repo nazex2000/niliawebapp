@@ -1,6 +1,5 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import niliaLogo from "../../assets/logo/nilia.webp";
 import { MdMenu, MdClose, MdFacebook } from "react-icons/md";
@@ -9,15 +8,19 @@ import "./css/Header.css";
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [isAdminPath, setIsAdminPath] = useState(false);
+
+    useEffect(() => {
+        setIsAdminPath(window.location.pathname.includes('/formulario'));
+    }, [window.location.pathname]);
 
     const handleMenu = (path) => {
         window.location.href = path;
-
         setMenuOpen(false);
     }
 
     return (
-        <div className="header">
+        <div className={`header ${isAdminPath ? 'admin-header' : ''}`}>
             <div className="header-content">
                 <div className="logo-container">
                     <Image src={niliaLogo} alt="Instituto Nilia" className="logo" onClick={() => window.location.href = "/"} />

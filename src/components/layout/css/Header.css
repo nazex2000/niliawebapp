@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Advent+Pro:ital,wght@0,100..900;1,100..900&family=Kaushan+Script&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 .header {
-  background-color: transparent;
   position: absolute;
   top: 0; 
   width: 100%;
@@ -11,6 +10,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.admin-header {
+  background-color: #10374F;
+  position: relative;
 }
 
 .header-content {
