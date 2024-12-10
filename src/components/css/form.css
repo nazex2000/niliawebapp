@@ -49,9 +49,38 @@
     padding-block: 3.4rem;
 }
 
+.form-border-main{
+    border: 1px solid #FFDDC7;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
+}
+
 .form-image-home{
     width: 100%;
     height: 20rem;
     object-fit: cover;
     border-radius: 0.5rem;
+}
+
+.levelChoose{
+    flex-wrap: wrap;
+    display: flex;
+    gap: 1rem;
+    justify-content:flex-start;
+}
+
+.level{
+    padding: 0.5rem 1rem;
+    border-radius: 5rem;
+    background-color: #FFDDC7;
+}
+
+.level:hover{
+    cursor: pointer;
+    background-color: #ff660098;
+}
+
+.level.selected{
+    background-color: #ff6600;
+    color: white;
 }

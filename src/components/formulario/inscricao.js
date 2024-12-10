@@ -7,8 +7,10 @@ import nilia_kids from "../../assets/images/nilia-kids-1.webp";
 import NiliaButton from '../buttons/button';
 
 export default function FormularioInscricao() {
-    const [current, setCurrent] = useState(0);
+    //Data of the form
+    const [selectedLevel, setSelectedLevel] = useState(null);
 
+    const [current, setCurrent] = useState(1);
     const handleMenu = (pageNum) => {
         setCurrent(pageNum);
     };
@@ -23,7 +25,7 @@ export default function FormularioInscricao() {
                 </div>
                 <div className={`form-step-line ${current > 0 ? 'active' : ''}`}></div>
                 <div className={`form-step ${current >= 1 ? 'form-step-active' : ''}`} onClick={() => handleMenu(1)}>
-                    <p className={`form-step-text ${current >= 1 ? 'active' : ''}`}>Dados de Identificação</p>
+                    <p className={`form-step-text ${current >= 1 ? 'active' : ''}`}>informações Gerais</p>
                 </div>
                 <div className={`form-step-line ${current > 1 ? 'active' : ''}`}></div>
                 <div className={`form-step ${current >= 2 ? 'form-step-active' : ''}`} onClick={() => handleMenu(2)}>
@@ -57,12 +59,63 @@ export default function FormularioInscricao() {
                                 informações solicitadas e seguir os passos indicados.
                             </p>
                             <div className='ml-auto mt-6'>
-                                <NiliaButton text='Iniciar Inscrição' />
+                                <NiliaButton text='Iniciar Inscrição' onClick={() => handleMenu(1)} />
                             </div>
                         </div>
                     </div>
                 </>
             )}
+            {current === 1 && (<div className='w-full flex flex-col gap-1'>
+                <p className='nilia-title-s'>Classe Pretendida</p>
+                <div className='w-full flex flex-col gap-1 form-border-main'>
+                    <p className='nilia-text-s'> Selecione a classe pretendida para o seu educando</p>
+                    <div className='levelChoose'>
+                        <div className={`level ${selectedLevel === 0 ? 'selected' : ''}`} onClick={() => setSelectedLevel(0)}>
+                            <p className='nilia-text-s'>Pré-Escolar</p>
+                        </div>
+                        <div className={`level ${selectedLevel === 1 ? 'selected' : ''}`} onClick={() => setSelectedLevel(1)}>
+                            <p className='nilia-text-s'>1ª Classe</p>
+                        </div>
+                        <div className={`level ${selectedLevel === 2 ? 'selected' : ''}`} onClick={() => setSelectedLevel(2)}>
+                            <p className='nilia-text-s'>2ª Classe</p>
+                        </div>
+                        <div className={`level ${selectedLevel === 3 ? 'selected' : ''}`} onClick={() => setSelectedLevel(3)}>
+                            <p className='nilia-text-s'>3ª Classe</p>
+                        </div>
+                        <div className={`level ${selectedLevel === 4 ? 'selected' : ''}`} onClick={() => setSelectedLevel(4)}>
+                            <p className='nilia-text-s'>4ª Classe</p>
+                        </div>
+                        <div className={`level ${selectedLevel === 5 ? 'selected' : ''}`} onClick={() => setSelectedLevel(5)}>
+                            <p className='nilia-text-s'>5ª Classe</p>
+                        </div>
+                        <div className={`level ${selectedLevel === 6 ? 'selected' : ''}`} onClick={() => setSelectedLevel(6)}>
+                            <p className='nilia-text-s'>6ª Classe</p>
+                        </div>
+                        <div className={`level ${selectedLevel === 7 ? 'selected' : ''}`} onClick={() => setSelectedLevel(7)}>
+                            <p className='nilia-text-s'>7ª Classe</p>
+                        </div>
+                        <div className={`level ${selectedLevel === 8 ? 'selected' : ''}`} onClick={() => setSelectedLevel(8)}>
+                            <p className='nilia-text-s'>8ª Classe</p>
+                        </div>
+                        <div className={`level ${selectedLevel === 9 ? 'selected' : ''}`} onClick={() => setSelectedLevel(9)}>
+                            <p className='nilia-text-s'>9ª Classe</p>
+                        </div>
+                        <div className={`level ${selectedLevel === 10 ? 'selected' : ''}`} onClick={() => setSelectedLevel(10)}>
+                            <p className='nilia-text-s'>10ª Classe</p>
+                        </div>
+                        <div className={`level ${selectedLevel === 11 ? 'selected' : ''}`} onClick={() => setSelectedLevel(11)}>
+                            <p className='nilia-text-s'>11ª Classe</p>
+                        </div>
+                        <div className={`level ${selectedLevel === 12 ? 'selected' : ''}`} onClick={() => setSelectedLevel(12)}>
+                            <p className='nilia-text-s'>12ª Classe</p>
+                        </div>
+                    </div>
+                </div>
+                <div className='w-full flex flex-row justify-between mt-4'>
+                    <NiliaButton text='Anterior' onClick={() => handleMenu(0)} />
+                    <NiliaButton text='Próximo' onClick={() => handleMenu(2)} />
+                </div>
+            </div>)}
         </section>
     );
 };
