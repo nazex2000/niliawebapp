@@ -84,3 +84,59 @@
     background-color: #ff6600;
     color: white;
 }
+
+.input{
+    padding: 0;
+    margin: 0;
+    gap: 0;
+    font-family: 'Oswald';
+    border-radius: '0px'; 
+    margin-top: 5px;
+}
+
+.input-form{
+    font-family: 'Montserrat';
+    font-size: 1em;
+    border-radius: 5px;
+    background-color: #F3FCFF;
+    margin-left: auto;
+}
+
+.input-form-see{
+    font-family: 'Montserrat';
+    font-size: 1.1em;
+    border-radius: 0px;
+    margin-left: auto;
+    border: none;
+    border-bottom: 1px solid #bcc3c9;
+    pointer-events: none;
+}
+
+.input-see{
+    font-family: 'Montserrat';
+    font-size: 1.1em;
+    border-radius: 0px;
+    margin-left: auto;
+    border: none;
+    background-color:white !important;
+    border-bottom: 1px solid #bcc3c9;
+    padding-left: 0;
+    color: #6c7072 !important
+}
+
+.ant-form-item-control-input-content input{
+    font-family: 'Montserrat';
+    font-size: 1.1em;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.ant-select-single .ant-select-selector{
+    font-family: 'Montserrat';
+    font-size: 1.1em;
+    border-radius: white;
+}
+
+:where(.css-dev-only-do-not-override-142vneq).ant-col [class^="ant-col"], :where(.css-dev-only-do-not-override-142vneq).ant-col [class*=" ant-col"] {
+    padding: 0;
+}

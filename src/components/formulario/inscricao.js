@@ -5,10 +5,26 @@ import "../css/form.css";
 import Image from 'next/image';
 import nilia_kids from "../../assets/images/nilia-kids-1.webp";
 import NiliaButton from '../buttons/button';
+import { Col, Form, Input, Row, Select } from 'antd';
+import { useForm } from 'antd/es/form/Form';
+import { getProvinces } from './form-data';
+
+const { Option } = Select
 
 export default function FormularioInscricao() {
     //Data of the form
+    const [form] = useForm();
+    const [provinces, setProvinces] = useState([]);
     const [selectedLevel, setSelectedLevel] = useState(null);
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+    const getData = async () => {
+        const provincesData = getProvinces();
+        setProvinces(provincesData);
+    }
 
     const [current, setCurrent] = useState(1);
     const handleMenu = (pageNum) => {
@@ -114,6 +130,193 @@ export default function FormularioInscricao() {
                 <div className='w-full flex flex-row justify-between mt-4'>
                     <NiliaButton text='Anterior' onClick={() => handleMenu(0)} />
                     <NiliaButton text='Próximo' onClick={() => handleMenu(2)} />
+                </div>
+            </div>)}
+            {current === 2 && (<div className='w-full flex flex-col gap-1'>
+                <p className='nilia-title-s'>Dados de Identificação</p>
+                <div className='w-full flex flex-col gap-1 form-border-main'>
+                    <Form
+                        form={form}
+                        name="basic"
+                        initialValues={{ remember: true }}
+                        style={{ width: '100%' }}
+                        onFinish={null}
+                    >
+                        <Row gutter={16}>
+                            <Col span={18}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Nome Completo</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='name'
+                                    className='input'
+                                    rules={[{ required: true, message: 'Por favor, insira o seu nome completo' }]}
+                                >
+                                    <Input
+                                        placeholder='Insira o seu nome completo'
+                                        style={{ marginTop: -10 }}
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Género</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='gender'
+                                    className='input'
+                                    rules={[{ required: true, message: 'Por favor, selecione o género' }]}
+                                >
+                                    <Select
+                                        style={{ marginTop: -10 }}
+                                        className='input-form'
+                                        placeholder='Seleccione o género'
+                                    >
+                                        <Option className='nilia-text-s' value='M'>Masculino</Option>
+                                        <Option className='nilia-text-s' value='F'>Femenino</Option>
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={6}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Data de Nascimento</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='dateOfBirth'
+                                    className='input'
+                                    rules={[{ required: true, message: 'Por favor, insira a data de nascimento' }]}
+                                >
+                                    <Input
+                                        placeholder='Insira a data de nascimento'
+                                        type='date'
+                                        style={{ marginTop: -10 }}
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Localidade</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='birthPlace'
+                                    className='input'
+                                    rules={[{ required: true, message: 'Por favor, insira o seu local de nascimento' }]}
+                                >
+                                    <Input
+                                        placeholder='Insira o seu local de nascimento'
+                                        style={{ marginTop: -10 }}
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Província</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='province'
+                                    className='input'
+                                    rules={[{ required: true, message: 'Por favor, selecione a província' }]}
+                                >
+                                    <Select
+                                        style={{ marginTop: -10 }}
+                                        className='input-form'
+                                        placeholder='Seleccione a província'
+                                    >
+                                        {provinces.map((province) => (
+                                            <Option className='nilia-text-s' value={province.name}>{province.name}</Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={6}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Tipo de Documento</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='documentType'
+                                    className='input'
+                                    rules={[{ required: true, message: 'Por favor, selecione o tipo de documento' }]}
+                                >
+                                    <Select
+                                        style={{ marginTop: -10 }}
+                                        className='input-form'
+                                        placeholder='Seleccione o tipo de documento'
+                                    >
+                                        <Option className='nilia-text-s' value='BI'>Bilhete de Identidade</Option>
+                                        <Option className='nilia-text-s' value='Passaporte'>Passaporte</Option>
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                            <Col span={18}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Número do Documento</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='documentNumber'
+                                    className='input'
+                                    rules={[{ required: true, message: 'Por favor, insira o número do documento' }]}
+                                >
+                                    <Input
+                                        placeholder='Insira o número do documento'
+                                        style={{ marginTop: -10 }}
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Morada Completo</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='address'
+                                    className='input'
+                                    rules={[{ required: true, message: 'Por favor, insira a morada completa' }]}
+                                >
+                                    <Input
+                                        placeholder='Insira a morada completa'
+                                        style={{ marginTop: -10 }}
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Número</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='addressNumber'
+                                    className='input'
+                                    rules={[{ required: true, message: 'Por favor, insira o número da morada' }]}
+                                >
+                                    <Input
+                                        placeholder='Insira o número da morada'
+                                        style={{ marginTop: -10 }}
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Flat/Apartamento</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='addressFlat'
+                                    className='input'
+                                    rules={[{ required: true, message: 'Por favor, insira o número do apartamento' }]}
+                                >
+                                    <Input
+                                        placeholder='Insira o número do apartamento'
+                                        style={{ marginTop: -10 }}
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Form>
+
+                </div>
+                <div className='w-full flex flex-row justify-between mt-4'>
+                    <NiliaButton text='Anterior' onClick={() => handleMenu(1)} />
+                    <NiliaButton text='Próximo' onClick={() => handleMenu(3)} />
                 </div>
             </div>)}
         </section>
