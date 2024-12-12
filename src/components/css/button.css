@@ -11,6 +11,24 @@
     background-color: #FF6600;
 }
 
+.nilia-button-2{
+    width: fit-content;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.8rem;
+    color: #FF6600;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 0.3rem;
+    border: 2px solid #FF6600;
+}
+
+.nilia-button-2:hover {
+    background-color: #FF6600;
+    color: white;
+}
+
 .nilia-button:hover {
     background-color: #fd9047;
 }
