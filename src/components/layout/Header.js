@@ -5,17 +5,20 @@ import niliaLogo from "../../assets/logo/nilia.webp";
 import { MdMenu, MdClose, MdFacebook } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa";
 import "./css/Header.css";
+import { usePathname, useRouter } from 'next/navigation';
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [isAdminPath, setIsAdminPath] = useState(false);
+    const pathname = usePathname();
+    const router = useRouter();
 
     useEffect(() => {
-        setIsAdminPath(window.location.pathname.includes('/formulario'));
-    }, [window.location.pathname]);
+        setIsAdminPath(pathname?.includes('/formulario'));
+    }, [pathname]);
 
     const handleMenu = (path) => {
-        window.location.href = path;
+        router.push(path);
         setMenuOpen(false);
     }
 
@@ -23,45 +26,53 @@ const Header = () => {
         <div className={`header ${isAdminPath ? 'admin-header' : ''}`}>
             <div className="header-content">
                 <div className="logo-container">
-                    <Image src={niliaLogo} alt="Instituto Nilia" className="logo" onClick={() => window.location.href = "/"} />
+                    <Image 
+                        src={niliaLogo} 
+                        alt="Instituto Nilia" 
+                        className="logo" 
+                        onClick={() => router.push("/")} 
+                    />
                 </div>
                 <nav className="nav-menu hidden md:flex">
                     <ul>
                         <li>
-                            <a href="/">Home</a>
+                            <a onClick={() => router.push("/")}>Home</a>
                         </li>
                         <li className="dropdown">
-                            <a >O Instituto</a>
+                            <a>O Instituto</a>
                             <div className="dropdown-menu">
-                                <a href="/sobre">Sobre</a>
-                                <a href="/sobre/nossa-equipa">Nossa Equipa</a>
+                                <a onClick={() => router.push("/sobre")}>Sobre</a>
+                                <a onClick={() => router.push("/sobre/nossa-equipa")}>Nossa Equipa</a>
                             </div>
                         </li>
                         <li className="dropdown">
                             <a>Ensino</a>
                             <div className="dropdown-menu">
-                                <a href="/ensino/pre-escolar">Pré-Escolar</a>
-                                <a href="/ensino/primario">Primário</a>
-                                <a href="/ensino/secundario">Secundário</a>
+                                <a onClick={() => router.push("/ensino/pre-escolar")}>Pré-Escolar</a>
+                                <a onClick={() => router.push("/ensino/primario")}>Primário</a>
+                                <a onClick={() => router.push("/ensino/secundario")}>Secundário</a>
                             </div>
                         </li>
                         <li className="dropdown">
-                            <a href="/admissoes">Admissões</a>
+                            <a onClick={() => router.push("/admissoes")}>Admissões</a>
                         </li>
                         <li>
-                            <a href="/galeria">Galeria</a>
+                            <a onClick={() => router.push("/galeria")}>Galeria</a>
                         </li>
                         <li>
-                            <a href="/contactos">Contactos</a>
+                            <a onClick={() => router.push("/contactos")}>Contactos</a>
                         </li>
                         <button className="header-button ml-3">Área Privada</button>
                     </ul>
                 </nav>
                 <div className="menu-icon md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
-                    {menuOpen ? <MdClose className='cursor-pointer' color="white" size={30} /> : <MdMenu className='cursor-pointer' color="white" size={30} />}
+                    {menuOpen ? 
+                        <MdClose className='cursor-pointer' color="white" size={30} /> : 
+                        <MdMenu className='cursor-pointer' color="white" size={30} />
+                    }
                 </div>
-                {menuOpen &&
-                    <div className='menu-bar-mobile  block md:hidden'>
+                {menuOpen && (
+                    <div className='menu-bar-mobile block md:hidden'>
                         <p className='text-menu'>
                             <FaArrowRight size={17} color='#ff812e' />
                             <p className="nilia-text-m" onClick={() => handleMenu('/')}>Home</p>
@@ -69,7 +80,6 @@ const Header = () => {
                         <p className='text-menu'>
                             <FaArrowRight size={17} color='#ff812e' />
                             <p className="nilia-text-m" onClick={() => handleMenu('/sobre')}>O Instituto</p>
-
                         </p>
                         <p className='text-menu'>
                             <FaArrowRight size={17} color='#ff812e' />
@@ -103,7 +113,7 @@ const Header = () => {
                             <MdFacebook size={30} color='#ff812e' />
                         </div>
                     </div>
-                }
+                )}
             </div>
         </div>
     );
