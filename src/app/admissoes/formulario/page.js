@@ -1,18 +1,25 @@
+'use client';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import Image from 'next/image';
 
 //Styles import
 import '../../../components/css/main.css';
 import '../../../components/css/button.css';
 
 import GoogleAnalytics from '@/components/GoogleAnalytics';
-import FormularioInscricao from '@/components/formulario/inscricao';
 
-export const metadata = {
-    title: "Instituto Nilia | Inscrições",
-    description: "Comece a sua jornada connosco. Inscreva-se no Instituto Nilia e prepare-se para o futuro.",
-    keywords: "educação, aprendizagem, desenvolvimento pessoal, auto-aprendizagem, ensino fundamental, ensino secundário, Moçambique",
-}
+// Importar FormularioInscricao dinamicamente
+const FormularioInscricao = dynamic(
+  () => import('@/components/formulario/inscricao'),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="h-screen w-full flex flex-col items-center justify-center">
+        <p className="nilia-text-s">Carregando formulário...</p>
+      </div>
+    )
+  }
+);
 
 export default function Page() {
     return (
@@ -36,7 +43,7 @@ export default function Page() {
             </Head>
             <section className='nilia-section bg-nilia-standard'>
                 <div className='nilia-container'>
-                    <div className=' w-full flex flex-col gap-4'>
+                    <div className='w-full flex flex-col gap-4'>
                         <p className='nilia-title-m'>Submissão de Candidatura</p>
                         <FormularioInscricao />
                     </div>

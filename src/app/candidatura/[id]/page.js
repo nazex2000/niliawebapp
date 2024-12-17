@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { firebase } from '../../../base';
-import html2pdf from 'html2pdf.js';
 import PrintTemplate from '@/components/formulario/PrintTemplate';
 import { Form, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -14,6 +14,7 @@ export default function CandidaturaPage() {
     const [data, setData] = useState(null);
     const [form] = Form.useForm();
     const params = useParams();
+    const router = useRouter();
 
     useEffect(() => {
         fetchData();
@@ -113,7 +114,9 @@ export default function CandidaturaPage() {
         }
     };
 
-    const handleDownloadPDF = () => {
+    const handleDownloadPDF = async () => {
+        if (typeof window === 'undefined') return;
+
         const content = document.getElementById('print-content');
         
         if (!content) {
@@ -121,31 +124,31 @@ export default function CandidaturaPage() {
             return;
         }
 
-        const opt = {
-            margin: [10, 10],
-            filename: `formulario-inscricao-${params.id}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { 
-                scale: 2,
-                useCORS: true,
-                letterRendering: true
-            },
-            jsPDF: { 
-                unit: 'mm', 
-                format: 'a4', 
-                orientation: 'portrait' 
-            }
-        };
+        try {
+            const html2pdf = (await import('html2pdf.js')).default;
 
-        html2pdf().from(content).set(opt).save()
-            .then(() => {
-                // Redirecionar para a página principal após o download
-                window.location.href = '/';
-            })
-            .catch(error => {
-                console.error('Erro ao gerar PDF:', error);
-                setError('Erro ao gerar o documento');
-            });
+            const opt = {
+                margin: [10, 10],
+                filename: `formulario-inscricao-${params.id}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                }
+            };
+
+            await html2pdf().from(content).set(opt).save();
+            router.push('/');
+        } catch (error) {
+            console.error('Erro ao gerar PDF:', error);
+            setError('Erro ao gerar o documento');
+        }
     };
 
     if (loading) {
