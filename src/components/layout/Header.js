@@ -22,6 +22,10 @@ const Header = () => {
         setMenuOpen(false);
     }
 
+    const goAdmin = () => {
+        window.location.href = 'https://institutonilia.com/admin';
+    }
+
     return (
         <div className={`header ${isAdminPath ? 'admin-header' : ''}`}>
             <div className="header-content">
@@ -62,7 +66,7 @@ const Header = () => {
                         <li>
                             <a onClick={() => router.push("/contactos")}>Contactos</a>
                         </li>
-                        <button className="header-button ml-3">Área Privada</button>
+                        <button className="header-button ml-3" onClick={goAdmin}>Área Privada</button>
                     </ul>
                 </nav>
                 <div className="menu-icon md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
