@@ -8,6 +8,12 @@ import '../../../components/css/button.css';
 
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 
+export const metadata = {
+    title: "Instituto Nilia | Inscrições",
+    description: "Inscreva-se no Instituto Nilia e comece a sua jornada connosco. Prepare-se para o futuro com um ambiente de aprendizagem que valoriza a autoconfiança, a criatividade e o desenvolvimento pessoal.",
+    keywords: "educação, aprendizagem, desenvolvimento pessoal, auto-aprendizagem, ensino fundamental, ensino secundário, Moçambique",
+}
+
 // Importar FormularioInscricao dinamicamente
 const FormularioInscricao = dynamic(
   () => import('@/components/formulario/inscricao'),
