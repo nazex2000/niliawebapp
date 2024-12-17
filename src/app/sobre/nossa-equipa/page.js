@@ -8,10 +8,10 @@ import '../../../components/css/main.css';
 import '../../../components/css/button.css';
 
 //Images import
-import mari from '../../../assets/docente/Marinela Muemela.webp';
-import nel from '../../../assets/docente/Nélia Macondzo.webp';
-import Ngui from '../../../assets/docente/Nguiloze Aleixa da Conceição.webp';
-import Noel from '../../../assets/docente/Noelma Dias.webp';
+import mari from '../../../assets/docente/mm.webp';
+import nel from '../../../assets/docente/nm.webp';
+import Ngui from '../../../assets/docente/nc.webp';
+import Noel from '../../../assets/docente/nd.webp';
 
 import VisitNilia from '@/components/sections/visit';
 import GoogleAnalytics from '@/components/GoogleAnalytics';

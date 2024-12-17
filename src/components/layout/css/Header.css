@@ -123,3 +123,20 @@
 .text-menu a:hover {
   color: #ff812e;
 }
+
+.header-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ff6600;
+  color: white;
+  padding: 0.35rem 1.3rem;
+  border-radius: 2rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+}
+
+.header-button:hover {
+  background-color: #fd9047;
+  cursor: pointer;
+}

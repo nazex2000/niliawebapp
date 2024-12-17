@@ -19,6 +19,7 @@ import vision_img from '../../assets/icons/binocular.png';
 import values_img from '../../assets/icons/loyalty.png';
 import VisitNilia from '@/components/sections/visit';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
+import NiliaButton from '@/components/buttons/button';
 
 export const metadata = {
     title: "Instituto Nilia | Admissões",
@@ -27,6 +28,7 @@ export const metadata = {
 }
 
 export default function Page() {
+
     return (
         <div>
             <GoogleAnalytics />
@@ -59,6 +61,7 @@ export default function Page() {
                             com confiança e entusiasmo.<br/>
                             Garanta sua vaga de forma prática: visite os escritórios da Unidade Tivane ou faça sua admissão online em apenas 5 minutos!
                         </p>
+                        <NiliaButton text='Admissão Online' navigate="/admissoes/formulario" />
                         <p className='nilia-title-ms'>Requisitos de Inscrição</p>
                         <div className='grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-8'>
                             <div className='flex flex-col gap-2'>

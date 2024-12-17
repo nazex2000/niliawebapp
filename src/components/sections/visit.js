@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import nilia_kids from '../../assets/images/nilia-scroll-3.webp';
+import nilia_kids from '../../assets/images/educa.jpg';
 import NiliaButton from "../buttons/button";
 export default function VisitNilia (){
     return (

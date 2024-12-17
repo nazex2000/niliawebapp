@@ -8,6 +8,7 @@ import nilia_img_1 from '../assets/images/carrousel_1.webp';
 import nilia_img_2 from '../assets/images/carrousel_2.webp';
 import nilia_img_3 from '../assets/images/carrousel_3.webp';
 import nilia_img_4 from '../assets/images/carrousel_4.webp';
+import nilia_img_5 from '../assets/images/c5.JPG';
 import nilia_kids_1 from '../assets/images/nilia-kids-1.webp';
 import nilia_kids_2 from '../assets/images/nilia-kids-2.webp';
 import nilia_kids_3 from '../assets/images/nilia-kids-3.webp';
@@ -57,6 +58,7 @@ export default function Home() {
         { image: nilia_img_2 },
         { image: nilia_img_3 },
         { image: nilia_img_4 },
+        { image: nilia_img_5 },
       ]} />
       <section className='nilia-section'>
         <div className='nilia-container'>

@@ -1,15 +1,21 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useReactToPrint } from 'react-to-print';
+import html2pdf from 'html2pdf.js';
 
 import "../css/form.css";
 import Image from 'next/image';
 import nilia_kids from "../../assets/images/nilia-kids-1.webp";
+import congrats_image from "../../assets/images/congrats.png";
 import NiliaButton from '../buttons/button';
-import { Col, Divider, Form, Input, Radio, Row, Select, notification } from 'antd';
+import { Col, Divider, Form, Input, Radio, Row, Select, Spin, notification } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { getProvinces } from './form-data';
 import NiliaButtonLight from '../buttons/buttonLight';
-
+import { LoadingOutlined } from '@ant-design/icons';
+import { firebase } from '../../base';
+import { FaExpand, FaExpandAlt } from 'react-icons/fa';
+import PrintTemplate from './PrintTemplate';
 const { Option } = Select
 
 export default function FormularioInscricao() {
@@ -20,6 +26,7 @@ export default function FormularioInscricao() {
 
     useEffect(() => {
         getData();
+        //verify if firebase is initialized
     }, []);
 
     const getData = async () => {
@@ -27,7 +34,7 @@ export default function FormularioInscricao() {
         setProvinces(provincesData);
     }
 
-    const [current, setCurrent] = useState(5);
+    const [current, setCurrent] = useState(0);
     const handleMenu = (pageNum) => {
         setCurrent(pageNum);
     };
@@ -76,7 +83,7 @@ export default function FormularioInscricao() {
     }
 
     //Handle the education guardian
-    const [educationGuardian, setEducationGuardian] = useState(0);
+    const [educationGuardian, setEducationGuardian] = useState('parents');
     const handleEducationGuardian = (e) => {
         setEducationGuardian(e.target.value);
     }
@@ -109,6 +116,197 @@ export default function FormularioInscricao() {
         );
     }
 
+    //Academic History
+    const handleAcademicHistory = () => {
+        form.validateFields().then((values) => {
+            handleMenu(7);
+        }).catch((error) => {
+            form.setFields(error.errorFields);
+            notification.error({
+                message: <p className='nilia-title-s'>Erro</p>,
+                description: <p className='nilia-text-s'>Por favor, preencha todos os campos</p>,
+                placement: 'topRight'
+            });
+        }
+        );
+    }
+
+    //Additional Information
+    const [orphan, setOrphan] = useState('no');
+    const handleOrphan = (e) => {
+        setOrphan(e.target.value);
+    }
+    const handleAdditionalInformation = () => {
+        form.validateFields().then((values) => {
+            handleMenu(8);
+            submitData();
+        }).catch((error) => {
+            form.setFields(error.errorFields);
+            notification.error({
+                message: <p className='nilia-title-s'>Erro</p>,
+                description: <p className='nilia-text-s'>Por favor, preencha todos os campos</p>,
+                placement: 'topRight'
+            });
+        }
+        );
+    }
+
+    //Submit Data
+    const submitData = async () => {
+        setLoading(true);
+        try {
+            await firebase.firestore().collection('submissoes').add({
+                level: selectedLevel,
+                studentIdentity: {
+                    name: form.getFieldValue('name') || '',
+                    dob: form.getFieldValue('dateOfBirth') || '',
+                    gender: form.getFieldValue('gender') || '',
+                    birthPlace: form.getFieldValue('birthPlace') || '',
+                    province: form.getFieldValue('province') || '',
+                    documentType: form.getFieldValue('documentType') || '',
+                    documentNumber: form.getFieldValue('documentNumber') || '',
+                    address: form.getFieldValue('address') || '',
+                    addressNumber: form.getFieldValue('addressNumber') || '',
+                    addressFlat: form.getFieldValue('addressFlat') || ''
+                },
+                filiation: {
+                    father: {
+                        name: form.getFieldValue('fatherName') || '',
+                        profession: form.getFieldValue('fatherProfession') || '',
+                        workPlace: form.getFieldValue('fatherWorkPlace') || '',
+                        phone: form.getFieldValue('fatherPhone') || '',
+                        whatsapp: form.getFieldValue('fatherWhatsApp') || '',
+                        address: form.getFieldValue('fatherAddress') || '',
+                        service: form.getFieldValue('fatherAddressService') || '',
+                        email: form.getFieldValue('fatherEmail') || '',
+                        alternativeEmail: form.getFieldValue('fatherAlternativeEmail') || ''
+                    },
+                    mother: {
+                        name: form.getFieldValue('motherName') || '',
+                        profession: form.getFieldValue('motherProfession') || '',
+                        workPlace: form.getFieldValue('motherWorkPlace') || '',
+                        phone: form.getFieldValue('motherPhone') || '',
+                        whatsapp: form.getFieldValue('motherWhatsApp') || '',
+                        address: form.getFieldValue('motherAddress') || '',
+                        service: form.getFieldValue('motherAddressService') || '',
+                        email: form.getFieldValue('motherEmail') || '',
+                        alternativeEmail: form.getFieldValue('motherAlternativeEmail') || ''
+                    }
+                },
+                educationGuardian: educationGuardian,
+                guardian: {
+                    name: form.getFieldValue('guardianName') || '',
+                    profession: form.getFieldValue('guardianProfession') || '',
+                    workPlace: form.getFieldValue('guardianWorkPlace') || '',
+                    phone: form.getFieldValue('guardianPhone') || '',
+                    whatsapp: form.getFieldValue('guardianWhatsApp') || '',
+                    address: form.getFieldValue('guardianAddress') || '',
+                    service: form.getFieldValue('guardianAddressService') || '',
+                    email: form.getFieldValue('guardianEmail') || '',
+                    alternativeEmail: form.getFieldValue('guardianAlternativeEmail') || ''
+                },
+                emergencyContacts: form.getFieldValue('emergencyContacts')?.map((contact) => {
+                    return {
+                        name: contact.name || '',
+                        phone: contact.phone || '',
+                        relationship: contact.relationship || ''
+                    };
+                }) || [],
+                academicHistory: form.getFieldValue('academicHistory')?.map((history) => {
+                    return {
+                        year: history.year || '',
+                        class: history.class || '',
+                        school: history.school || '',
+                        schoolAddress: history.schoolAddress || '',
+                        finalGrade: history.finalGrade || ''
+                    };
+                }) || [],
+                additionalInformation: {
+                    orphan: orphan || '',
+                    chronicDiseases: form.getFieldValue('chronicDiseases') || '',
+                    allergies: form.getFieldValue('allergies') || '',
+                    disabilities: form.getFieldValue('disabilities') || '',
+                    insurance: form.getFieldValue('insurances') || '',
+                    siblings: form.getFieldValue('siblings') || '',
+                    otherInformation: form.getFieldValue('observations') || ''
+                },
+                status: 'pending',
+                createdAt: new Date().toISOString(),
+                metadata: [],
+                notification: []
+            });
+            notification.success({
+                message: <p className='nilia-title-s'>Sucesso</p>,
+                description: <p className='nilia-text-s'>A sua inscrição foi submetida com sucesso</p>,
+                placement: 'topRight'
+            });
+        } catch (error) {
+            console.log(error);
+            handleMenu(7);
+            notification.error({
+                message: <p className='nilia-title-s'>Erro</p>,
+                description: <p className='nilia-text-s'>Houve um erro ao submeter a inscrição</p>,
+                placement: 'topRight'
+            });
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    //Loading Information
+    const [loading, setLoading] = useState(false);
+
+    const handleDownloadPDF = () => {
+        const content = document.getElementById('print-content');
+
+        if (!content) {
+            notification.error({
+                message: <p className='nilia-title-s'>Erro</p>,
+                description: <p className='nilia-text-s'>Não foi possível gerar o documento</p>,
+                placement: 'topRight'
+            });
+            return;
+        }
+
+        const opt = {
+            margin: [10, 10],
+            filename: 'formulario-inscricao.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                letterRendering: true
+            },
+            jsPDF: {
+                unit: 'mm',
+                format: 'a4',
+                orientation: 'portrait'
+            }
+        };
+
+        // Mostrar loading
+        setLoading(true);
+
+        html2pdf().from(content).set(opt).save()
+            .then(() => {
+                setLoading(false);
+                notification.success({
+                    message: <p className='nilia-title-s'>Sucesso</p>,
+                    description: <p className='nilia-text-s'>Documento gerado com sucesso</p>,
+                    placement: 'topRight'
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao gerar PDF:', error);
+                setLoading(false);
+                notification.error({
+                    message: <p className='nilia-title-s'>Erro</p>,
+                    description: <p className='nilia-text-s'>Erro ao gerar o documento</p>,
+                    placement: 'topRight'
+                });
+            });
+    };
+
     return (
         <section className='form-page'>
             <div className='form-steps-container'>
@@ -118,21 +316,21 @@ export default function FormularioInscricao() {
                     </p>
                 </div>
                 <div className={`form-step-line ${current > 0 ? 'active' : ''}`}></div>
-                <div className={`form-step ${current >= 1 ? 'form-step-active' : ''}`} onClick={() => handleMenu(1)}>
+                <div className={`form-step ${current >= 1 ? 'form-step-active' : ''}`} >
                     <p className={`form-step-text ${current >= 1 ? 'active' : ''}`}>informações Gerais</p>
                 </div>
                 <div className={`form-step-line ${current > 1 ? 'active' : ''}`}></div>
-                <div className={`form-step ${current >= 2 ? 'form-step-active' : ''}`} onClick={() => handleMenu(2)}>
-                    <p className={`form-step-text ${current >= 2 ? 'active' : ''}`}>Histórico Académico</p>
+                <div className={`form-step ${current >= 6 ? 'form-step-active' : ''}`} >
+                    <p className={`form-step-text ${current >= 6 ? 'active' : ''}`}>Histórico Académico</p>
                 </div>
-                <div className={`form-step-line ${current > 2 ? 'active' : ''}`}></div>
-                <div className={`form-step ${current >= 3 ? 'form-step-active' : ''}`} onClick={() => handleMenu(3)}>
-                    <p className={`form-step-text ${current >= 3 ? 'active' : ''}`}>Informação Adicional</p>
+                <div className={`form-step-line ${current > 6 ? 'active' : ''}`}></div>
+                <div className={`form-step ${current >= 7 ? 'form-step-active' : ''}`} >
+                    <p className={`form-step-text ${current >= 7 ? 'active' : ''}`}>Informação Adicional</p>
                 </div>
             </div>
             {current === 0 && (
                 <>
-                    <div className='w-full flex flex-col sm:flex-row gap-8 form-border'>
+                    <div className='w-full flex flex-col sm:flex-row gap-8 form-border wscreen'>
                         <div className='w-full sm:w-1/3'>
                             <div className='form-image'>
                                 <Image src={nilia_kids} alt="Instituto Nilia" className='form-image-home' />
@@ -155,6 +353,16 @@ export default function FormularioInscricao() {
                             <div className='ml-auto mt-6'>
                                 <NiliaButton text='Iniciar Inscrição' onClick={() => handleMenu(1)} />
                             </div>
+                        </div>
+                    </div>
+                    <div className='w-full flex flex-col sm:flex-row gap-8 form-border-main mscreen'>
+                        <div className='w-full flex flex-col gap-3 py-6'>
+                            <div className='mx-auto'>
+                                <FaExpand size={50} color='#ff812e' />
+                            </div>
+                            <p className='nilia-title-s text-center'>
+                                Para uma melhor experiência, recomendamos que utilize um dispositivo com um ecrã maior
+                            </p>
                         </div>
                     </div>
                 </>
@@ -262,11 +470,12 @@ export default function FormularioInscricao() {
                                     labelCol={{ span: 24 }}
                                     name='dateOfBirth'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira a data de nascimento' }]}
+                                    rules={[{ required: true, message: 'Por favor, insira a data de nascimento' }, { max: new Date().toISOString().split('T')[0], message: 'A data de nascimento é inválida' }]}
                                 >
                                     <Input
                                         placeholder='Insira a data de nascimento'
                                         type='date'
+                                        max={new Date().toISOString().split('T')[0]}
                                         style={{ marginTop: -10 }}
                                         className='input-form'
                                     />
@@ -462,7 +671,10 @@ export default function FormularioInscricao() {
                                     labelCol={{ span: 24 }}
                                     name='fatherPhone'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira o contacto de chamadas' }]}
+                                    rules={[
+                                        { required: true, message: 'Por favor, insira o contacto de WhatsApp' },
+                                        { len: 9, message: 'O contacto de WhatsApp deve ter 9 dígitos' }
+                                    ]}
                                 >
                                     <Input
                                         placeholder='Insira o contacto de chamadas'
@@ -478,7 +690,10 @@ export default function FormularioInscricao() {
                                     labelCol={{ span: 24 }}
                                     name='fatherWhatsApp'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira o contacto de WhatsApp' }]}
+                                    rules={[
+                                        { required: true, message: 'Por favor, insira o contacto de WhatsApp' },
+                                        { len: 9, message: 'O contacto de WhatsApp deve ter 9 dígitos' }
+                                    ]}
                                 >
                                     <Input
                                         placeholder='Insira o contacto de WhatsApp'
@@ -528,7 +743,7 @@ export default function FormularioInscricao() {
                                     labelCol={{ span: 24 }}
                                     name='fatherEmail'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira o email' }]}
+                                    rules={[{ required: true, message: 'Por favor, insira o email' }, { type: 'email', message: 'O email é inválido' }]}
                                 >
                                     <Input
                                         placeholder='Insira o email'
@@ -609,7 +824,10 @@ export default function FormularioInscricao() {
                                     labelCol={{ span: 24 }}
                                     name='motherPhone'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira o contacto de chamadas' }]}
+                                    rules={[
+                                        { required: true, message: 'Por favor, insira o contacto de WhatsApp' },
+                                        { len: 9, message: 'O contacto de WhatsApp deve ter 9 dígitos' }
+                                    ]}
                                 >
                                     <Input
                                         placeholder='Insira o contacto de chamadas'
@@ -625,7 +843,10 @@ export default function FormularioInscricao() {
                                     labelCol={{ span: 24 }}
                                     name='motherWhatsApp'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira o contacto de WhatsApp' }]}
+                                    rules={[
+                                        { required: true, message: 'Por favor, insira o contacto de WhatsApp' },
+                                        { len: 9, message: 'O contacto de WhatsApp deve ter 9 dígitos' }
+                                    ]}
                                 >
                                     <Input
                                         placeholder='Insira o contacto de WhatsApp'
@@ -675,7 +896,7 @@ export default function FormularioInscricao() {
                                     labelCol={{ span: 24 }}
                                     name='motherEmail'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira o email' }]}
+                                    rules={[{ required: true, message: 'Por favor, insira o email' }, { type: 'email', message: 'O email é inválido' }]}
                                 >
                                     <Input
                                         placeholder='Insira o email'
@@ -785,11 +1006,15 @@ export default function FormularioInscricao() {
                                         labelCol={{ span: 24 }}
                                         name='guardianPhone'
                                         className='input'
-                                        rules={[{ required: true, message: 'Por favor, insira o contacto de chamadas' }]}
+                                        rules={[
+                                            { required: true, message: 'Por favor, insira o contacto de WhatsApp' },
+                                            { len: 9, message: 'O contacto de WhatsApp deve ter 9 dígitos' }
+                                        ]}
                                     >
                                         <Input
                                             placeholder='Insira o contacto de chamadas'
                                             prefix='+258'
+                                            type='number'
                                             style={{ marginTop: -10 }}
                                             className='input-form'
                                         />
@@ -801,12 +1026,16 @@ export default function FormularioInscricao() {
                                         labelCol={{ span: 24 }}
                                         name='guardianWhatsApp'
                                         className='input'
-                                        rules={[{ required: true, message: 'Por favor, insira o contacto de WhatsApp' }]}
+                                        rules={[
+                                            { required: true, message: 'Por favor, insira o contacto de WhatsApp' },
+                                            { len: 9, message: 'O contacto de WhatsApp deve ter 9 dígitos' }
+                                        ]}
                                     >
                                         <Input
                                             placeholder='Insira o contacto de WhatsApp'
                                             prefix='+258'
                                             style={{ marginTop: -10 }}
+                                            type='number'
                                             className='input-form'
                                         />
                                     </Form.Item>
@@ -851,7 +1080,10 @@ export default function FormularioInscricao() {
                                         labelCol={{ span: 24 }}
                                         name='guardianEmail'
                                         className='input'
-                                        rules={[{ required: true, message: 'Por favor, insira o email' }]}
+                                        rules={[
+                                            { required: true, message: 'Por favor, insira o email' },
+                                            { type: 'email', message: 'O email não é válido' }
+                                        ]}
                                     >
                                         <Input
                                             placeholder='Insira o email'
@@ -937,11 +1169,15 @@ export default function FormularioInscricao() {
                                                     labelCol={{ span: 24 }}
                                                     name={[name, 'phone']}
                                                     className='input'
-                                                    rules={[{ required: true, message: 'Por favor, insira o contacto de chamadas' }]}
+                                                    rules={[
+                                                        { required: true, message: 'Por favor, insira o contacto de chamadas' },
+                                                        { len: 9, message: 'O contacto de chamadas deve ter 9 dígitos' }
+                                                    ]}
                                                 >
                                                     <Input
                                                         placeholder='Insira o contacto de chamadas'
                                                         prefix='+258'
+                                                        type='number'
                                                         style={{ marginTop: -10 }}
                                                         className='input-form'
                                                     />
@@ -959,7 +1195,6 @@ export default function FormularioInscricao() {
                                 </>
                             )}
                         </Form.List>
-
                     </Form>
                 </div>
                 <div className='w-full flex flex-row justify-between mt-4'>
@@ -967,6 +1202,285 @@ export default function FormularioInscricao() {
                     <NiliaButton text='Próximo' onClick={handleEmergencyContacts} />
                 </div>
             </div>)}
+            {current === 6 && (<div className='w-full flex flex-col gap-1'>
+                <p className='nilia-title-s'>Histórico Académico</p>
+                <div className='w-full flex flex-col gap-1 form-border-main'>
+                    <Form
+                        form={form}
+                        name="basic"
+                        initialValues={{ remember: true }}
+                        style={{ width: '100%' }}
+                        className='pb-2'
+                        onFinish={null}
+                    >
+                        <Form.List name='academicHistory' initialValue={[{ year: '', class: '', school: '', schoolAddress: '', finalGrade: '' }]}>
+                            {(fields, { add, remove }) => (
+                                <>
+                                    {fields.map(({ key, name, fieldKey, ...restField }) => (
+                                        <>
+                                            <Row gutter={16} key={key}>
+                                                <Col span={4}>
+                                                    <Form.Item
+                                                        label={<p className='nilia-text-s'>Ano Lectivo</p>}
+                                                        labelCol={{ span: 24 }}
+                                                        name={[name, 'year']}
+                                                        className='input'
+                                                        rules={[
+                                                            { required: true, message: 'Por favor, insira o ano lectivo' }
+                                                        ]}
+                                                    >
+                                                        <Input
+                                                            placeholder='Insira o ano lectivo'
+                                                            style={{ marginTop: -10 }}
+                                                            className='input-form'
+                                                            min={2000}
+                                                            max={(new Date()).getFullYear() + 1}
+                                                            type='number'
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col span={4}>
+                                                    <Form.Item
+                                                        label={<p className='nilia-text-s'>Classe</p>}
+                                                        labelCol={{ span: 24 }}
+                                                        name={[name, 'class']}
+                                                        className='input'
+                                                        rules={[{ required: true, message: 'Por favor, insira a classe' }]}
+                                                    >
+                                                        <Input
+                                                            placeholder='Insira a classe'
+                                                            style={{ marginTop: -10 }}
+                                                            className='input-form'
+                                                            min={1}
+                                                            max={12}
+                                                            type='number'
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col span={16}>
+                                                    <Form.Item
+                                                        label={<p className='nilia-text-s'>Escola</p>}
+                                                        labelCol={{ span: 24 }}
+                                                        name={[name, 'school']}
+                                                        className='input'
+                                                        rules={[{ required: true, message: 'Por favor, insira a escola' }]}
+                                                    >
+                                                        <Input
+                                                            placeholder='Insira a escola'
+                                                            style={{ marginTop: -10 }}
+                                                            className='input-form'
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                            </Row>
+                                            <Row gutter={16}>
+                                                <Col span={12}>
+                                                    <Form.Item
+                                                        label={<p className='nilia-text-s'>Morada da Escola</p>}
+                                                        labelCol={{ span: 24 }}
+                                                        name={[name, 'schoolAddress']}
+                                                        className='input'
+                                                        rules={[{ required: true, message: 'Por favor, insira a morada da escola' }]}
+                                                    >
+                                                        <Input
+                                                            placeholder='Insira a morada da escola'
+                                                            style={{ marginTop: -10 }}
+                                                            className='input-form'
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col span={4}>
+                                                    <Form.Item
+                                                        label={<p className='nilia-text-s'>Nota Final</p>}
+                                                        labelCol={{ span: 24 }}
+                                                        name={[name, 'finalGrade']}
+                                                        className='input'
+                                                        rules={[
+                                                            { required: true, message: 'Por favor, insira a nota final' },
+                                                            { min: 0, message: 'A nota final deve ser maior ou igual a 0' },
+                                                            { max: 20, message: 'A nota final deve ser menor ou igual a 20' }
+                                                        ]}
+                                                    >
+                                                        <Input
+                                                            placeholder='Insira a nota final'
+                                                            style={{ marginTop: -10 }}
+                                                            className='input-form'
+                                                            min={0}
+                                                            max={20}
+                                                            type='number'
+                                                        />
+                                                    </Form.Item>
+                                                </Col>
+                                            </Row>
+                                        </>
+                                    ))}
+                                    <Row gutter={16}>
+                                        <Col span={24}>
+                                            <div className='ml-auto w-[fit-content] mt-3'>
+                                                <NiliaButtonLight text='Adicionar Histórico' onClick={() => add()} />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </>
+                            )}
+                        </Form.List>
+                    </Form>
+                </div>
+                <div className='w-full flex flex-row justify-between mt-4'>
+                    <NiliaButton text='Anterior' onClick={() => handleMenu(5)} />
+                    <NiliaButton text='Próximo' onClick={handleAcademicHistory} />
+                </div>
+            </div>)}
+            {current === 7 && (<div className='w-full flex flex-col gap-1'>
+                <p className='nilia-title-s'>Informação Adicional</p>
+                <div className='w-full flex flex-col gap-1 form-border-main'>
+                    <Form
+                        form={form}
+                        name="basic"
+                        initialValues={{ remember: true }}
+                        style={{ width: '100%' }}
+                        className='pb-2'
+                        onFinish={null}
+                    >
+                        <Row gutter={16}>
+                            <Col span={24}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Possui doenças crónicas? Caso sim, preencha abaixo</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='chronicDiseases'
+                                    className='input'
+                                >
+                                    <Input.TextArea
+                                        placeholder='Insira as doenças crónicas'
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={24}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Possui alergias? Caso sim, preencha abaixo</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='allergies'
+                                    className='input'
+                                >
+                                    <Input.TextArea
+                                        placeholder='Insira as alergias'
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={24}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Possui alguma deficiência? Caso sim, preencha abaixo</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='disabilities'
+                                    className='input'
+                                >
+                                    <Input.TextArea
+                                        placeholder='Insira as deficiências'
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={24}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Possui seguros? Caso sim, preencha abaixo</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='insurances'
+                                    className='input'
+                                >
+                                    <Input.TextArea
+                                        placeholder='Insira os seguros'
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={24}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Tem/teve algum irmão na escola? Caso sim, preencha abaixo</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='siblings'
+                                    className='input'
+                                >
+                                    <Input.TextArea
+                                        placeholder='Insira o nome do irmão'
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={24} className='mt-2'>
+                                <p className='nilia-text-s'>O Aluno é orfão?</p>
+                                <Row gutter={16} className='pl-2 mt-2'>
+                                    <Radio.Group onChange={handleOrphan} value={orphan} className='w-full flex flex-row gap-4'>
+                                        <Radio value={'parents'} className='nilia-text-s'>De Pai e Mãe</Radio>
+                                        <Radio value={'father'} className='nilia-text-s'>Apenas Pai</Radio>
+                                        <Radio value={'mother'} className='nilia-text-s'>Apenas Mãe</Radio>
+                                        <Radio value={'no'} className='nilia-text-s'>Não</Radio>
+                                    </Radio.Group>
+                                </Row>
+                            </Col>
+                            <Col span={24}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Observações adicionais</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='observations'
+                                    className='input'
+                                >
+                                    <Input.TextArea
+                                        placeholder='Insira as observações'
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Form>
+                </div>
+                <div className='w-full flex flex-row justify-between mt-4'>
+                    <NiliaButton text='Anterior' onClick={() => handleMenu(7)} />
+                    <NiliaButton text='Próximo' onClick={handleAdditionalInformation} />
+                </div>
+            </div>)}
+            {current === 8 && (
+                <>
+                    <div className='w-full flex flex-col sm:flex-row gap-8 form-border-main'>
+                        <div className='w-full flex flex-col gap-3 items-center justify-center pb-3'>
+                            {loading ?
+                                <div className='w-full h-36 flex flex-col items-center justify-center'>
+                                    <LoadingOutlined style={{ fontSize: 50, color: '#ff812e' }} spin />
+                                    <p className='nilia-text-s mt-4'>Aguarde...</p>
+                                </div>
+                                :
+                                <>
+                                    <Image src={congrats_image} width={150} height={150} />
+                                    <p className='nilia-title-ms w-1/2 text-center'>
+                                        Caro encarregado(a), a inscrição foi submetida com sucesso
+                                    </p>
+                                    <p className='nilia-text-s text-center'>
+                                        A equipa da secretária entrará em contacto o mais breve possivel para informar o estágio da inscrição, solicitamos que fique atento aos canais de emails e whatsapp por forma a acompanhar o status da sua submissão.
+                                    </p>
+                                    <p className='nilia-text-s'>
+                                        Encontre abaixo o formulário preenchido:
+                                    </p>
+                                    <div className='mt-4'>
+                                        <NiliaButton
+                                            text={loading ? 'Gerando PDF...' : 'Baixar Formulário'}
+                                            onClick={handleDownloadPDF}
+                                            disabled={loading}
+                                        />
+                                    </div>
+                                </>}
+                        </div>
+                    </div>
+                </>
+            )}
+            <div className='hidden'>
+                <div id="print-content">
+                    <PrintTemplate
+                        data={{ level: selectedLevel }}
+                        form={form}
+                    />
+                </div>
+            </div>
         </section>
     );
 };

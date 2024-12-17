@@ -140,3 +140,135 @@
 :where(.css-dev-only-do-not-override-142vneq).ant-col [class^="ant-col"], :where(.css-dev-only-do-not-override-142vneq).ant-col [class*=" ant-col"] {
     padding: 0;
 }
+
+.mscreen{
+    display: none;
+}
+
+@media screen and (max-width: 768px){
+    .form-steps-container{
+        display: none;
+    }
+    .wscreen{
+        display: none;
+    }
+    .mscreen{
+        display: block;
+    }
+}
+
+/* Estilos para impressão */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .print-container,
+    .print-container * {
+        visibility: visible;
+    }
+    .print-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding: 20mm;
+    }
+}
+
+.print-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: white;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+}
+
+.print-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #ff812e;
+    padding-bottom: 20px;
+}
+
+.print-logo {
+    margin-right: 20px;
+}
+
+.print-title {
+    flex: 1;
+}
+
+.print-title h1 {
+    color: #ff812e;
+    margin: 0;
+    font-size: 24px;
+}
+
+.print-title h2 {
+    margin: 5px 0 0;
+    font-size: 18px;
+    color: #666;
+}
+
+.print-section {
+    margin-bottom: 20px;
+}
+
+.print-section h3 {
+    color: #ff812e;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.print-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.print-field {
+    margin-bottom: 10px;
+}
+
+.print-field label {
+    font-weight: bold;
+    color: #666;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.print-field p {
+    margin: 0;
+    padding: 3px 0;
+}
+
+.print-footer {
+    margin-top: 40px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.print-signatures {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+.signature-line {
+    text-align: center;
+}
+
+.signature-line p:first-child {
+    margin-bottom: 5px;
+}
+
+.print-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}

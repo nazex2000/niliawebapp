@@ -54,6 +54,7 @@ const Header = () => {
                         <li>
                             <a href="/contactos">Contactos</a>
                         </li>
+                        <button className="header-button ml-3">Área Privada</button>
                     </ul>
                 </nav>
                 <div className="menu-icon md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
