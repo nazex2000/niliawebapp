@@ -23,7 +23,7 @@ const Header = () => {
     }
 
     const goAdmin = () => {
-        window.location.href = 'https://institutonilia.com/admin';
+        window.location.href = 'https://institutonilia.edu.mz/admin';
     }
 
     return (
