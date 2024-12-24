@@ -2,6 +2,16 @@ import React from 'react';
 import Image from 'next/image';
 import nilia_logo from "../../assets/logo/nilia.webp";
 
+const RELATIONSHIP_LABELS = {
+    'avo': 'Avô/Avó',
+    'tio': 'Tio/Tia',
+    'primo': 'Primo/Prima',
+    'padrinho': 'Padrinho/Madrinha',
+    'vizinho': 'Vizinho',
+    'amigo': 'Amigo da Família',
+    'outro': 'Outro'
+};
+
 const PrintTemplate = ({ data, form }) => {
     const getLevelName = (level) => {
         switch(level) {
@@ -41,11 +51,15 @@ const PrintTemplate = ({ data, form }) => {
                 <div className="print-grid">
                     <div className="print-field">
                         <label>Nome Completo:</label>
-                        <p>{form.getFieldValue('name')}</p>
+                        <p>{[
+                            form.getFieldValue('firstName'),
+                            form.getFieldValue('middleName'),
+                            form.getFieldValue('lastName')
+                        ].filter(Boolean).join(' ')}</p>
                     </div>
                     <div className="print-field">
                         <label>Data de Nascimento:</label>
-                        <p>{form.getFieldValue('dateOfBirth')}</p>
+                        <p>{form.getFieldValue('dateOfBirth') || ''}</p>
                     </div>
                     <div className="print-field">
                         <label>Género:</label>
@@ -227,7 +241,7 @@ const PrintTemplate = ({ data, form }) => {
                         </div>
                         <div className="print-field">
                             <label>Parentesco:</label>
-                            <p>{contact.relationship}</p>
+                            <p>{RELATIONSHIP_LABELS[contact.relationship] || contact.relationship}</p>
                         </div>
                         <div className="print-field">
                             <label>Contacto:</label>

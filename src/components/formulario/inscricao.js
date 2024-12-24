@@ -1,24 +1,33 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useReactToPrint } from 'react-to-print';
-import html2pdf from 'html2pdf.js';
 
 import "../css/form.css";
 import Image from 'next/image';
 import nilia_kids from "../../assets/images/nilia-kids-1.webp";
 import congrats_image from "../../assets/images/congrats.png";
 import NiliaButton from '../buttons/button';
-import { Col, Divider, Form, Input, Radio, Row, Select, Spin, notification } from 'antd';
+import { Col, DatePicker, Divider, Form, Input, Radio, Row, Select, Spin, notification } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { getProvinces } from './form-data';
 import NiliaButtonLight from '../buttons/buttonLight';
 import { LoadingOutlined } from '@ant-design/icons';
 import { firebase } from '../../base';
 import { FaExpand, FaExpandAlt } from 'react-icons/fa';
-import PrintTemplate from './PrintTemplate';
+import { useRouter } from 'next/navigation';
 const { Option } = Select
 
+const RELATIONSHIP_OPTIONS = [
+    { value: 'avo', label: 'Avô/Avó' },
+    { value: 'tio', label: 'Tio/Tia' },
+    { value: 'primo', label: 'Primo/Prima' },
+    { value: 'padrinho', label: 'Padrinho/Madrinha' },
+    { value: 'vizinho', label: 'Vizinho' },
+    { value: 'amigo', label: 'Amigo da Família' },
+    { value: 'outro', label: 'Outro' }
+];
+
 export default function FormularioInscricao() {
+    const navigate = useRouter();
     //Data of the form
     const [form] = useForm();
     const [provinces, setProvinces] = useState([]);
@@ -70,7 +79,7 @@ export default function FormularioInscricao() {
     //Handle the filiation data
     const handleFiliationData = () => {
         form.validateFields().then((values) => {
-            handleMenu(4);
+            handleMenu(5);
         }).catch((error) => {
             form.setFields(error.errorFields);
             notification.error({
@@ -89,7 +98,7 @@ export default function FormularioInscricao() {
     }
     const handleGuardianData = () => {
         form.validateFields().then((values) => {
-            handleMenu(5);
+            handleMenu(4)
         }).catch((error) => {
             form.setFields(error.errorFields);
             notification.error({
@@ -117,6 +126,16 @@ export default function FormularioInscricao() {
     }
 
     //Academic History
+    const ACADEMIC_RESULT_OPTIONS = [
+        { value: 'transitou', label: 'Transitou' },
+        { value: 'naoTransitou', label: 'Não Transitou' }
+    ];
+
+    const [haveAcademicHistory, setHaveAcademicHistory] = useState('yes');
+    const handleHaveAcademicHistory = (e) => {
+        setHaveAcademicHistory(e.target.value);
+    }
+
     const handleAcademicHistory = () => {
         form.validateFields().then((values) => {
             handleMenu(7);
@@ -152,14 +171,27 @@ export default function FormularioInscricao() {
     }
 
     //Submit Data
+    const [result, setResult] = useState(null);
     const submitData = async () => {
         setLoading(true);
         try {
-            await firebase.firestore().collection('submissoes').add({
+            // Combinar os nomes
+            const firstName = form.getFieldValue('firstName') || '';
+            const middleName = form.getFieldValue('middleName') || '';
+            const lastName = form.getFieldValue('lastName') || '';
+            const fullName = [firstName, middleName, lastName].filter(Boolean).join(' ');
+
+            // Formatar a data
+            const dateOfBirth = form.getFieldValue('dateOfBirth')?.format('DD-MM-YYYY') || '';
+
+            const docRef = await firebase.firestore().collection('submissoes').add({
                 level: selectedLevel,
                 studentIdentity: {
-                    name: form.getFieldValue('name') || '',
-                    dob: form.getFieldValue('dateOfBirth') || '',
+                    name: fullName,
+                    firstName: firstName,
+                    middleName: middleName,
+                    lastName: lastName,
+                    dob: dateOfBirth,
                     gender: form.getFieldValue('gender') || '',
                     birthPlace: form.getFieldValue('birthPlace') || '',
                     province: form.getFieldValue('province') || '',
@@ -235,6 +267,7 @@ export default function FormularioInscricao() {
                 metadata: [],
                 notification: []
             });
+            setResult(docRef.id);
             notification.success({
                 message: <p className='nilia-title-s'>Sucesso</p>,
                 description: <p className='nilia-text-s'>A sua inscrição foi submetida com sucesso</p>,
@@ -256,56 +289,16 @@ export default function FormularioInscricao() {
     //Loading Information
     const [loading, setLoading] = useState(false);
 
-    const handleDownloadPDF = () => {
-        const content = document.getElementById('print-content');
+    const handleDownloadPage = () => {
+        navigate.push(`/candidatura/${result}`);
+    }
 
-        if (!content) {
-            notification.error({
-                message: <p className='nilia-title-s'>Erro</p>,
-                description: <p className='nilia-text-s'>Não foi possível gerar o documento</p>,
-                placement: 'topRight'
-            });
-            return;
-        }
-
-        const opt = {
-            margin: [10, 10],
-            filename: 'formulario-inscricao.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: {
-                scale: 2,
-                useCORS: true,
-                letterRendering: true
-            },
-            jsPDF: {
-                unit: 'mm',
-                format: 'a4',
-                orientation: 'portrait'
-            }
-        };
-
-        // Mostrar loading
-        setLoading(true);
-
-        html2pdf().from(content).set(opt).save()
-            .then(() => {
-                setLoading(false);
-                notification.success({
-                    message: <p className='nilia-title-s'>Sucesso</p>,
-                    description: <p className='nilia-text-s'>Documento gerado com sucesso</p>,
-                    placement: 'topRight'
-                });
-            })
-            .catch(error => {
-                console.error('Erro ao gerar PDF:', error);
-                setLoading(false);
-                notification.error({
-                    message: <p className='nilia-title-s'>Erro</p>,
-                    description: <p className='nilia-text-s'>Erro ao gerar o documento</p>,
-                    placement: 'topRight'
-                });
-            });
-    };
+    // ... no início do componente, adicione os estados:
+    const [hasChronicDiseases, setHasChronicDiseases] = useState('no');
+    const [hasAllergies, setHasAllergies] = useState('no');
+    const [hasDisabilities, setHasDisabilities] = useState('no');
+    const [hasInsurance, setHasInsurance] = useState('no');
+    const [hasSiblings, setHasSiblings] = useState('no');
 
     return (
         <section className='form-page'>
@@ -338,7 +331,7 @@ export default function FormularioInscricao() {
                         </div>
                         <div className='w-full sm:w-2/3 flex flex-col gap-3'>
                             <p className='nilia-title-mss'>
-                                Caro Encarregado(a), obrigado por considerar o Instituto Nília
+                                Caro Encarregado(a), obrigado por considerar o Instituto Nilia
                                 para a educação do seu educando
                             </p>
                             <p className='nilia-text-s'>
@@ -429,22 +422,53 @@ export default function FormularioInscricao() {
                         onFinish={null}
                     >
                         <Row gutter={16}>
-                            <Col span={18}>
+                            <Col span={8}>
                                 <Form.Item
-                                    label={<p className='nilia-text-s'>Nome Completo</p>}
+                                    label={<p className='nilia-text-s'>Primeiro Nome</p>}
                                     labelCol={{ span: 24 }}
-                                    name='name'
+                                    name='firstName'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira o seu nome completo' }]}
+                                    rules={[{ required: true, message: 'Por favor, insira o primeiro nome' }]}
                                 >
                                     <Input
-                                        placeholder='Insira o seu nome completo'
+                                        placeholder='Insira o primeiro nome'
                                         style={{ marginTop: -10 }}
                                         className='input-form'
                                     />
                                 </Form.Item>
                             </Col>
-                            <Col span={6}>
+                            <Col span={8}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Apelido</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='lastName'
+                                    className='input'
+                                    rules={[{ required: true, message: 'Por favor, insira o apelido' }]}
+                                >
+                                    <Input
+                                        placeholder='Insira o apelido'
+                                        style={{ marginTop: -10 }}
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item
+                                    label={<p className='nilia-text-s'>Outros Nomes</p>}
+                                    labelCol={{ span: 24 }}
+                                    name='middleName'
+                                    className='input'
+                                >
+                                    <Input
+                                        placeholder='Insira outros nomes'
+                                        style={{ marginTop: -10 }}
+                                        className='input-form'
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={4}>
                                 <Form.Item
                                     label={<p className='nilia-text-s'>Género</p>}
                                     labelCol={{ span: 24 }}
@@ -462,26 +486,25 @@ export default function FormularioInscricao() {
                                     </Select>
                                 </Form.Item>
                             </Col>
-                        </Row>
-                        <Row gutter={16}>
                             <Col span={6}>
                                 <Form.Item
                                     label={<p className='nilia-text-s'>Data de Nascimento</p>}
                                     labelCol={{ span: 24 }}
                                     name='dateOfBirth'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira a data de nascimento' }, { max: new Date().toISOString().split('T')[0], message: 'A data de nascimento é inválida' }]}
+                                    rules={[
+                                        { required: true, message: 'Por favor, insira a data de nascimento' },
+                                    ]}
                                 >
-                                    <Input
-                                        placeholder='Insira a data de nascimento'
-                                        type='date'
-                                        max={new Date().toISOString().split('T')[0]}
-                                        style={{ marginTop: -10 }}
+                                    <DatePicker
+                                        placeholder='DD-MM-AAAA'
+                                        format="DD-MM-YYYY"
+                                        style={{ marginTop: -10, width: '100%' }}
                                         className='input-form'
                                     />
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
+                            <Col span={8}>
                                 <Form.Item
                                     label={<p className='nilia-text-s'>Localidade</p>}
                                     labelCol={{ span: 24 }}
@@ -531,7 +554,11 @@ export default function FormularioInscricao() {
                                         placeholder='Seleccione o tipo de documento'
                                     >
                                         <Option className='nilia-text-s' value='BI'>Bilhete de Identidade</Option>
+                                        <Option className='nilia-text-s' value='Cédula de Identidade'>Cédula de Identidade</Option>
+                                        <Option className='nilia-text-s' value='Boletim de Nascimento'>Boletim de Nascimento</Option>
                                         <Option className='nilia-text-s' value='Passaporte'>Passaporte</Option>
+                                        <Option className='nilia-text-s' value='D.I.R.E'>D.I.R.E</Option>
+                                        <Option className='nilia-text-s' value='Número de Identificação'>Número do Doc. de Identificação Apresentado</Option>
                                     </Select>
                                 </Form.Item>
                             </Col>
@@ -607,6 +634,193 @@ export default function FormularioInscricao() {
                 </div>
             </div>)}
             {current === 3 && (<div className='w-full flex flex-col gap-1'>
+                <p className='nilia-title-s'>Encarregado de Educação</p>
+                <div className='w-full flex flex-col gap-1 form-border-main'>
+                    <Form
+                        form={form}
+                        name="basic"
+                        initialValues={{ remember: true }}
+                        style={{ width: '100%' }}
+                        className='pb-2'
+                        onFinish={null}
+                    >
+                        <p className='nilia-text-s'>Selecione o encarregado de educação do seu educando</p>
+                        <Row gutter={16} title='Encarregado de Educação' className='pl-2 mt-2'>
+                            <Radio.Group onChange={handleEducationGuardian} value={educationGuardian} className='w-full flex flex-row gap-4'>
+                                <Radio value={'parents'} className='nilia-text-s'>Pai e Mãe</Radio>
+                                <Radio value={'father'} className='nilia-text-s'>Pai</Radio>
+                                <Radio value={'mother'} className='nilia-text-s'>Mãe</Radio>
+                                <Radio value={'other'} className='nilia-text-s'>Outro</Radio>
+                            </Radio.Group>
+                        </Row>
+                        {educationGuardian === 'other' && (<>
+                            <Divider className='p-0 mt-3 mb-0' style={{ backgroundColor: 'rgb(255, 221, 199)' }} />
+                            <Row gutter={16}>
+                                <Col span={16}>
+                                    <Form.Item
+                                        label={<p className='nilia-text-s'>Nome Completo</p>}
+                                        labelCol={{ span: 24 }}
+                                        name='guardianName'
+                                        className='input'
+                                        rules={[{ required: true, message: 'Por favor, insira o nome completo' }]}
+                                    >
+                                        <Input
+                                            placeholder='Insira o nome completo'
+                                            style={{ marginTop: -10 }}
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={8}>
+                                    <Form.Item
+                                        label={<p className='nilia-text-s'>Profissão</p>}
+                                        labelCol={{ span: 24 }}
+                                        name='guardianProfession'
+                                        className='input'
+                                        rules={[{ required: true, message: 'Por favor, insira a profissão' }]}
+                                    >
+                                        <Input
+                                            placeholder='Insira a profissão'
+                                            style={{ marginTop: -10 }}
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <Form.Item
+                                        label={<p className='nilia-text-s'>Instituição que Trabalha</p>}
+                                        labelCol={{ span: 24 }}
+                                        name='guardianWorkPlace'
+                                        className='input'
+                                        rules={[{ required: true, message: 'Por favor, insira a instituição onde trabalha' }]}
+                                    >
+                                        <Input
+                                            placeholder='Insira a instituição onde trabalha'
+                                            style={{ marginTop: -10 }}
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                    <Form.Item
+                                        label={<p className='nilia-text-s'>Contacto de Chamadas</p>}
+                                        labelCol={{ span: 24 }}
+                                        name='guardianPhone'
+                                        className='input'
+                                        rules={[
+                                            { required: true, message: 'Por favor, insira o contacto de WhatsApp' },
+                                            { len: 9, message: 'O contacto de WhatsApp deve ter 9 dígitos' }
+                                        ]}
+                                    >
+                                        <Input
+                                            placeholder='Insira o contacto de chamadas'
+                                            prefix='+258'
+                                            type='number'
+                                            style={{ marginTop: -10 }}
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                    <Form.Item
+                                        label={<p className='nilia-text-s'>Contacto de WhatsApp</p>}
+                                        labelCol={{ span: 24 }}
+                                        name='guardianWhatsApp'
+                                        className='input'
+                                        rules={[
+                                            { required: true, message: 'Por favor, insira o contacto de WhatsApp' },
+                                            { len: 9, message: 'O contacto de WhatsApp deve ter 9 dígitos' }
+                                        ]}
+                                    >
+                                        <Input
+                                            placeholder='Insira o contacto de WhatsApp'
+                                            prefix='+258'
+                                            style={{ marginTop: -10 }}
+                                            type='number'
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <Form.Item
+                                        label={<p className='nilia-text-s'>Morada Completa</p>}
+                                        labelCol={{ span: 24 }}
+                                        name='guardianAddress'
+                                        className='input'
+                                        rules={[{ required: true, message: 'Por favor, insira a morada completa' }]}
+                                    >
+                                        <Input
+                                            placeholder='Insira a morada completa'
+                                            style={{ marginTop: -10 }}
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        label={<p className='nilia-text-s'>Serviço</p>}
+                                        labelCol={{ span: 24 }}
+                                        name='guardianAddressService'
+                                        className='input'
+                                        rules={[{ required: true, message: 'Por favor, insira o serviço' }]}
+                                    >
+                                        <Input
+                                            placeholder='Insira o serviço'
+                                            style={{ marginTop: -10 }}
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <Form.Item
+                                        label={<p className='nilia-text-s'>Email</p>}
+                                        labelCol={{ span: 24 }}
+                                        name='guardianEmail'
+                                        className='input'
+                                        rules={[
+                                            { required: true, message: 'Por favor, insira o email' },
+                                            { type: 'email', message: 'O email não é válido' }
+                                        ]}
+                                    >
+                                        <Input
+                                            placeholder='Insira o email'
+                                            type='email'
+                                            style={{ marginTop: -10 }}
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        label={<p className='nilia-text-s'>Email Alternativo</p>}
+                                        labelCol={{ span: 24 }}
+                                        name='guardianAlternativeEmail'
+                                        className='input'
+                                    >
+                                        <Input
+                                            placeholder='Insira o email alternativo'
+                                            type='email'
+                                            style={{ marginTop: -10 }}
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        </>)}
+                    </Form>
+                </div>
+                <div className='w-full flex flex-row justify-between mt-4'>
+                    <NiliaButton text='Anterior' onClick={() => handleMenu(2)} />
+                    <NiliaButton text='Próximo' onClick={handleGuardianData} />
+                </div>
+            </div>)}
+            {current === 4 && (<div className='w-full flex flex-col gap-1'>
                 <p className='nilia-title-s'>Filiação</p>
                 <div className='w-full flex flex-col gap-1 form-border-main'>
                     <Form
@@ -926,197 +1140,11 @@ export default function FormularioInscricao() {
 
                 </div>
                 <div className='w-full flex flex-row justify-between mt-4'>
-                    <NiliaButton text='Anterior' onClick={() => handleMenu(2)} />
+                    <NiliaButton text='Anterior' onClick={() => handleMenu(3)} />
                     <NiliaButton text='Próximo' onClick={handleFiliationData} />
                 </div>
             </div>)}
-            {current === 4 && (<div className='w-full flex flex-col gap-1'>
-                <p className='nilia-title-s'>Encarregado de Educação</p>
-                <div className='w-full flex flex-col gap-1 form-border-main'>
-                    <Form
-                        form={form}
-                        name="basic"
-                        initialValues={{ remember: true }}
-                        style={{ width: '100%' }}
-                        className='pb-2'
-                        onFinish={null}
-                    >
-                        <p className='nilia-text-s'>Selecione o encarregado de educação do seu educando</p>
-                        <Row gutter={16} title='Encarregado de Educação' className='pl-2 mt-2'>
-                            <Radio.Group onChange={handleEducationGuardian} value={educationGuardian} className='w-full flex flex-row gap-4'>
-                                <Radio value={'parents'} className='nilia-text-s'>Pai e Mãe</Radio>
-                                <Radio value={'father'} className='nilia-text-s'>Pai</Radio>
-                                <Radio value={'mother'} className='nilia-text-s'>Mãe</Radio>
-                                <Radio value={'other'} className='nilia-text-s'>Outro</Radio>
-                            </Radio.Group>
-                        </Row>
-                        {educationGuardian === 'other' && (<>
-                            <Divider className='p-0 mt-3 mb-0' style={{ backgroundColor: 'rgb(255, 221, 199)' }} />
-                            <Row gutter={16}>
-                                <Col span={16}>
-                                    <Form.Item
-                                        label={<p className='nilia-text-s'>Nome Completo</p>}
-                                        labelCol={{ span: 24 }}
-                                        name='guardianName'
-                                        className='input'
-                                        rules={[{ required: true, message: 'Por favor, insira o nome completo' }]}
-                                    >
-                                        <Input
-                                            placeholder='Insira o nome completo'
-                                            style={{ marginTop: -10 }}
-                                            className='input-form'
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={8}>
-                                    <Form.Item
-                                        label={<p className='nilia-text-s'>Profissão</p>}
-                                        labelCol={{ span: 24 }}
-                                        name='guardianProfession'
-                                        className='input'
-                                        rules={[{ required: true, message: 'Por favor, insira a profissão' }]}
-                                    >
-                                        <Input
-                                            placeholder='Insira a profissão'
-                                            style={{ marginTop: -10 }}
-                                            className='input-form'
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col span={12}>
-                                    <Form.Item
-                                        label={<p className='nilia-text-s'>Instituição que Trabalha</p>}
-                                        labelCol={{ span: 24 }}
-                                        name='guardianWorkPlace'
-                                        className='input'
-                                        rules={[{ required: true, message: 'Por favor, insira a instituição onde trabalha' }]}
-                                    >
-                                        <Input
-                                            placeholder='Insira a instituição onde trabalha'
-                                            style={{ marginTop: -10 }}
-                                            className='input-form'
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={6}>
-                                    <Form.Item
-                                        label={<p className='nilia-text-s'>Contacto de Chamadas</p>}
-                                        labelCol={{ span: 24 }}
-                                        name='guardianPhone'
-                                        className='input'
-                                        rules={[
-                                            { required: true, message: 'Por favor, insira o contacto de WhatsApp' },
-                                            { len: 9, message: 'O contacto de WhatsApp deve ter 9 dígitos' }
-                                        ]}
-                                    >
-                                        <Input
-                                            placeholder='Insira o contacto de chamadas'
-                                            prefix='+258'
-                                            type='number'
-                                            style={{ marginTop: -10 }}
-                                            className='input-form'
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={6}>
-                                    <Form.Item
-                                        label={<p className='nilia-text-s'>Contacto de WhatsApp</p>}
-                                        labelCol={{ span: 24 }}
-                                        name='guardianWhatsApp'
-                                        className='input'
-                                        rules={[
-                                            { required: true, message: 'Por favor, insira o contacto de WhatsApp' },
-                                            { len: 9, message: 'O contacto de WhatsApp deve ter 9 dígitos' }
-                                        ]}
-                                    >
-                                        <Input
-                                            placeholder='Insira o contacto de WhatsApp'
-                                            prefix='+258'
-                                            style={{ marginTop: -10 }}
-                                            type='number'
-                                            className='input-form'
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col span={12}>
-                                    <Form.Item
-                                        label={<p className='nilia-text-s'>Morada Completa</p>}
-                                        labelCol={{ span: 24 }}
-                                        name='guardianAddress'
-                                        className='input'
-                                        rules={[{ required: true, message: 'Por favor, insira a morada completa' }]}
-                                    >
-                                        <Input
-                                            placeholder='Insira a morada completa'
-                                            style={{ marginTop: -10 }}
-                                            className='input-form'
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item
-                                        label={<p className='nilia-text-s'>Serviço</p>}
-                                        labelCol={{ span: 24 }}
-                                        name='guardianAddressService'
-                                        className='input'
-                                        rules={[{ required: true, message: 'Por favor, insira o serviço' }]}
-                                    >
-                                        <Input
-                                            placeholder='Insira o serviço'
-                                            style={{ marginTop: -10 }}
-                                            className='input-form'
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col span={12}>
-                                    <Form.Item
-                                        label={<p className='nilia-text-s'>Email</p>}
-                                        labelCol={{ span: 24 }}
-                                        name='guardianEmail'
-                                        className='input'
-                                        rules={[
-                                            { required: true, message: 'Por favor, insira o email' },
-                                            { type: 'email', message: 'O email não é válido' }
-                                        ]}
-                                    >
-                                        <Input
-                                            placeholder='Insira o email'
-                                            type='email'
-                                            style={{ marginTop: -10 }}
-                                            className='input-form'
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item
-                                        label={<p className='nilia-text-s'>Email Alternativo</p>}
-                                        labelCol={{ span: 24 }}
-                                        name='guardianAlternativeEmail'
-                                        className='input'
-                                    >
-                                        <Input
-                                            placeholder='Insira o email alternativo'
-                                            type='email'
-                                            style={{ marginTop: -10 }}
-                                            className='input-form'
-                                        />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                        </>)}
-                    </Form>
-                </div>
-                <div className='w-full flex flex-row justify-between mt-4'>
-                    <NiliaButton text='Anterior' onClick={() => handleMenu(3)} />
-                    <NiliaButton text='Próximo' onClick={handleGuardianData} />
-                </div>
-            </div>)}
+
             {current === 5 && (<div className='w-full flex flex-col gap-1'>
                 <p className='nilia-title-s'>Contactos de Emergência</p>
                 <div className='w-full flex flex-col gap-1 form-border-main'>
@@ -1128,11 +1156,18 @@ export default function FormularioInscricao() {
                         className='pb-2'
                         onFinish={null}
                     >
-                        <Form.List name='emergencyContacts' initialValue={[{ name: '', relationship: '', phone: '' }]}>
+                        <Form.List
+                            name='emergencyContacts'
+                            initialValue={[
+                                { name: '', relationship: '', phone: '' },
+                                { name: '', relationship: '', phone: '' },
+                                { name: '', relationship: '', phone: '' }
+                            ]}
+                        >
                             {(fields, { add, remove }) => (
                                 <>
                                     {fields.map(({ key, name, fieldKey, ...restField }) => (
-                                        <Row gutter={16} key={key}>
+                                        <Row gutter={16} key={key} className="mb-4">
                                             <Col span={12}>
                                                 <Form.Item
                                                     label={<p className='nilia-text-s'>Nome Completo</p>}
@@ -1154,30 +1189,40 @@ export default function FormularioInscricao() {
                                                     labelCol={{ span: 24 }}
                                                     name={[name, 'relationship']}
                                                     className='input'
-                                                    rules={[{ required: true, message: 'Por favor, insira o parentesco' }]}
+                                                    rules={[{ required: true, message: 'Por favor, selecione o parentesco' }]}
                                                 >
-                                                    <Input
-                                                        placeholder='Insira o parentesco'
+                                                    <Select
+                                                        placeholder="Selecione o parentesco"
                                                         style={{ marginTop: -10 }}
                                                         className='input-form'
-                                                    />
+                                                    >
+                                                        <Option disabled value=''>Selecione o parentesco</Option>
+                                                        {RELATIONSHIP_OPTIONS.map(option => (
+                                                            <Option
+                                                                key={option.value}
+                                                                value={option.value}
+                                                                className='nilia-text-s'
+                                                            >
+                                                                {option.label}
+                                                            </Option>
+                                                        ))}
+                                                    </Select>
                                                 </Form.Item>
                                             </Col>
                                             <Col span={6}>
                                                 <Form.Item
-                                                    label={<p className='nilia-text-s'>Contacto de Chamadas</p>}
+                                                    label={<p className='nilia-text-s'>Contacto</p>}
                                                     labelCol={{ span: 24 }}
                                                     name={[name, 'phone']}
                                                     className='input'
                                                     rules={[
-                                                        { required: true, message: 'Por favor, insira o contacto de chamadas' },
-                                                        { len: 9, message: 'O contacto de chamadas deve ter 9 dígitos' }
+                                                        { required: true, message: 'Por favor, insira o contacto' },
+                                                        { len: 9, message: 'O contacto deve ter 9 dígitos' }
                                                     ]}
                                                 >
                                                     <Input
-                                                        placeholder='Insira o contacto de chamadas'
+                                                        placeholder='Insira o contacto'
                                                         prefix='+258'
-                                                        type='number'
                                                         style={{ marginTop: -10 }}
                                                         className='input-form'
                                                     />
@@ -1185,13 +1230,19 @@ export default function FormularioInscricao() {
                                             </Col>
                                         </Row>
                                     ))}
-                                    <Row gutter={16}>
-                                        <Col span={24}>
-                                            <div className='ml-auto w-[fit-content] mt-3'>
-                                                <NiliaButtonLight text='Adicionar Contacto' onClick={() => add()} />
-                                            </div>
-                                        </Col>
-                                    </Row>
+                                    {fields.length < 5 && (
+                                        <Row gutter={16}>
+                                            <Col span={24}>
+                                                <div className='ml-auto w-[fit-content] mt-3'>
+                                                    <NiliaButtonLight
+                                                        text='Adicionar Contacto'
+                                                        onClick={() => add()}
+                                                        disabled={fields.length >= 5}
+                                                    />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    )}
                                 </>
                             )}
                         </Form.List>
@@ -1213,117 +1264,125 @@ export default function FormularioInscricao() {
                         className='pb-2'
                         onFinish={null}
                     >
-                        <Form.List name='academicHistory' initialValue={[{ year: '', class: '', school: '', schoolAddress: '', finalGrade: '' }]}>
-                            {(fields, { add, remove }) => (
-                                <>
-                                    {fields.map(({ key, name, fieldKey, ...restField }) => (
-                                        <>
-                                            <Row gutter={16} key={key}>
-                                                <Col span={4}>
-                                                    <Form.Item
-                                                        label={<p className='nilia-text-s'>Ano Lectivo</p>}
-                                                        labelCol={{ span: 24 }}
-                                                        name={[name, 'year']}
-                                                        className='input'
-                                                        rules={[
-                                                            { required: true, message: 'Por favor, insira o ano lectivo' }
-                                                        ]}
-                                                    >
-                                                        <Input
-                                                            placeholder='Insira o ano lectivo'
-                                                            style={{ marginTop: -10 }}
-                                                            className='input-form'
-                                                            min={2000}
-                                                            max={(new Date()).getFullYear() + 1}
-                                                            type='number'
-                                                        />
-                                                    </Form.Item>
-                                                </Col>
-                                                <Col span={4}>
-                                                    <Form.Item
-                                                        label={<p className='nilia-text-s'>Classe</p>}
-                                                        labelCol={{ span: 24 }}
-                                                        name={[name, 'class']}
-                                                        className='input'
-                                                        rules={[{ required: true, message: 'Por favor, insira a classe' }]}
-                                                    >
-                                                        <Input
-                                                            placeholder='Insira a classe'
-                                                            style={{ marginTop: -10 }}
-                                                            className='input-form'
-                                                            min={1}
-                                                            max={12}
-                                                            type='number'
-                                                        />
-                                                    </Form.Item>
-                                                </Col>
-                                                <Col span={16}>
-                                                    <Form.Item
-                                                        label={<p className='nilia-text-s'>Escola</p>}
-                                                        labelCol={{ span: 24 }}
-                                                        name={[name, 'school']}
-                                                        className='input'
-                                                        rules={[{ required: true, message: 'Por favor, insira a escola' }]}
-                                                    >
-                                                        <Input
-                                                            placeholder='Insira a escola'
-                                                            style={{ marginTop: -10 }}
-                                                            className='input-form'
-                                                        />
-                                                    </Form.Item>
-                                                </Col>
-                                            </Row>
-                                            <Row gutter={16}>
-                                                <Col span={12}>
-                                                    <Form.Item
-                                                        label={<p className='nilia-text-s'>Morada da Escola</p>}
-                                                        labelCol={{ span: 24 }}
-                                                        name={[name, 'schoolAddress']}
-                                                        className='input'
-                                                        rules={[{ required: true, message: 'Por favor, insira a morada da escola' }]}
-                                                    >
-                                                        <Input
-                                                            placeholder='Insira a morada da escola'
-                                                            style={{ marginTop: -10 }}
-                                                            className='input-form'
-                                                        />
-                                                    </Form.Item>
-                                                </Col>
-                                                <Col span={4}>
-                                                    <Form.Item
-                                                        label={<p className='nilia-text-s'>Nota Final</p>}
-                                                        labelCol={{ span: 24 }}
-                                                        name={[name, 'finalGrade']}
-                                                        className='input'
-                                                        rules={[
-                                                            { required: true, message: 'Por favor, insira a nota final' },
-                                                            { min: 0, message: 'A nota final deve ser maior ou igual a 0' },
-                                                            { max: 20, message: 'A nota final deve ser menor ou igual a 20' }
-                                                        ]}
-                                                    >
-                                                        <Input
-                                                            placeholder='Insira a nota final'
-                                                            style={{ marginTop: -10 }}
-                                                            className='input-form'
-                                                            min={0}
-                                                            max={20}
-                                                            type='number'
-                                                        />
-                                                    </Form.Item>
-                                                </Col>
-                                            </Row>
-                                        </>
-                                    ))}
-                                    <Row gutter={16}>
-                                        <Col span={24}>
-                                            <div className='ml-auto w-[fit-content] mt-3'>
-                                                <NiliaButtonLight text='Adicionar Histórico' onClick={() => add()} />
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </>
-                            )}
-                        </Form.List>
+                        <p className='nilia-text-s'>Possui algum histórico académico?</p>
+                        <Row gutter={16} className='pl-2 mt-2'>
+                            <Radio.Group onChange={handleHaveAcademicHistory} value={haveAcademicHistory} className='w-full flex flex-row gap-4'>
+                                <Radio value={'yes'} className='nilia-text-s'>Sim</Radio>
+                                <Radio value={'no'} className='nilia-text-s'>Não</Radio>
+                            </Radio.Group>
+                        </Row>
+                        {haveAcademicHistory === 'yes' && (<>
+                            <Form.List name='academicHistory' initialValue={[{ year: '', class: '', school: '', schoolAddress: '', finalGrade: '' }]}>
+                                {(fields, { add, remove }) => (
+                                    <>
+                                        {fields.map(({ key, name, fieldKey, ...restField }) => (
+                                            <>
+                                            <Divider className='p-0 mt-3 mb-0' style={{ backgroundColor: 'rgb(255, 221, 199)' }} />
+                                                <Row gutter={16} key={key}>
+                                                    <Col span={4}>
+                                                        <Form.Item
+                                                            label={<p className='nilia-text-s'>Ano Lectivo</p>}
+                                                            labelCol={{ span: 24 }}
+                                                            name={[name, 'year']}
+                                                            className='input'
+                                                            rules={[
+                                                                { required: true, message: 'Por favor, insira o ano lectivo' }
+                                                            ]}
+                                                        >
+                                                            <Input
+                                                                placeholder='Insira o ano lectivo'
+                                                                style={{ marginTop: -10 }}
+                                                                className='input-form'
+                                                                min={2000}
+                                                                max={(new Date()).getFullYear() + 1}
+                                                                type='number'
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
+                                                    <Col span={4}>
+                                                        <Form.Item
+                                                            label={<p className='nilia-text-s'>Classe</p>}
+                                                            labelCol={{ span: 24 }}
+                                                            name={[name, 'class']}
+                                                            className='input'
+                                                            rules={[{ required: true, message: 'Por favor, insira a classe' }]}
+                                                        >
+                                                            <Input
+                                                                placeholder='Insira a classe'
+                                                                style={{ marginTop: -10 }}
+                                                                className='input-form'
+                                                                min={1}
+                                                                max={12}
+                                                                type='number'
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
+                                                    <Col span={16}>
+                                                        <Form.Item
+                                                            label={<p className='nilia-text-s'>Escola</p>}
+                                                            labelCol={{ span: 24 }}
+                                                            name={[name, 'school']}
+                                                            className='input'
+                                                            rules={[{ required: true, message: 'Por favor, insira a escola' }]}
+                                                        >
+                                                            <Input
+                                                                placeholder='Insira a escola'
+                                                                style={{ marginTop: -10 }}
+                                                                className='input-form'
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                                <Row gutter={16}>
+                                                    <Col span={12}>
+                                                        <Form.Item
+                                                            label={<p className='nilia-text-s'>Morada da Escola</p>}
+                                                            labelCol={{ span: 24 }}
+                                                            name={[name, 'schoolAddress']}
+                                                            className='input'
+                                                            rules={[{ required: true, message: 'Por favor, insira a morada da escola' }]}
+                                                        >
+                                                            <Input
+                                                                placeholder='Insira a morada da escola'
+                                                                style={{ marginTop: -10 }}
+                                                                className='input-form'
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
+                                                    <Col span={8}>
+                                                        <Form.Item
+                                                            label={<p className='nilia-text-s'>Resultado Final</p>}
+                                                            labelCol={{ span: 24 }}
+                                                            name={[name, 'finalGrade']}
+                                                            className='input'
+                                                            rules={[{ required: true, message: 'Por favor, selecione o resultado final' }]}
+                                                        >
+                                                            <Select
+                                                                placeholder="Selecione o resultado final"
+                                                                style={{ marginTop: -10 }}
+                                                                className='input-form'
+                                                            >
+                                                                <Option disabled value=''>Selecione o resultado final</Option>
+                                                                {ACADEMIC_RESULT_OPTIONS.map(option => (
+                                                                    <Option key={option.value} value={option.label}>{option.label}</Option>
+                                                                ))}
+                                                            </Select>
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                            </>
+                                        ))}
+                                        <Row gutter={16}>
+                                            <Col span={24}>
+                                                <div className='ml-auto w-[fit-content] mt-3'>
+                                                    <NiliaButtonLight text='Adicionar Outro Histórico' onClick={() => add()} />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    </>
+                                )}
+                            </Form.List>
+                        </>)}
                     </Form>
                 </div>
                 <div className='w-full flex flex-row justify-between mt-4'>
@@ -1343,71 +1402,126 @@ export default function FormularioInscricao() {
                         onFinish={null}
                     >
                         <Row gutter={16}>
-                            <Col span={24}>
+                            <Col span={24} className='mb-4'>
+                                <p className='nilia-text-s'>Possui doenças crónicas?</p>
+                                <Radio.Group 
+                                    onChange={(e) => setHasChronicDiseases(e.target.value)} 
+                                    value={hasChronicDiseases} 
+                                    className='w-full flex flex-row gap-4 mt-2'
+                                >
+                                    <Radio value={'yes'} className='nilia-text-s'>Sim</Radio>
+                                    <Radio value={'no'} className='nilia-text-s'>Não</Radio>
+                                </Radio.Group>
+                                {hasChronicDiseases === 'yes' && (
                                 <Form.Item
-                                    label={<p className='nilia-text-s'>Possui doenças crónicas? Caso sim, preencha abaixo</p>}
-                                    labelCol={{ span: 24 }}
                                     name='chronicDiseases'
-                                    className='input'
+                                        className='input mt-2'
+                                        rules={[{ required: true, message: 'Por favor, especifique as doenças crónicas' }]}
                                 >
                                     <Input.TextArea
-                                        placeholder='Insira as doenças crónicas'
+                                            placeholder='Especifique as doenças crónicas'
                                         className='input-form'
                                     />
                                 </Form.Item>
+                                )}
                             </Col>
-                            <Col span={24}>
+
+                            <Col span={24} className='mb-4'>
+                                <p className='nilia-text-s'>Possui alergias?</p>
+                                <Radio.Group 
+                                    onChange={(e) => setHasAllergies(e.target.value)} 
+                                    value={hasAllergies} 
+                                    className='w-full flex flex-row gap-4 mt-2'
+                                >
+                                    <Radio value={'yes'} className='nilia-text-s'>Sim</Radio>
+                                    <Radio value={'no'} className='nilia-text-s'>Não</Radio>
+                                </Radio.Group>
+                                {hasAllergies === 'yes' && (
                                 <Form.Item
-                                    label={<p className='nilia-text-s'>Possui alergias? Caso sim, preencha abaixo</p>}
-                                    labelCol={{ span: 24 }}
                                     name='allergies'
-                                    className='input'
+                                        className='input mt-2'
+                                        rules={[{ required: true, message: 'Por favor, especifique as alergias' }]}
                                 >
                                     <Input.TextArea
-                                        placeholder='Insira as alergias'
+                                            placeholder='Especifique as alergias'
                                         className='input-form'
                                     />
                                 </Form.Item>
+                                )}
                             </Col>
-                            <Col span={24}>
+
+                            <Col span={24} className='mb-4'>
+                                <p className='nilia-text-s'>Possui alguma deficiência?</p>
+                                <Radio.Group 
+                                    onChange={(e) => setHasDisabilities(e.target.value)} 
+                                    value={hasDisabilities} 
+                                    className='w-full flex flex-row gap-4 mt-2'
+                                >
+                                    <Radio value={'yes'} className='nilia-text-s'>Sim</Radio>
+                                    <Radio value={'no'} className='nilia-text-s'>Não</Radio>
+                                </Radio.Group>
+                                {hasDisabilities === 'yes' && (
                                 <Form.Item
-                                    label={<p className='nilia-text-s'>Possui alguma deficiência? Caso sim, preencha abaixo</p>}
-                                    labelCol={{ span: 24 }}
                                     name='disabilities'
-                                    className='input'
+                                        className='input mt-2'
+                                        rules={[{ required: true, message: 'Por favor, especifique as deficiências' }]}
                                 >
                                     <Input.TextArea
-                                        placeholder='Insira as deficiências'
+                                            placeholder='Especifique as deficiências'
                                         className='input-form'
                                     />
                                 </Form.Item>
+                                )}
                             </Col>
-                            <Col span={24}>
+
+                            <Col span={24} className='mb-4'>
+                                <p className='nilia-text-s'>Possui seguros de saúde?</p>
+                                <Radio.Group 
+                                    onChange={(e) => setHasInsurance(e.target.value)} 
+                                    value={hasInsurance} 
+                                    className='w-full flex flex-row gap-4 mt-2'
+                                >
+                                    <Radio value={'yes'} className='nilia-text-s'>Sim</Radio>
+                                    <Radio value={'no'} className='nilia-text-s'>Não</Radio>
+                                </Radio.Group>
+                                {hasInsurance === 'yes' && (
                                 <Form.Item
-                                    label={<p className='nilia-text-s'>Possui seguros? Caso sim, preencha abaixo</p>}
-                                    labelCol={{ span: 24 }}
                                     name='insurances'
-                                    className='input'
+                                        className='input mt-2'
+                                        rules={[{ required: true, message: 'Por favor, especifique dados dos seguros de saúde' }]}
                                 >
                                     <Input.TextArea
-                                        placeholder='Insira os seguros'
+                                            placeholder='Especifique dados da apólice de seguro'
                                         className='input-form'
                                     />
                                 </Form.Item>
+                                )}
                             </Col>
-                            <Col span={24}>
+
+                            <Col span={24} className='mb-4'>
+                                <p className='nilia-text-s'>Tem/teve algum irmão na escola?</p>
+                                <Radio.Group 
+                                    onChange={(e) => setHasSiblings(e.target.value)} 
+                                    value={hasSiblings} 
+                                    className='w-full flex flex-row gap-4 mt-2'
+                                >
+                                    <Radio value={'yes'} className='nilia-text-s'>Sim</Radio>
+                                    <Radio value={'no'} className='nilia-text-s'>Não</Radio>
+                                </Radio.Group>
+                                {hasSiblings === 'yes' && (
                                 <Form.Item
-                                    label={<p className='nilia-text-s'>Tem/teve algum irmão na escola? Caso sim, preencha abaixo</p>}
-                                    labelCol={{ span: 24 }}
                                     name='siblings'
-                                    className='input'
+                                        className='input mt-2'
+                                        rules={[{ required: true, message: 'Por favor, especifique os irmãos' }]}
                                 >
                                     <Input.TextArea
-                                        placeholder='Insira o nome do irmão'
+                                            placeholder='Especifique o nome do(s) irmão(s)'
                                         className='input-form'
                                     />
                                 </Form.Item>
+                                )}
                             </Col>
+
                             <Col span={24} className='mt-2'>
                                 <p className='nilia-text-s'>O Aluno é orfão?</p>
                                 <Row gutter={16} className='pl-2 mt-2'>
@@ -1419,6 +1533,7 @@ export default function FormularioInscricao() {
                                     </Radio.Group>
                                 </Row>
                             </Col>
+
                             <Col span={24}>
                                 <Form.Item
                                     label={<p className='nilia-text-s'>Observações adicionais</p>}
@@ -1436,7 +1551,7 @@ export default function FormularioInscricao() {
                     </Form>
                 </div>
                 <div className='w-full flex flex-row justify-between mt-4'>
-                    <NiliaButton text='Anterior' onClick={() => handleMenu(7)} />
+                    <NiliaButton text='Anterior' onClick={() => handleMenu(6)} />
                     <NiliaButton text='Próximo' onClick={handleAdditionalInformation} />
                 </div>
             </div>)}
@@ -1464,7 +1579,7 @@ export default function FormularioInscricao() {
                                     <div className='mt-4'>
                                         <NiliaButton
                                             text={loading ? 'Gerando PDF...' : 'Baixar Formulário'}
-                                            onClick={handleDownloadPDF}
+                                            onClick={handleDownloadPage}
                                             disabled={loading}
                                         />
                                     </div>
@@ -1473,14 +1588,6 @@ export default function FormularioInscricao() {
                     </div>
                 </>
             )}
-            <div className='hidden'>
-                <div id="print-content">
-                    <PrintTemplate
-                        data={{ level: selectedLevel }}
-                        form={form}
-                    />
-                </div>
-            </div>
         </section>
     );
 };
