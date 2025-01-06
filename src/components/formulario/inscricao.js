@@ -115,7 +115,7 @@ export default function FormularioInscricao() {
         setProvinces(provincesData);
     }
 
-    const [current, setCurrent] = useState(5);
+    const [current, setCurrent] = useState(0);
     const handleMenu = (pageNum) => {
         setCurrent(pageNum);
     };
