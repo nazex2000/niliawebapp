@@ -6,7 +6,7 @@ import Image from 'next/image';
 import nilia_kids from "../../assets/images/nilia-kids-1.webp";
 import congrats_image from "../../assets/images/congrats.png";
 import NiliaButton from '../buttons/button';
-import { Col, DatePicker, Divider, Form, Input, Radio, Row, Select, Spin, notification } from 'antd';
+import { Button, Col, DatePicker, Divider, Form, Input, Radio, Row, Select, Spin, Table, notification } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { getProvinces } from './form-data';
 import NiliaButtonLight from '../buttons/buttonLight';
@@ -26,6 +26,78 @@ const RELATIONSHIP_OPTIONS = [
     { value: 'outro', label: 'Outro' }
 ];
 
+const PROFESSION_OPTIONS = [
+    { value: 'operador', label: 'Operador' },
+    { value: 'pedagogo', label: 'Pedagogo' },
+    { value: 'pedreiro', label: 'Pedreiro' },
+    { value: 'piloto', label: 'Piloto' },
+    { value: 'professor', label: 'Professor' },
+    { value: 'procurador', label: 'Procurador' },
+    { value: 'psicologo', label: 'Psicólogo' },
+    { value: 'publicitario', label: 'Publicitário' },
+    { value: 'quimico', label: 'Químico' },
+    { value: 'rececionista', label: 'Rececionista' },
+    { value: 'secretario', label: 'Secretário' },
+    { value: 'sociologo', label: 'Sociólogo' },
+    { value: 'tecnico', label: 'Técnico' },
+    { value: 'tradutor', label: 'Tradutor' },
+    { value: 'veterinario', label: 'Veterinário' },
+    { value: 'webdesigner', label: 'Web Designer' },
+    { value: 'outro', label: 'Outro' }
+];
+
+const validateClassProgression = (newRecord, existingRecords) => {
+    // Ordenar registros por ano
+    const sortedRecords = [...existingRecords].sort((a, b) => a.year - b.year);
+    
+    // Verificar progressão com registros existentes
+    for (let record of sortedRecords) {
+        // Se o novo ano é posterior
+        if (newRecord.year > record.year) {
+            // A classe não pode ser menor que a anterior se transitou
+            if (record.finalResult === 'transitou' && newRecord.class <= record.class) {
+                notification.error({
+                    message: <p className='nilia-title-s'>Erro</p>,
+                    description: <p className='nilia-text-s'>
+                        Em {record.year} o aluno transitou da {record.class}ª classe. 
+                        Não pode estar numa classe inferior ou igual em {newRecord.year}.
+                    </p>,
+                    placement: 'topRight'
+                });
+                return false;
+            }
+            // A classe não pode diminuir mais que 1 se não transitou
+            if (record.finalResult === 'naoTransitou' && newRecord.class < record.class) {
+                notification.error({
+                    message: <p className='nilia-title-s'>Erro</p>,
+                    description: <p className='nilia-text-s'>
+                        Em {record.year} o aluno não transitou da {record.class}ª classe. 
+                        A classe seguinte deve ser igual ou superior.
+                    </p>,
+                    placement: 'topRight'
+                });
+                return false;
+            }
+        }
+        // Se o novo ano é anterior
+        else if (newRecord.year < record.year) {
+            // Se o registro posterior mostra transição, a classe deve ser menor
+            if (newRecord.finalResult === 'transitou' && newRecord.class >= record.class) {
+                notification.error({
+                    message: <p className='nilia-title-s'>Erro</p>,
+                    description: <p className='nilia-text-s'>
+                        Inconsistência detectada: Em {newRecord.year} não poderia estar na {newRecord.class}ª classe 
+                        pois em {record.year} estava na {record.class}ª classe.
+                    </p>,
+                    placement: 'topRight'
+                });
+                return false;
+            }
+        }
+    }
+    return true;
+};
+
 export default function FormularioInscricao() {
     const navigate = useRouter();
     //Data of the form
@@ -43,7 +115,7 @@ export default function FormularioInscricao() {
         setProvinces(provincesData);
     }
 
-    const [current, setCurrent] = useState(0);
+    const [current, setCurrent] = useState(5);
     const handleMenu = (pageNum) => {
         setCurrent(pageNum);
     };
@@ -137,17 +209,7 @@ export default function FormularioInscricao() {
     }
 
     const handleAcademicHistory = () => {
-        form.validateFields().then((values) => {
-            handleMenu(7);
-        }).catch((error) => {
-            form.setFields(error.errorFields);
-            notification.error({
-                message: <p className='nilia-title-s'>Erro</p>,
-                description: <p className='nilia-text-s'>Por favor, preencha todos os campos</p>,
-                placement: 'topRight'
-            });
-        }
-        );
+        handleMenu(7);
     }
 
     //Additional Information
@@ -299,6 +361,149 @@ export default function FormularioInscricao() {
     const [hasDisabilities, setHasDisabilities] = useState('no');
     const [hasInsurance, setHasInsurance] = useState('no');
     const [hasSiblings, setHasSiblings] = useState('no');
+
+    const [fatherProfessionOther, setFatherProfessionOther] = useState(false);
+    const [motherProfessionOther, setMotherProfessionOther] = useState(false);
+    const [guardianProfessionOther, setGuardianProfessionOther] = useState(false);
+
+    const [academicRecords, setAcademicRecords] = useState([]);
+
+    const validateAcademicRecord = (values) => {
+        if (!values) return false;
+        
+        const { year, class: classNum, school, schoolAddress, finalResult } = values;
+        
+        // Validar ano letivo
+        const currentYear = new Date().getFullYear();
+        if (!year || year < 2000 || year > currentYear + 1) {
+            notification.error({
+                message: <p className='nilia-title-s'>Erro</p>,
+                description: <p className='nilia-text-s'>Ano letivo inválido</p>,
+                placement: 'topRight'
+            });
+            return false;
+        }
+
+        // Validar classe
+        if (!classNum || classNum < 1 || classNum > 12) {
+            notification.error({
+                message: <p className='nilia-title-s'>Erro</p>,
+                description: <p className='nilia-text-s'>Classe inválida</p>,
+                placement: 'topRight'
+            });
+            return false;
+        }
+
+        // Validar escola
+        if (!school || school.trim().length < 3) {
+            notification.error({
+                message: <p className='nilia-title-s'>Erro</p>,
+                description: <p className='nilia-text-s'>Nome da escola inválido</p>,
+                placement: 'topRight'
+            });
+            return false;
+        }
+
+        // Validar morada
+        if (!schoolAddress || schoolAddress.trim().length < 5) {
+            notification.error({
+                message: <p className='nilia-title-s'>Erro</p>,
+                description: <p className='nilia-text-s'>Morada da escola inválida</p>,
+                placement: 'topRight'
+            });
+            return false;
+        }
+
+        // Validar resultado
+        if (!finalResult || !['transitou', 'naoTransitou'].includes(finalResult)) {
+            notification.error({
+                message: <p className='nilia-title-s'>Erro</p>,
+                description: <p className='nilia-text-s'>Resultado final inválido</p>,
+                placement: 'topRight'
+            });
+            return false;
+        }
+
+        return true;
+    };
+
+    const handleAddRecord = () => {
+        const values = form.getFieldValue('currentRecord');
+        
+        if (!validateAcademicRecord(values)) return;
+
+        // Esterilizar dados
+        const sanitizedRecord = {
+            year: parseInt(values.year),
+            class: parseInt(values.class),
+            school: values.school.trim(),
+            schoolAddress: values.schoolAddress.trim(),
+            finalResult: values.finalResult
+        };
+
+        // Verificar duplicidade
+        const duplicateRecord = academicRecords.find(
+            record => record.year === sanitizedRecord.year
+        );
+
+        if (duplicateRecord) {
+            notification.error({
+                message: <p className='nilia-title-s'>Erro</p>,
+                description: <p className='nilia-text-s'>Já existe um registro para este ano letivo</p>,
+                placement: 'topRight'
+            });
+            return;
+        }
+
+        // Validar progressão das classes
+        if (!validateClassProgression(sanitizedRecord, academicRecords)) {
+            return;
+        }
+
+        setAcademicRecords([...academicRecords, sanitizedRecord]);
+        form.setFieldValue('academicHistory', [...academicRecords, sanitizedRecord]);
+        
+        // Limpar campos
+        form.setFields([
+            {
+                name: ['currentRecord', 'year'],
+                value: '',
+                errors: []
+            },
+            {
+                name: ['currentRecord', 'class'],
+                value: '',
+                errors: []
+            },
+            {
+                name: ['currentRecord', 'school'],
+                value: '',
+                errors: []
+            },
+            {
+                name: ['currentRecord', 'schoolAddress'],
+                value: '',
+                errors: []
+            },
+            {
+                name: ['currentRecord', 'finalResult'],
+                value: undefined,
+                errors: []
+            }
+        ]);
+
+        notification.success({
+            message: <p className='nilia-title-s'>Sucesso</p>,
+            description: <p className='nilia-text-s'>Registro adicionado com sucesso</p>,
+            placement: 'topRight'
+        });
+    };
+
+    const handleDeleteRecord = (index) => {
+        const newRecords = academicRecords.filter((_, i) => i !== index);
+        setAcademicRecords(newRecords);
+        form.setFieldValue('academicHistory', newRecords);
+    };
 
     return (
         <section className='form-page'>
@@ -558,7 +763,6 @@ export default function FormularioInscricao() {
                                         <Option className='nilia-text-s' value='Boletim de Nascimento'>Boletim de Nascimento</Option>
                                         <Option className='nilia-text-s' value='Passaporte'>Passaporte</Option>
                                         <Option className='nilia-text-s' value='D.I.R.E'>D.I.R.E</Option>
-                                        <Option className='nilia-text-s' value='Número de Identificação'>Número do Doc. de Identificação Apresentado</Option>
                                     </Select>
                                 </Form.Item>
                             </Col>
@@ -679,18 +883,40 @@ export default function FormularioInscricao() {
                                         className='input'
                                         rules={[{ required: true, message: 'Por favor, insira a profissão' }]}
                                     >
-                                        <Input
-                                            placeholder='Insira a profissão'
+                                        <Select
+                                            placeholder='Selecione a profissão'
                                             style={{ marginTop: -10 }}
                                             className='input-form'
-                                        />
+                                            onChange={(value) => setGuardianProfessionOther(value === 'outro')}
+                                        >
+                                            {PROFESSION_OPTIONS.map(option => (
+                                                <Option key={option.value} value={option.value} className='nilia-text-s'>
+                                                    {option.label}
+                                                </Option>
+                                            ))}
+                                        </Select>
                                     </Form.Item>
+                                    {guardianProfessionOther && (
+                                        <Form.Item
+                                            label={<p className='nilia-text-s'>Especifique a profissão</p>}
+                                            labelCol={{ span: 24 }}
+                                            name='guardianProfessionOther'
+                                            className='input'
+                                            rules={[{ required: true, message: 'Por favor, especifique a profissão' }]}
+                                        >
+                                            <Input
+                                                placeholder='Especifique a profissão'
+                                                style={{ marginTop: -10 }}
+                                                className='input-form'
+                                            />
+                                        </Form.Item>
+                                    )}
                                 </Col>
                             </Row>
                             <Row gutter={16}>
                                 <Col span={12}>
                                     <Form.Item
-                                        label={<p className='nilia-text-s'>Instituição que Trabalha</p>}
+                                        label={<p className='nilia-text-s'>Empregador</p>}
                                         labelCol={{ span: 24 }}
                                         name='guardianWorkPlace'
                                         className='input'
@@ -710,8 +936,8 @@ export default function FormularioInscricao() {
                                         name='guardianPhone'
                                         className='input'
                                         rules={[
-                                            { required: true, message: 'Por favor, insira o contacto de WhatsApp' },
-                                            { len: 9, message: 'O contacto de WhatsApp deve ter 9 dígitos' }
+                                            { required: true, message: 'Por favor, insira o contacto de chamadas' },
+                                            { len: 9, message: 'O contacto de chamadas deve ter 9 dígitos' }
                                         ]}
                                     >
                                         <Input
@@ -762,15 +988,19 @@ export default function FormularioInscricao() {
                                 </Col>
                                 <Col span={12}>
                                     <Form.Item
-                                        label={<p className='nilia-text-s'>Serviço</p>}
+                                        label={<p className='nilia-text-s'>Contacto do Emprego</p>}
                                         labelCol={{ span: 24 }}
                                         name='guardianAddressService'
                                         className='input'
-                                        rules={[{ required: true, message: 'Por favor, insira o serviço' }]}
+                                        rules={[{ required: true, message: 'Por favor, insira o contacto do emprego' },
+                                        { len: 9, message: 'O contacto do emprego deve ter 9 dígitos' }
+                                        ]}
                                     >
                                         <Input
-                                            placeholder='Insira o serviço'
+                                            placeholder='Insira o contacto do emprego'
+                                            prefix='+258'
                                             style={{ marginTop: -10 }}
+                                            type='number'
                                             className='input-form'
                                         />
                                     </Form.Item>
@@ -853,20 +1083,42 @@ export default function FormularioInscricao() {
                                     labelCol={{ span: 24 }}
                                     name='fatherProfession'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira a profissão do pai' }]}
+                                    rules={[{ required: true, message: 'Por favor, selecione a profissão' }]}
                                 >
-                                    <Input
-                                        placeholder='Insira a profissão do pai'
+                                    <Select
+                                        placeholder='Selecione a profissão'
                                         style={{ marginTop: -10 }}
                                         className='input-form'
-                                    />
+                                        onChange={(value) => setFatherProfessionOther(value === 'outro')}
+                                    >
+                                        {PROFESSION_OPTIONS.map(option => (
+                                            <Option key={option.value} value={option.value} className='nilia-text-s'>
+                                                {option.label}
+                                            </Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
+                                {fatherProfessionOther && (
+                                    <Form.Item
+                                        label={<p className='nilia-text-s'>Especifique a profissão</p>}
+                                        labelCol={{ span: 24 }}
+                                        name='fatherProfessionOther'
+                                        className='input'
+                                        rules={[{ required: true, message: 'Por favor, especifique a profissão' }]}
+                                    >
+                                        <Input
+                                            placeholder='Especifique a profissão'
+                                            style={{ marginTop: -10 }}
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
+                                )}
                             </Col>
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
                                 <Form.Item
-                                    label={<p className='nilia-text-s'>Instituição que Trabalha</p>}
+                                    label={<p className='nilia-text-s'>Empregador</p>}
                                     labelCol={{ span: 24 }}
                                     name='fatherWorkPlace'
                                     className='input'
@@ -886,8 +1138,8 @@ export default function FormularioInscricao() {
                                     name='fatherPhone'
                                     className='input'
                                     rules={[
-                                        { required: true, message: 'Por favor, insira o contacto de WhatsApp' },
-                                        { len: 9, message: 'O contacto de WhatsApp deve ter 9 dígitos' }
+                                        { required: true, message: 'Por favor, insira o contacto de chamadas' },
+                                        { len: 9, message: 'O contacto de chamadas deve ter 9 dígitos' }
                                     ]}
                                 >
                                     <Input
@@ -936,15 +1188,19 @@ export default function FormularioInscricao() {
                             </Col>
                             <Col span={12}>
                                 <Form.Item
-                                    label={<p className='nilia-text-s'>Serviço</p>}
+                                    label={<p className='nilia-text-s'>Contacto do Emprego</p>}
                                     labelCol={{ span: 24 }}
                                     name='fatherAddressService'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira o serviço' }]}
+                                    rules={[{ required: true, message: 'Por favor, insira o contacto do emprego' },
+                                    { len: 9, message: 'O contacto do emprego deve ter 9 dígitos' }
+                                    ]}
                                 >
                                     <Input
-                                        placeholder='Insira o serviço'
+                                        placeholder='Insira o contacto do emprego'
+                                        prefix='+258'
                                         style={{ marginTop: -10 }}
+                                        type='number'
                                         className='input-form'
                                     />
                                 </Form.Item>
@@ -1006,20 +1262,42 @@ export default function FormularioInscricao() {
                                     labelCol={{ span: 24 }}
                                     name='motherProfession'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira a profissão da mãe' }]}
+                                    rules={[{ required: true, message: 'Por favor, selecione a profissão' }]}
                                 >
-                                    <Input
-                                        placeholder='Insira a profissão da mãe'
+                                    <Select
+                                        placeholder='Selecione a profissão'
                                         style={{ marginTop: -10 }}
                                         className='input-form'
-                                    />
+                                        onChange={(value) => setMotherProfessionOther(value === 'outro')}
+                                    >
+                                        {PROFESSION_OPTIONS.map(option => (
+                                            <Option key={option.value} value={option.value} className='nilia-text-s'>
+                                                {option.label}
+                                            </Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
+                                {motherProfessionOther && (
+                                    <Form.Item
+                                        label={<p className='nilia-text-s'>Especifique a profissão</p>}
+                                        labelCol={{ span: 24 }}
+                                        name='motherProfessionOther'
+                                        className='input'
+                                        rules={[{ required: true, message: 'Por favor, especifique a profissão' }]}
+                                    >
+                                        <Input
+                                            placeholder='Especifique a profissão'
+                                            style={{ marginTop: -10 }}
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
+                                )}
                             </Col>
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
                                 <Form.Item
-                                    label={<p className='nilia-text-s'>Instituição que Trabalha</p>}
+                                    label={<p className='nilia-text-s'>Empregador</p>}
                                     labelCol={{ span: 24 }}
                                     name='motherWorkPlace'
                                     className='input'
@@ -1089,15 +1367,19 @@ export default function FormularioInscricao() {
                             </Col>
                             <Col span={12}>
                                 <Form.Item
-                                    label={<p className='nilia-text-s'>Serviço</p>}
+                                    label={<p className='nilia-text-s'>Contacto do Emprego</p>}
                                     labelCol={{ span: 24 }}
                                     name='motherAddressService'
                                     className='input'
-                                    rules={[{ required: true, message: 'Por favor, insira o serviço' }]}
+                                    rules={[{ required: true, message: 'Por favor, insira o contacto do emprego' },
+                                    { len: 9, message: 'O contacto do emprego deve ter 9 dígitos' }
+                                    ]}
                                 >
                                     <Input
-                                        placeholder='Insira o serviço'
+                                        placeholder='Insira o contacto do emprego'
+                                        prefix='+258'
                                         style={{ marginTop: -10 }}
+                                        type='number'
                                         className='input-form'
                                     />
                                 </Form.Item>
@@ -1158,17 +1440,13 @@ export default function FormularioInscricao() {
                     >
                         <Form.List
                             name='emergencyContacts'
-                            initialValue={[
-                                { name: '', relationship: '', phone: '' },
-                                { name: '', relationship: '', phone: '' },
-                                { name: '', relationship: '', phone: '' }
-                            ]}
+                            initialValue={[{ name: '', relationship: '', phone: '' }]}
                         >
                             {(fields, { add, remove }) => (
                                 <>
-                                    {fields.map(({ key, name, fieldKey, ...restField }) => (
+                                    {fields.map(({ key, name, fieldKey, ...restField }, index) => (
                                         <Row gutter={16} key={key} className="mb-4">
-                                            <Col span={12}>
+                                            <Col span={8}>
                                                 <Form.Item
                                                     label={<p className='nilia-text-s'>Nome Completo</p>}
                                                     labelCol={{ span: 24 }}
@@ -1183,7 +1461,7 @@ export default function FormularioInscricao() {
                                                     />
                                                 </Form.Item>
                                             </Col>
-                                            <Col span={6}>
+                                            <Col span={8}>
                                                 <Form.Item
                                                     label={<p className='nilia-text-s'>Parentesco</p>}
                                                     labelCol={{ span: 24 }}
@@ -1196,13 +1474,8 @@ export default function FormularioInscricao() {
                                                         style={{ marginTop: -10 }}
                                                         className='input-form'
                                                     >
-                                                        <Option disabled value=''>Selecione o parentesco</Option>
                                                         {RELATIONSHIP_OPTIONS.map(option => (
-                                                            <Option
-                                                                key={option.value}
-                                                                value={option.value}
-                                                                className='nilia-text-s'
-                                                            >
+                                                            <Option key={option.value} value={option.value}>
                                                                 {option.label}
                                                             </Option>
                                                         ))}
@@ -1228,16 +1501,26 @@ export default function FormularioInscricao() {
                                                     />
                                                 </Form.Item>
                                             </Col>
+                                            <Col span={2} className="flex items-end mb-2">
+                                                {fields.length > 1 && (
+                                                    <Button 
+                                                        type="link" 
+                                                        danger
+                                                        onClick={() => remove(name)}
+                                                    >
+                                                        Eliminar
+                                                    </Button>
+                                                )}
+                                            </Col>
                                         </Row>
                                     ))}
                                     {fields.length < 5 && (
-                                        <Row gutter={16}>
+                                        <Row>
                                             <Col span={24}>
                                                 <div className='ml-auto w-[fit-content] mt-3'>
-                                                    <NiliaButtonLight
-                                                        text='Adicionar Contacto'
-                                                        onClick={() => add()}
-                                                        disabled={fields.length >= 5}
+                                                    <NiliaButtonLight 
+                                                        text='Adicionar Contacto' 
+                                                        onClick={() => add()} 
                                                     />
                                                 </div>
                                             </Col>
@@ -1271,118 +1554,123 @@ export default function FormularioInscricao() {
                                 <Radio value={'no'} className='nilia-text-s'>Não</Radio>
                             </Radio.Group>
                         </Row>
-                        {haveAcademicHistory === 'yes' && (<>
-                            <Form.List name='academicHistory' initialValue={[{ year: '', class: '', school: '', schoolAddress: '', finalGrade: '' }]}>
-                                {(fields, { add, remove }) => (
-                                    <>
-                                        {fields.map(({ key, name, fieldKey, ...restField }) => (
-                                            <>
-                                            <Divider className='p-0 mt-3 mb-0' style={{ backgroundColor: 'rgb(255, 221, 199)' }} />
-                                                <Row gutter={16} key={key}>
-                                                    <Col span={4}>
-                                                        <Form.Item
-                                                            label={<p className='nilia-text-s'>Ano Lectivo</p>}
-                                                            labelCol={{ span: 24 }}
-                                                            name={[name, 'year']}
-                                                            className='input'
-                                                            rules={[
-                                                                { required: true, message: 'Por favor, insira o ano lectivo' }
-                                                            ]}
-                                                        >
-                                                            <Input
-                                                                placeholder='Insira o ano lectivo'
-                                                                style={{ marginTop: -10 }}
-                                                                className='input-form'
-                                                                min={2000}
-                                                                max={(new Date()).getFullYear() + 1}
-                                                                type='number'
-                                                            />
-                                                        </Form.Item>
-                                                    </Col>
-                                                    <Col span={4}>
-                                                        <Form.Item
-                                                            label={<p className='nilia-text-s'>Classe</p>}
-                                                            labelCol={{ span: 24 }}
-                                                            name={[name, 'class']}
-                                                            className='input'
-                                                            rules={[{ required: true, message: 'Por favor, insira a classe' }]}
-                                                        >
-                                                            <Input
-                                                                placeholder='Insira a classe'
-                                                                style={{ marginTop: -10 }}
-                                                                className='input-form'
-                                                                min={1}
-                                                                max={12}
-                                                                type='number'
-                                                            />
-                                                        </Form.Item>
-                                                    </Col>
-                                                    <Col span={16}>
-                                                        <Form.Item
-                                                            label={<p className='nilia-text-s'>Escola</p>}
-                                                            labelCol={{ span: 24 }}
-                                                            name={[name, 'school']}
-                                                            className='input'
-                                                            rules={[{ required: true, message: 'Por favor, insira a escola' }]}
-                                                        >
-                                                            <Input
-                                                                placeholder='Insira a escola'
-                                                                style={{ marginTop: -10 }}
-                                                                className='input-form'
-                                                            />
-                                                        </Form.Item>
-                                                    </Col>
-                                                </Row>
-                                                <Row gutter={16}>
-                                                    <Col span={12}>
-                                                        <Form.Item
-                                                            label={<p className='nilia-text-s'>Morada da Escola</p>}
-                                                            labelCol={{ span: 24 }}
-                                                            name={[name, 'schoolAddress']}
-                                                            className='input'
-                                                            rules={[{ required: true, message: 'Por favor, insira a morada da escola' }]}
-                                                        >
-                                                            <Input
-                                                                placeholder='Insira a morada da escola'
-                                                                style={{ marginTop: -10 }}
-                                                                className='input-form'
-                                                            />
-                                                        </Form.Item>
-                                                    </Col>
-                                                    <Col span={8}>
-                                                        <Form.Item
-                                                            label={<p className='nilia-text-s'>Resultado Final</p>}
-                                                            labelCol={{ span: 24 }}
-                                                            name={[name, 'finalGrade']}
-                                                            className='input'
-                                                            rules={[{ required: true, message: 'Por favor, selecione o resultado final' }]}
-                                                        >
-                                                            <Select
-                                                                placeholder="Selecione o resultado final"
-                                                                style={{ marginTop: -10 }}
-                                                                className='input-form'
-                                                            >
-                                                                <Option disabled value=''>Selecione o resultado final</Option>
-                                                                {ACADEMIC_RESULT_OPTIONS.map(option => (
-                                                                    <Option key={option.value} value={option.label}>{option.label}</Option>
-                                                                ))}
-                                                            </Select>
-                                                        </Form.Item>
-                                                    </Col>
-                                                </Row>
-                                            </>
-                                        ))}
-                                        <Row gutter={16}>
-                                            <Col span={24}>
-                                                <div className='ml-auto w-[fit-content] mt-3'>
-                                                    <NiliaButtonLight text='Adicionar Outro Histórico' onClick={() => add()} />
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </>
-                                )}
-                            </Form.List>
-                        </>)}
+
+                        {haveAcademicHistory === 'yes' && (
+                            <>
+                                <Form.Item name="currentRecord">
+                                    <Row gutter={16} className="mt-4">
+                                        <Col span={6}>
+                                            <Form.Item
+                                                label={<p className='nilia-text-s'>Ano Lectivo</p>}
+                                                name={['currentRecord', 'year']}
+                                            >
+                                                <Input
+                                                    placeholder='Ex: 2023'
+                                                    type='number'
+                                                    className='input-form'
+                                                />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col span={6}>
+                                            <Form.Item
+                                                label={<p className='nilia-text-s'>Classe</p>}
+                                                name={['currentRecord', 'class']}
+                                            >
+                                                <Input
+                                                    placeholder='Ex: 7'
+                                                    type='number'
+                                                    className='input-form'
+                                                />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col span={12}>
+                                            <Form.Item
+                                                label={<p className='nilia-text-s'>Escola</p>}
+                                                name={['currentRecord', 'school']}
+                                                className='input'
+                                            >
+                                                <Input placeholder='Nome da escola' className='input-form' />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col span={16}>
+                                            <Form.Item
+                                                label={<p className='nilia-text-s'>Morada da Escola</p>}
+                                                name={['currentRecord', 'schoolAddress']}
+                                            >
+                                                <Input placeholder='Morada da escola' />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col span={8}>
+                                            <Form.Item
+                                                label={<p className='nilia-text-s'>Resultado Final</p>}
+                                                name={['currentRecord', 'finalResult']}
+                                            >
+                                                <Select placeholder="Selecione o resultado">
+                                                    {ACADEMIC_RESULT_OPTIONS.map(option => (
+                                                        <Option key={option.value} value={option.value}>
+                                                            {option.label}
+                                                        </Option>
+                                                    ))}
+                                                </Select>
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                    <Row gutter={16}>
+                                        <Col span={4}>
+                                            <NiliaButtonLight text='Adicionar' onClick={handleAddRecord} />
+                                        </Col>
+                                    </Row>
+                                </Form.Item>
+
+                                <Table
+                                    dataSource={academicRecords}
+                                    pagination={false}
+                                    className="mt-4"
+                                    columns={[
+                                        {
+                                            title: 'Ano Lectivo',
+                                            dataIndex: 'year',
+                                            key: 'year',
+                                        },
+                                        {
+                                            title: 'Classe',
+                                            dataIndex: 'class',
+                                            key: 'class',
+                                            render: (text) => `${text}ª Classe`
+                                        },
+                                        {
+                                            title: 'Escola',
+                                            dataIndex: 'school',
+                                            key: 'school',
+                                        },
+                                        {
+                                            title: 'Morada',
+                                            dataIndex: 'schoolAddress',
+                                            key: 'schoolAddress',
+                                        },
+                                        {
+                                            title: 'Resultado',
+                                            dataIndex: 'finalResult',
+                                            key: 'finalResult',
+                                            render: (value) => ACADEMIC_RESULT_OPTIONS.find(opt => opt.value === value)?.label
+                                        },
+                                        {
+                                            title: 'Ações',
+                                            key: 'action',
+                                            render: (_, record, index) => (
+                                                <Button 
+                                                    type="link" 
+                                                    danger
+                                                    onClick={() => handleDeleteRecord(index)}
+                                                >
+                                                    Eliminar
+                                                </Button>
+                                            ),
+                                        },
+                                    ]}
+                                />
+                            </>
+                        )}
                     </Form>
                 </div>
                 <div className='w-full flex flex-row justify-between mt-4'>
@@ -1404,121 +1692,121 @@ export default function FormularioInscricao() {
                         <Row gutter={16}>
                             <Col span={24} className='mb-4'>
                                 <p className='nilia-text-s'>Possui doenças crónicas?</p>
-                                <Radio.Group 
-                                    onChange={(e) => setHasChronicDiseases(e.target.value)} 
-                                    value={hasChronicDiseases} 
+                                <Radio.Group
+                                    onChange={(e) => setHasChronicDiseases(e.target.value)}
+                                    value={hasChronicDiseases}
                                     className='w-full flex flex-row gap-4 mt-2'
                                 >
                                     <Radio value={'yes'} className='nilia-text-s'>Sim</Radio>
                                     <Radio value={'no'} className='nilia-text-s'>Não</Radio>
                                 </Radio.Group>
                                 {hasChronicDiseases === 'yes' && (
-                                <Form.Item
-                                    name='chronicDiseases'
+                                    <Form.Item
+                                        name='chronicDiseases'
                                         className='input mt-2'
                                         rules={[{ required: true, message: 'Por favor, especifique as doenças crónicas' }]}
-                                >
-                                    <Input.TextArea
+                                    >
+                                        <Input.TextArea
                                             placeholder='Especifique as doenças crónicas'
-                                        className='input-form'
-                                    />
-                                </Form.Item>
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
                                 )}
                             </Col>
 
                             <Col span={24} className='mb-4'>
                                 <p className='nilia-text-s'>Possui alergias?</p>
-                                <Radio.Group 
-                                    onChange={(e) => setHasAllergies(e.target.value)} 
-                                    value={hasAllergies} 
+                                <Radio.Group
+                                    onChange={(e) => setHasAllergies(e.target.value)}
+                                    value={hasAllergies}
                                     className='w-full flex flex-row gap-4 mt-2'
                                 >
                                     <Radio value={'yes'} className='nilia-text-s'>Sim</Radio>
                                     <Radio value={'no'} className='nilia-text-s'>Não</Radio>
                                 </Radio.Group>
                                 {hasAllergies === 'yes' && (
-                                <Form.Item
-                                    name='allergies'
+                                    <Form.Item
+                                        name='allergies'
                                         className='input mt-2'
                                         rules={[{ required: true, message: 'Por favor, especifique as alergias' }]}
-                                >
-                                    <Input.TextArea
+                                    >
+                                        <Input.TextArea
                                             placeholder='Especifique as alergias'
-                                        className='input-form'
-                                    />
-                                </Form.Item>
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
                                 )}
                             </Col>
 
                             <Col span={24} className='mb-4'>
                                 <p className='nilia-text-s'>Possui alguma deficiência?</p>
-                                <Radio.Group 
-                                    onChange={(e) => setHasDisabilities(e.target.value)} 
-                                    value={hasDisabilities} 
+                                <Radio.Group
+                                    onChange={(e) => setHasDisabilities(e.target.value)}
+                                    value={hasDisabilities}
                                     className='w-full flex flex-row gap-4 mt-2'
                                 >
                                     <Radio value={'yes'} className='nilia-text-s'>Sim</Radio>
                                     <Radio value={'no'} className='nilia-text-s'>Não</Radio>
                                 </Radio.Group>
                                 {hasDisabilities === 'yes' && (
-                                <Form.Item
-                                    name='disabilities'
+                                    <Form.Item
+                                        name='disabilities'
                                         className='input mt-2'
                                         rules={[{ required: true, message: 'Por favor, especifique as deficiências' }]}
-                                >
-                                    <Input.TextArea
+                                    >
+                                        <Input.TextArea
                                             placeholder='Especifique as deficiências'
-                                        className='input-form'
-                                    />
-                                </Form.Item>
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
                                 )}
                             </Col>
 
                             <Col span={24} className='mb-4'>
                                 <p className='nilia-text-s'>Possui seguros de saúde?</p>
-                                <Radio.Group 
-                                    onChange={(e) => setHasInsurance(e.target.value)} 
-                                    value={hasInsurance} 
+                                <Radio.Group
+                                    onChange={(e) => setHasInsurance(e.target.value)}
+                                    value={hasInsurance}
                                     className='w-full flex flex-row gap-4 mt-2'
                                 >
                                     <Radio value={'yes'} className='nilia-text-s'>Sim</Radio>
                                     <Radio value={'no'} className='nilia-text-s'>Não</Radio>
                                 </Radio.Group>
                                 {hasInsurance === 'yes' && (
-                                <Form.Item
-                                    name='insurances'
+                                    <Form.Item
+                                        name='insurances'
                                         className='input mt-2'
                                         rules={[{ required: true, message: 'Por favor, especifique dados dos seguros de saúde' }]}
-                                >
-                                    <Input.TextArea
+                                    >
+                                        <Input.TextArea
                                             placeholder='Especifique dados da apólice de seguro'
-                                        className='input-form'
-                                    />
-                                </Form.Item>
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
                                 )}
                             </Col>
 
                             <Col span={24} className='mb-4'>
                                 <p className='nilia-text-s'>Tem/teve algum irmão na escola?</p>
-                                <Radio.Group 
-                                    onChange={(e) => setHasSiblings(e.target.value)} 
-                                    value={hasSiblings} 
+                                <Radio.Group
+                                    onChange={(e) => setHasSiblings(e.target.value)}
+                                    value={hasSiblings}
                                     className='w-full flex flex-row gap-4 mt-2'
                                 >
                                     <Radio value={'yes'} className='nilia-text-s'>Sim</Radio>
                                     <Radio value={'no'} className='nilia-text-s'>Não</Radio>
                                 </Radio.Group>
                                 {hasSiblings === 'yes' && (
-                                <Form.Item
-                                    name='siblings'
+                                    <Form.Item
+                                        name='siblings'
                                         className='input mt-2'
                                         rules={[{ required: true, message: 'Por favor, especifique os irmãos' }]}
-                                >
-                                    <Input.TextArea
+                                    >
+                                        <Input.TextArea
                                             placeholder='Especifique o nome do(s) irmão(s)'
-                                        className='input-form'
-                                    />
-                                </Form.Item>
+                                            className='input-form'
+                                        />
+                                    </Form.Item>
                                 )}
                             </Col>
 

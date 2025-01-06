@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
         phoneNumber="+258823062080"
         accountName="Instituto Nília"
         avatar="https://institutonilia.edu.mz/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnilia.21efec9a.webp&w=64&q=75"
-        chatMessage="Olá! Como podemos te ajudar?"
+        chatMessage="Olá! Como podemos ajudar?"
         darkMode={false}
       />
       <a
