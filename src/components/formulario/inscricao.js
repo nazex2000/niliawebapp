@@ -79,7 +79,7 @@ const PROFESSION_OPTIONS = [
 const validateClassProgression = (newRecord, existingRecords) => {
     // Ordenar registros por ano
     const sortedRecords = [...existingRecords].sort((a, b) => a.year - b.year);
-    
+
     // Verificar progressão com registros existentes
     for (let record of sortedRecords) {
         // Se o novo ano é posterior
@@ -89,7 +89,7 @@ const validateClassProgression = (newRecord, existingRecords) => {
                 notification.error({
                     message: <p className='nilia-title-s'>Erro</p>,
                     description: <p className='nilia-text-s'>
-                        Em {record.year} o aluno transitou da {record.class}ª classe. 
+                        Em {record.year} o aluno transitou da {record.class}ª classe.
                         Não pode estar numa classe inferior ou igual em {newRecord.year}.
                     </p>,
                     placement: 'topRight'
@@ -101,7 +101,7 @@ const validateClassProgression = (newRecord, existingRecords) => {
                 notification.error({
                     message: <p className='nilia-title-s'>Erro</p>,
                     description: <p className='nilia-text-s'>
-                        Em {record.year} o aluno não transitou da {record.class}ª classe. 
+                        Em {record.year} o aluno não transitou da {record.class}ª classe.
                         A classe seguinte deve ser igual ou superior.
                     </p>,
                     placement: 'topRight'
@@ -116,7 +116,7 @@ const validateClassProgression = (newRecord, existingRecords) => {
                 notification.error({
                     message: <p className='nilia-title-s'>Erro</p>,
                     description: <p className='nilia-text-s'>
-                        Inconsistência detectada: Em {newRecord.year} não poderia estar na {newRecord.class}ª classe 
+                        Inconsistência detectada: Em {newRecord.year} não poderia estar na {newRecord.class}ª classe
                         pois em {record.year} estava na {record.class}ª classe.
                     </p>,
                     placement: 'topRight'
@@ -404,9 +404,9 @@ export default function FormularioInscricao() {
 
     const validateAcademicRecord = (values) => {
         if (!values) return false;
-        
+
         const { year, class: classNum, school, schoolAddress, finalResult } = values;
-        
+
         // Validar ano letivo
         const currentYear = new Date().getFullYear();
         if (!year || year < 2000 || year > currentYear + 1) {
@@ -463,7 +463,7 @@ export default function FormularioInscricao() {
 
     const handleAddRecord = () => {
         const values = form.getFieldValue('currentRecord');
-        
+
         if (!validateAcademicRecord(values)) return;
 
         // Esterilizar dados
@@ -496,7 +496,7 @@ export default function FormularioInscricao() {
 
         setAcademicRecords([...academicRecords, sanitizedRecord]);
         form.setFieldValue('academicHistory', [...academicRecords, sanitizedRecord]);
-        
+
         // Limpar campos
         form.setFields([
             {
@@ -765,11 +765,17 @@ export default function FormularioInscricao() {
                                     name='province'
                                     className='input'
                                     rules={[{ required: true, message: 'Por favor, selecione a província' }]}
+                                    
                                 >
                                     <Select
                                         style={{ marginTop: -10 }}
                                         className='input-form'
                                         placeholder='Seleccione a província'
+                                        showSearch
+                                    filterOption={(input, option) =>
+                                        (option?.value ?? '').toLowerCase().includes(input.toLowerCase())
+                                    }
+                                    optionFilterProp="value"
                                     >
                                         {provinces.map((province) => (
                                             <Option className='nilia-text-s' value={province.name}>{province.name}</Option>
@@ -791,6 +797,11 @@ export default function FormularioInscricao() {
                                         style={{ marginTop: -10 }}
                                         className='input-form'
                                         placeholder='Seleccione o tipo de documento'
+                                        showSearch
+                                        filterOption={(input, option) =>
+                                            (option?.value ?? '').toLowerCase().includes(input.toLowerCase())
+                                        }
+                                        optionFilterProp="value"
                                     >
                                         <Option className='nilia-text-s' value='BI'>Bilhete de Identidade</Option>
                                         <Option className='nilia-text-s' value='Cédula de Identidade'>Cédula de Identidade</Option>
@@ -918,10 +929,15 @@ export default function FormularioInscricao() {
                                         rules={[{ required: true, message: 'Por favor, insira a profissão' }]}
                                     >
                                         <Select
+                                            showSearch
                                             placeholder='Selecione a profissão'
                                             style={{ marginTop: -10 }}
                                             className='input-form'
                                             onChange={(value) => setGuardianProfessionOther(value === 'outro')}
+                                            filterOption={(input, option) =>
+                                                (option?.value ?? '').toLowerCase().includes(input.toLowerCase())
+                                            }
+                                            optionFilterProp="value"
                                         >
                                             {PROFESSION_OPTIONS.map(option => (
                                                 <Option key={option.value} value={option.value} className='nilia-text-s'>
@@ -1120,10 +1136,15 @@ export default function FormularioInscricao() {
                                     rules={[{ required: true, message: 'Por favor, selecione a profissão' }]}
                                 >
                                     <Select
+                                        showSearch
                                         placeholder='Selecione a profissão'
                                         style={{ marginTop: -10 }}
                                         className='input-form'
                                         onChange={(value) => setFatherProfessionOther(value === 'outro')}
+                                        filterOption={(input, option) =>
+                                            (option?.value ?? '').toLowerCase().includes(input.toLowerCase())
+                                        }
+                                        optionFilterProp="value"
                                     >
                                         {PROFESSION_OPTIONS.map(option => (
                                             <Option key={option.value} value={option.value} className='nilia-text-s'>
@@ -1299,10 +1320,15 @@ export default function FormularioInscricao() {
                                     rules={[{ required: true, message: 'Por favor, selecione a profissão' }]}
                                 >
                                     <Select
+                                        showSearch
                                         placeholder='Selecione a profissão'
                                         style={{ marginTop: -10 }}
                                         className='input-form'
                                         onChange={(value) => setMotherProfessionOther(value === 'outro')}
+                                        filterOption={(input, option) =>
+                                            (option?.value ?? '').toLowerCase().includes(input.toLowerCase())
+                                        }
+                                        optionFilterProp="value"
                                     >
                                         {PROFESSION_OPTIONS.map(option => (
                                             <Option key={option.value} value={option.value} className='nilia-text-s'>
@@ -1460,7 +1486,6 @@ export default function FormularioInscricao() {
                     <NiliaButton text='Próximo' onClick={handleFiliationData} />
                 </div>
             </div>)}
-
             {current === 5 && (<div className='w-full flex flex-col gap-1'>
                 <p className='nilia-title-s'>Contactos de Emergência</p>
                 <div className='w-full flex flex-col gap-1 form-border-main'>
@@ -1507,6 +1532,11 @@ export default function FormularioInscricao() {
                                                         placeholder="Selecione o parentesco"
                                                         style={{ marginTop: -10 }}
                                                         className='input-form'
+                                                        showSearch
+                                                        filterOption={(input, option) =>
+                                                            (option?.value ?? '').toLowerCase().includes(input.toLowerCase())
+                                                        }
+                                                        optionFilterProp="value"
                                                     >
                                                         {RELATIONSHIP_OPTIONS.map(option => (
                                                             <Option key={option.value} value={option.value}>
@@ -1537,8 +1567,8 @@ export default function FormularioInscricao() {
                                             </Col>
                                             <Col span={2} className="flex items-end mb-2">
                                                 {fields.length > 1 && (
-                                                    <Button 
-                                                        type="link" 
+                                                    <Button
+                                                        type="link"
                                                         danger
                                                         onClick={() => remove(name)}
                                                     >
@@ -1552,9 +1582,9 @@ export default function FormularioInscricao() {
                                         <Row>
                                             <Col span={24}>
                                                 <div className='ml-auto w-[fit-content] mt-3'>
-                                                    <NiliaButtonLight 
-                                                        text='Adicionar Contacto' 
-                                                        onClick={() => add()} 
+                                                    <NiliaButtonLight
+                                                        text='Adicionar Contacto'
+                                                        onClick={() => add()}
                                                     />
                                                 </div>
                                             </Col>
@@ -1692,8 +1722,8 @@ export default function FormularioInscricao() {
                                             title: 'Ações',
                                             key: 'action',
                                             render: (_, record, index) => (
-                                                <Button 
-                                                    type="link" 
+                                                <Button
+                                                    type="link"
                                                     danger
                                                     onClick={() => handleDeleteRecord(index)}
                                                 >
@@ -1916,8 +1946,8 @@ export default function FormularioInscricao() {
                                 <div>
                                     <p className='nilia-text-xs font-bold'>Morada</p>
                                     <p className='nilia-text-xs'>
-                                        {form.getFieldValue('address')}, 
-                                        Nº {form.getFieldValue('addressNumber')}, 
+                                        {form.getFieldValue('address')},
+                                        Nº {form.getFieldValue('addressNumber')},
                                         {form.getFieldValue('addressFlat')}
                                     </p>
                                 </div>
@@ -2018,7 +2048,7 @@ export default function FormularioInscricao() {
                             <div>
                                 <p className='nilia-text-xs font-bold'>Responsável pela Educação</p>
                                 <p className='nilia-text-xs mb-4'>{(() => {
-                                    switch(form.getFieldValue('educationGuardian')) {
+                                    switch (educationGuardian) {
                                         case 'parents': return 'Pai e Mãe';
                                         case 'father': return 'Pai';
                                         case 'mother': return 'Mãe';
@@ -2028,7 +2058,7 @@ export default function FormularioInscricao() {
                                 })()}</p>
                             </div>
 
-                            {form.getFieldValue('educationGuardian') === 'other' && (
+                            {educationGuardian === 'other' && (
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div>
                                         <p className='nilia-text-xs font-bold'>Nome</p>
@@ -2151,7 +2181,7 @@ export default function FormularioInscricao() {
                                 <div>
                                     <p className='nilia-text-xs font-bold'>Órfão</p>
                                     <p className='nilia-text-xs'>{(() => {
-                                        switch(orphan) {
+                                        switch (orphan) {
                                             case 'parents': return 'De Pai e Mãe';
                                             case 'father': return 'Apenas de Pai';
                                             case 'mother': return 'Apenas de Mãe';
@@ -2192,7 +2222,7 @@ export default function FormularioInscricao() {
                                         Caro encarregado(a), a inscrição foi submetida com sucesso
                                     </p>
                                     <p className='nilia-text-s text-center'>
-                                        A equipa da secretária entrará em contacto o mais breve possivel para informar o estágio da inscrição, solicitamos que fique atento aos canais de emails e whatsapp por forma a acompanhar o status da sua submissão.
+                                        A Administração entrará em contacto o mais breve possivel para informar o estágio da inscrição, solicitamos que fique atento aos canais de emails e whatsapp por forma a acompanhar o estado da sua submissão.
                                     </p>
                                     <p className='nilia-text-s'>
                                         Encontre abaixo o formulário preenchido:
