@@ -27,6 +27,36 @@ const RELATIONSHIP_OPTIONS = [
 ];
 
 const PROFESSION_OPTIONS = [
+    { value: 'administrador', label: 'Administrador' },
+    { value: 'advogado', label: 'Advogado' },
+    { value: 'analista', label: 'Analista' },
+    { value: 'arquiteto', label: 'Arquiteto' },
+    { value: 'artista', label: 'Artista' },
+    { value: 'assistente', label: 'Assistente' },
+    { value: 'ator', label: 'Ator' },
+    { value: 'auditor', label: 'Auditor' },
+    { value: 'biologo', label: 'Biólogo' },
+    { value: 'carpinteiro', label: 'Carpinteiro' },
+    { value: 'chefCozinha', label: 'Chef de Cozinha' },
+    { value: 'cientista', label: 'Cientista' },
+    { value: 'consultor', label: 'Consultor' },
+    { value: 'contabilista', label: 'Contabilista' },
+    { value: 'dentista', label: 'Dentista' },
+    { value: 'designer', label: 'Designer' },
+    { value: 'desenvolvedor', label: 'Desenvolvedor' },
+    { value: 'economista', label: 'Economista' },
+    { value: 'eletricista', label: 'Eletricista' },
+    { value: 'enfermeiro', label: 'Enfermeiro' },
+    { value: 'engenheiro', label: 'Engenheiro' },
+    { value: 'escriturario', label: 'Escriturário' },
+    { value: 'farmaceutico', label: 'Farmacêutico' },
+    { value: 'fisioterapeuta', label: 'Fisioterapeuta' },
+    { value: 'fotografo', label: 'Fotógrafo' },
+    { value: 'gestor', label: 'Gestor' },
+    { value: 'jornalista', label: 'Jornalista' },
+    { value: 'juiz', label: 'Juiz' },
+    { value: 'medico', label: 'Médico' },
+    { value: 'nutricionista', label: 'Nutricionista' },
     { value: 'operador', label: 'Operador' },
     { value: 'pedagogo', label: 'Pedagogo' },
     { value: 'pedreiro', label: 'Pedreiro' },
@@ -42,7 +72,7 @@ const PROFESSION_OPTIONS = [
     { value: 'tecnico', label: 'Técnico' },
     { value: 'tradutor', label: 'Tradutor' },
     { value: 'veterinario', label: 'Veterinário' },
-    { value: 'webdesigner', label: 'Web Designer' },
+    { value: 'zootecnista', label: 'Zootecnista' },
     { value: 'outro', label: 'Outro' }
 ];
 
@@ -219,8 +249,7 @@ export default function FormularioInscricao() {
     }
     const handleAdditionalInformation = () => {
         form.validateFields().then((values) => {
-            handleMenu(8);
-            submitData();
+            handleMenu(8); // Vai para o step de revisão
         }).catch((error) => {
             form.setFields(error.errorFields);
             notification.error({
@@ -228,8 +257,13 @@ export default function FormularioInscricao() {
                 description: <p className='nilia-text-s'>Por favor, preencha todos os campos</p>,
                 placement: 'topRight'
             });
-        }
-        );
+        });
+    }
+
+    // Adicione esta função para submeter após revisão
+    const handleSubmitAfterReview = () => {
+        handleMenu(9); // Vai para o step final
+        submitData();
     }
 
     //Submit Data
@@ -1844,6 +1878,305 @@ export default function FormularioInscricao() {
                 </div>
             </div>)}
             {current === 8 && (
+                <div className='w-full flex flex-col gap-4'>
+                    <p className='nilia-title-s'>Revisão da Candidatura</p>
+                    <div className='w-full flex flex-col gap-4 form-border-main'>
+                        {/* Dados do Aluno */}
+                        <div className='review-section'>
+                            <h3 className='nilia-title-xs text-nilia'>1. Dados do Aluno</h3>
+                            <div className='grid grid-cols-2 gap-4'>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Nome Completo</p>
+                                    <p className='nilia-text-xs'>{[
+                                        form.getFieldValue('firstName'),
+                                        form.getFieldValue('middleName'),
+                                        form.getFieldValue('lastName')
+                                    ].filter(Boolean).join(' ')}</p>
+                                </div>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Data de Nascimento</p>
+                                    <p className='nilia-text-xs'>{form.getFieldValue('dateOfBirth')?.format('DD/MM/YYYY')}</p>
+                                </div>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Género</p>
+                                    <p className='nilia-text-xs'>{form.getFieldValue('gender') === 'M' ? 'Masculino' : 'Feminino'}</p>
+                                </div>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Local de Nascimento</p>
+                                    <p className='nilia-text-xs'>{form.getFieldValue('birthPlace')}</p>
+                                </div>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Província</p>
+                                    <p className='nilia-text-xs'>{form.getFieldValue('province')}</p>
+                                </div>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Documento de Identificação</p>
+                                    <p className='nilia-text-xs'>{form.getFieldValue('documentType')} - {form.getFieldValue('documentNumber')}</p>
+                                </div>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Morada</p>
+                                    <p className='nilia-text-xs'>
+                                        {form.getFieldValue('address')}, 
+                                        Nº {form.getFieldValue('addressNumber')}, 
+                                        {form.getFieldValue('addressFlat')}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Filiação */}
+                        <div className='review-section'>
+                            <h3 className='nilia-title-xs text-nilia'>2. Filiação</h3>
+                            <div className='mb-4'>
+                                <h4 className='nilia-text-s mb-2'>Pai</h4>
+                                <div className='grid grid-cols-2 gap-4'>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Nome</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('fatherName')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Profissão</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('fatherProfession')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Local de Trabalho</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('fatherWorkPlace')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Contacto</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('fatherPhone')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>WhatsApp</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('fatherWhatsApp')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Morada</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('fatherAddress')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Contacto do Emprego</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('fatherAddressService')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Email</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('fatherEmail')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Email Alternativo</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('fatherAlternativeEmail') || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 className='nilia-text-s mb-2'>Mãe</h4>
+                                <div className='grid grid-cols-2 gap-4'>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Nome</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('motherName')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Profissão</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('motherProfession')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Local de Trabalho</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('motherWorkPlace')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Contacto</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('motherPhone')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>WhatsApp</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('motherWhatsApp')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Morada</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('motherAddress')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Contacto do Emprego</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('motherAddressService')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Email</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('motherEmail')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Email Alternativo</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('motherAlternativeEmail') || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Encarregado de Educação */}
+                        <div className='review-section'>
+                            <h3 className='nilia-title-xs text-nilia'>3. Encarregado de Educação</h3>
+                            <div>
+                                <p className='nilia-text-xs font-bold'>Responsável pela Educação</p>
+                                <p className='nilia-text-xs mb-4'>{(() => {
+                                    switch(form.getFieldValue('educationGuardian')) {
+                                        case 'parents': return 'Pai e Mãe';
+                                        case 'father': return 'Pai';
+                                        case 'mother': return 'Mãe';
+                                        case 'other': return 'Outro';
+                                        default: return 'Não especificado';
+                                    }
+                                })()}</p>
+                            </div>
+
+                            {form.getFieldValue('educationGuardian') === 'other' && (
+                                <div className='grid grid-cols-2 gap-4'>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Nome</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('guardianName')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Profissão</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('guardianProfession')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Local de Trabalho</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('guardianWorkPlace')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Contacto</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('guardianPhone')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>WhatsApp</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('guardianWhatsApp')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Morada</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('guardianAddress')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Contacto do Emprego</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('guardianAddressService')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Email</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('guardianEmail')}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Email Alternativo</p>
+                                        <p className='nilia-text-xs'>{form.getFieldValue('guardianAlternativeEmail') || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Contactos de Emergência */}
+                        <div className='review-section'>
+                            <h3 className='nilia-title-xs text-nilia'>4. Contactos de Emergência</h3>
+                            {form.getFieldValue('emergencyContacts')?.map((contact, index) => (
+                                <div key={index} className='grid grid-cols-3 gap-4 mb-2'>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Nome</p>
+                                        <p className='nilia-text-xs'>{contact.name}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Parentesco</p>
+                                        <p className='nilia-text-xs'>{RELATIONSHIP_OPTIONS.find(opt => opt.value === contact.relationship)?.label}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Contacto</p>
+                                        <p className='nilia-text-xs'>{contact.phone}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Histórico Acadêmico */}
+                        <div className='review-section'>
+                            <h3 className='nilia-title-xs text-nilia'>5. Histórico Acadêmico</h3>
+                            <div>
+                                <p className='nilia-text-xs font-bold'>Possui histórico acadêmico?</p>
+                                <p className='nilia-text-xs mb-4'>{haveAcademicHistory === 'yes' ? 'Sim' : 'Não'}</p>
+                            </div>
+                            {haveAcademicHistory === 'yes' && academicRecords.map((record, index) => (
+                                <div key={index} className='grid grid-cols-2 gap-4 mb-4'>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Ano Letivo</p>
+                                        <p className='nilia-text-xs'>{record.year}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Classe</p>
+                                        <p className='nilia-text-xs'>{record.class}ª Classe</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Escola</p>
+                                        <p className='nilia-text-xs'>{record.school}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Morada da Escola</p>
+                                        <p className='nilia-text-xs'>{record.schoolAddress}</p>
+                                    </div>
+                                    <div>
+                                        <p className='nilia-text-xs font-bold'>Resultado</p>
+                                        <p className='nilia-text-xs'>{record.finalResult === 'transitou' ? 'Transitou' : 'Não Transitou'}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Informação Adicional */}
+                        <div className='review-section'>
+                            <h3 className='nilia-title-xs text-nilia'>6. Informação Adicional</h3>
+                            <div className='grid grid-cols-2 gap-4'>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Doenças Crónicas</p>
+                                    <p className='nilia-text-xs'>{hasChronicDiseases === 'yes' ? form.getFieldValue('chronicDiseases') : 'Não'}</p>
+                                </div>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Alergias</p>
+                                    <p className='nilia-text-xs'>{hasAllergies === 'yes' ? form.getFieldValue('allergies') : 'Não'}</p>
+                                </div>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Deficiências</p>
+                                    <p className='nilia-text-xs'>{hasDisabilities === 'yes' ? form.getFieldValue('disabilities') : 'Não'}</p>
+                                </div>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Seguros de Saúde</p>
+                                    <p className='nilia-text-xs'>{hasInsurance === 'yes' ? form.getFieldValue('insurances') : 'Não'}</p>
+                                </div>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Irmãos na Escola</p>
+                                    <p className='nilia-text-xs'>{hasSiblings === 'yes' ? form.getFieldValue('siblings') : 'Não'}</p>
+                                </div>
+                                <div>
+                                    <p className='nilia-text-xs font-bold'>Órfão</p>
+                                    <p className='nilia-text-xs'>{(() => {
+                                        switch(orphan) {
+                                            case 'parents': return 'De Pai e Mãe';
+                                            case 'father': return 'Apenas de Pai';
+                                            case 'mother': return 'Apenas de Mãe';
+                                            case 'no': return 'Não';
+                                            default: return 'Não especificado';
+                                        }
+                                    })()}</p>
+                                </div>
+                            </div>
+                            {form.getFieldValue('observations') && (
+                                <div className='mt-4'>
+                                    <p className='nilia-text-xs font-bold'>Observações</p>
+                                    <p className='nilia-text-xs'>{form.getFieldValue('observations')}</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className='w-full flex flex-row justify-between mt-4'>
+                        <NiliaButton text='Anterior' onClick={() => handleMenu(7)} />
+                        <NiliaButton text='Submeter Candidatura' onClick={handleSubmitAfterReview} />
+                    </div>
+                </div>
+            )}
+            {current === 9 && (
                 <>
                     <div className='w-full flex flex-col sm:flex-row gap-8 form-border-main'>
                         <div className='w-full flex flex-col gap-3 items-center justify-center pb-3'>

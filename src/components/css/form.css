@@ -272,3 +272,18 @@
     height: auto;
     display: block;
 }
+
+.review-section {
+    border-bottom: 1px solid #FFDDC7;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.review-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.text-nilia {
+    color: #ff6600;
+}

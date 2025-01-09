@@ -51,11 +51,7 @@ const PrintTemplate = ({ data, form }) => {
                 <div className="print-grid">
                     <div className="print-field">
                         <label>Nome Completo:</label>
-                        <p>{[
-                            form.getFieldValue('firstName'),
-                            form.getFieldValue('middleName'),
-                            form.getFieldValue('lastName')
-                        ].filter(Boolean).join(' ')}</p>
+                        <p>{form.getFieldValue('name')}</p>
                     </div>
                     <div className="print-field">
                         <label>Data de Nascimento:</label>
@@ -327,7 +323,11 @@ const PrintTemplate = ({ data, form }) => {
 
             {/* Rodapé */}
             <div className="print-footer">
-                <p>Data: {new Date().toLocaleDateString()}</p>
+                <p>Data: {new Date().toLocaleDateString('pt-PT', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                })}</p>
                 <div className="print-signatures">
                     <div className="signature-line">
                         <p>_____________________________</p>
