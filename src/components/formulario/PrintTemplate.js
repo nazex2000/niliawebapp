@@ -269,8 +269,8 @@ const PrintTemplate = ({ data, form }) => {
                             <p>{history.schoolAddress}</p>
                         </div>
                         <div className="print-field">
-                            <label>Nota Final:</label>
-                            <p>{history.finalGrade} valores</p>
+                            <label>Resultado Final:</label>
+                            <p>{history.finalResult}</p>
                         </div>
                     </div>
                 ))}

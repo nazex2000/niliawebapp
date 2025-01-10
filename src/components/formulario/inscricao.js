@@ -77,10 +77,10 @@ const PROFESSION_OPTIONS = [
 ];
 
 const validateClassProgression = (newRecord, existingRecords) => {
-    // Ordenar registros por ano
+    // Ordenar Registos por ano
     const sortedRecords = [...existingRecords].sort((a, b) => a.year - b.year);
 
-    // Verificar progressão com registros existentes
+    // Verificar progressão com Registos existentes
     for (let record of sortedRecords) {
         // Se o novo ano é posterior
         if (newRecord.year > record.year) {
@@ -111,7 +111,7 @@ const validateClassProgression = (newRecord, existingRecords) => {
         }
         // Se o novo ano é anterior
         else if (newRecord.year < record.year) {
-            // Se o registro posterior mostra transição, a classe deve ser menor
+            // Se o Registo posterior mostra transição, a classe deve ser menor
             if (newRecord.finalResult === 'transitou' && newRecord.class >= record.class) {
                 notification.error({
                     message: <p className='nilia-title-s'>Erro</p>,
@@ -145,7 +145,7 @@ export default function FormularioInscricao() {
         setProvinces(provincesData);
     }
 
-    const [current, setCurrent] = useState(0);
+    const [current, setCurrent] = useState(7);
     const handleMenu = (pageNum) => {
         setCurrent(pageNum);
     };
@@ -346,7 +346,7 @@ export default function FormularioInscricao() {
                         class: history.class || '',
                         school: history.school || '',
                         schoolAddress: history.schoolAddress || '',
-                        finalGrade: history.finalGrade || ''
+                        finalResult: history.finalResult || ''
                     };
                 }) || [],
                 additionalInformation: {
@@ -419,7 +419,7 @@ export default function FormularioInscricao() {
         }
 
         // Validar classe
-        if (!classNum || classNum < 1 || classNum > 12) {
+        if (!classNum || classNum < 0 || classNum > 12) {
             notification.error({
                 message: <p className='nilia-title-s'>Erro</p>,
                 description: <p className='nilia-text-s'>Classe inválida</p>,
@@ -483,7 +483,7 @@ export default function FormularioInscricao() {
         if (duplicateRecord) {
             notification.error({
                 message: <p className='nilia-title-s'>Erro</p>,
-                description: <p className='nilia-text-s'>Já existe um registro para este ano letivo</p>,
+                description: <p className='nilia-text-s'>Já existe um Registo para este ano letivo</p>,
                 placement: 'topRight'
             });
             return;
@@ -528,7 +528,7 @@ export default function FormularioInscricao() {
 
         notification.success({
             message: <p className='nilia-title-s'>Sucesso</p>,
-            description: <p className='nilia-text-s'>Registro adicionado com sucesso</p>,
+            description: <p className='nilia-text-s'>Registo adicionado com sucesso</p>,
             placement: 'topRight'
         });
     };
@@ -2135,11 +2135,11 @@ export default function FormularioInscricao() {
                                         <p className='nilia-text-xs'>{record.year}</p>
                                     </div>
                                     <div>
-                                        <p className='nilia-text-xs font-bold'>Classe</p>
+                                        <p className='nilia-text-xs'>Classe</p>
                                         <p className='nilia-text-xs'>{record.class}ª Classe</p>
                                     </div>
                                     <div>
-                                        <p className='nilia-text-xs font-bold'>Escola</p>
+                                        <p className='nilia-text-xs'>Escola</p>
                                         <p className='nilia-text-xs'>{record.school}</p>
                                     </div>
                                     <div>
@@ -2147,7 +2147,7 @@ export default function FormularioInscricao() {
                                         <p className='nilia-text-xs'>{record.schoolAddress}</p>
                                     </div>
                                     <div>
-                                        <p className='nilia-text-xs font-bold'>Resultado</p>
+                                        <p className='nilia-text-xs'>Resultado</p>
                                         <p className='nilia-text-xs'>{record.finalResult === 'transitou' ? 'Transitou' : 'Não Transitou'}</p>
                                     </div>
                                 </div>
